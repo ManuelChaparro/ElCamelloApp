@@ -1,0 +1,196 @@
+@font-face {
+  font-family: 'Raleway';
+  src: url('../../assets/fonts/Raleway.ttf');
+}
+
+@media (max-width: 800px) {
+  .container{
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+  }
+}
+
+@media (min-width: 800px) {
+  .container-create{
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    height: 100vh;
+  }
+
+  .img-login{
+    position: relative;
+    max-width: 100%;
+    height: 100%;
+  }
+
+  .background{
+    filter: brightness(0.1);
+    grid-column: 1;
+    z-index: 1;
+    max-width: 100%;
+    object-fit: cover;
+    height: 100%;
+    animation-name: background;
+    animation-duration: 6s;
+  }
+
+  @keyframes background {
+    from{
+      filter: brightness(1);
+    }
+
+    to{
+      filter: brightness(0.1);
+    }
+  }
+
+  .logo{
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    filter: brightness(280%);
+    width: 25vw;
+    height: 25vh;
+    animation-name: logo;
+    animation-duration: 3s;
+  }
+
+  @keyframes logo {
+    from{
+      margin-left: -100%;
+      filter: brightness(-100%);
+    }
+
+    to{
+      margin-left: 0%;
+      filter: brightness(280%);
+    }
+  }
+
+  .title-logo{
+    position: absolute;
+    top: 60%;
+    left: 25%;
+    color: white;
+    font-size: 3vw;
+    animation-name: title-logo;
+    animation-duration: 3s;
+  }
+
+  @keyframes title-logo {
+    from{
+      margin-left: -100%;
+      filter: brightness(-100%);
+    }
+
+    to{
+      margin-left: 0%;
+      filter: brightness(280%);
+    }
+  }
+
+  .container{
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Raleway';
+    gap: 1rem;
+  }
+
+  .title{
+
+  }
+
+  .label-create{
+
+  }
+
+  .form{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: 1rem;
+    margin: 0.5rem;
+    border: 1px gray solid;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    width: 80%;
+    height: 70%;
+  }
+
+  .column-form{
+    display: grid;
+    justify-content: center;
+    align-items: flex-start;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 3rem;
+    width: 100%;
+    margin: 0;
+  }
+
+  .input-form{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .title-info{
+    font-size: 2rem;
+  }
+
+  .title-knowing{
+    color: #bf5417;
+    font-style: italic;
+  }
+
+  .btn-create{
+    border: 1px gray solid;
+    border-radius: 20px;
+    height: 2rem;
+  }
+
+  .con-btn{
+    width: 40%;
+    font-weight: 500;
+  }
+
+  .logo-form{
+    width: 100%;
+    height: 100%;
+  }
+
+  .con-logo-form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .column-date{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 12rem;
+  }
+
+  input{
+    width: 100%;
+    height: 6vh;
+    border: 1px gray solid;
+    border-radius: 5px;
+  }
+
+  select{
+    height: 6vh;
+  }
+
+}
+
+

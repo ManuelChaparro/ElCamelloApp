@@ -1,0 +1,80 @@
+<div class="container-create">
+  <div class="img-login">
+    <img class="background" src="../../assets/img-stock/CreateUserLogo.jpg" alt="">
+    <img class="logo" src="../../assets/img-stock/LogoElCamello.svg" alt="">
+    <h1 class="title-logo">Crear cuenta</h1>
+  </div>
+  <div class="container">
+    <h1 class="title-info">Introduce tus datos para <span class="title-knowing">conocerte</span> mejor!</h1>
+    <form action="" class="form">
+      <div class="column-form">
+        <div class="input-form">
+          <label for="">Nombres</label>
+          <input type="text" name="name" placeholder="Ingrese su Nombre">
+        </div>
+
+        <div class="input-form">
+          <label for="">Apellidos</label>
+          <input type="text" name="surname" placeholder="Ingrese sus Apellidos">
+        </div>
+
+        <div class="input-form">
+          <label for="">Celular</label>
+          <input type="number" name="cellphone" placeholder="Ingrese su Número">
+        </div>
+      </div>
+      <div class="column-form">
+        <div class="input-form">
+          <label for="">Email</label>
+          <input type="text" name="email" placeholder="Ingrese su Email">
+        </div>
+
+        <div class="input-form">
+          <label for="">Contraseña</label>
+          <input type="password" name="password" placeholder="Ingrese su Contraseña">
+        </div>
+
+        <div class="input-form">
+          <label for="">Confirmar contraseña</label>
+          <input type="password" name="con-password" placeholder="Confirme su contraseña">
+        </div>
+
+      </div>
+      <div class="column-form ">
+        <div class="input-form">
+          <label for="">Género</label>
+          <select name="" id="">
+            <option value="">Masculino</option>
+            <option value="">Femenino</option>
+            <option value="">Prefiero no decirlo</option>
+          </select>
+        </div>
+
+        <div class="input-form">
+          <label for="">Tipo de documento</label>
+          <select name="" id="">
+            <option value="">Cédula de Ciudadania</option>
+            <option value="">Tarjeta de Identidad</option>
+            <option value="">Cédula de Extranjería</option>
+          </select>
+        </div>
+
+        <div class="input-form">
+          <label for="">Documento</label>
+          <input type="number" placeholder="Ingrese su Documento">
+        </div>
+      </div>
+      <div class="column-form column-date">
+        <div class="input-form">
+          <label for="">Fecha de nacimiento</label>
+          <input type="date">
+        </div>
+      </div>
+    </form>
+    <div class="input-form con-btn">
+      <button type="submit" class="btn btn-primary" (click)="validateUser()">Crear Usuario</button>
+    </div>
+  </div>
+</div>
+
+
