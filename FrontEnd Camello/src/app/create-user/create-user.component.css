@@ -167,6 +167,7 @@
 
   select{
     height: 4.5vh;
+    width: 100%;
   }
 }
 
@@ -285,9 +286,8 @@
   .column-form{
     display: grid;
     justify-content: center;
-    align-items: flex-start;
     grid-template-columns: 1fr 1fr 1fr;
-    gap: 3rem;
+    gap: 2rem;
     width: 100%;
     margin: 0;
   }
@@ -347,8 +347,14 @@
 
   select{
     height: 6vh;
+    width: 100%;
   }
 
 }
 
+label{
+  white-space: nowrap;
+  overflow: auto;
+  text-overflow: ellipsis;
+}
 
