@@ -9,6 +9,7 @@ import { CreateUserComponent } from './create-user/create-user.component';
 import { HomeComponent } from './home/home.component';
 import { AdminHomeComponent } from './admin-home/admin-home.component';
 import { RecoverPassComponent } from './recover-pass/recover-pass.component';
+import {FormsModule} from '@angular/forms';
 
 const appRoutes:Routes=[
   {path:'login', component:LoginComponent},
@@ -30,7 +31,8 @@ const appRoutes:Routes=[
   imports: [
     BrowserModule,
     AppRoutingModule,
-    RouterModule.forRoot(appRoutes)
+    RouterModule.forRoot(appRoutes),
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

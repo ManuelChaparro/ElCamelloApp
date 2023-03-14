@@ -4,9 +4,196 @@
 }
 
 @media (max-width: 800px) {
-  .container-login{
+  .img-login{
+    position: relative;
+    max-width: 100%;
+    height: 100%;
+    display: none;
+  }
+
+  .background{
+    filter: brightness(0.1);
+    max-width: 100%;
+    object-fit: cover;
+    height: 50%;
+    width: 100%;
+    animation-name: background;
+    animation-duration: 6s;
+  }
+
+  @keyframes background {
+    from{
+      filter: brightness(1);
+    }
+
+    to{
+      filter: brightness(0.1);
+    }
+  }
+
+  .logo{
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    filter: brightness(280%);
+    width: 25vw;
+    height: 25vh;
+    animation-name: logo;
+    animation-duration: 3s;
+  }
+
+  @keyframes logo {
+    from{
+      margin-left: -100%;
+      filter: brightness(-100%);
+    }
+
+    to{
+      margin-left: 0%;
+      filter: brightness(280%);
+    }
+  }
+
+  .size-web{
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url(../../assets/img-stock/LoginHome.jpg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    width: 100vw;
+    object-fit: cover;
+  }
+
+  .container-info{
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 2px gray solid;
+    border-radius: 10px;
+    max-height: 100%;
+    width: 90%;
+    height: 90%;
+    background-color: white;
+  }
+
+  .titles-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 2rem;
+    text-align: center;
+  }
+
+  .title-camello{
+    color: #502d1d;
+    font-size: 35px;
+    font-style: normal;
+    font-weight: 500;
+  }
+
+  .title-coworking{
+    color: #8d4a24;
+    font-size: 25px;
+    font-style: italic;
+  }
+
+  .form{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    font-family: 'Raleway';
+    width: 100%;
+    padding: 0 1rem;
+  }
+
+  .login-media{
+    display: flex;
+    flex-direction: column;
+  }
+
+  .title-logininit{
+    font-size: 20px;
+    font-weight: 500;
+    padding-bottom: 1.5rem;
+  }
+
+  .btns{
+    color: #f6eee6;
+    font-weight: 500;
+    border: 1px gray solid;
+    border-radius: 10px;
+  }
+
+  .btns-container{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    height: 2.5rem;
+  }
+
+  .btn-login{
+    background-color: #2c4165;
+  }
+
+  .btn-register{
+    color: #bf5417;
+    font-weight: 300;
+    border: 0;
+    border-radius: 0;
+    background-color: white;
+    border-bottom: 1px #bf5417 solid;
+  }
+
+  .btn-register:hover{
+    font-size: 20px;
+  }
+
+  .btn-login:hover{
+    font-size: 20px;
+  }
+
+  .login-media{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0;
+  }
+
+  .icon-btn{
+    width: 25px;
+  }
+
+  .btns-media{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    border-radius: 30px;
+    border: 1px #f6eee6 solid;
+    width: 90%;
+    font-weight: 500;
+  }
+
+  .forget-pass{
+    display: flex;
+    justify-content: center;
+  }
+
+  .btn-face:hover{
+    border: 1px #2c4165 solid;
+  }
+
+  .btn-google:hover{
+    border: 1px #FF641A solid;
   }
 }
 
@@ -102,14 +289,14 @@
 
   .title-camello{
     color: #502d1d;
-    font-size: 40px;
+    font-size: 35px;
     font-style: normal;
     font-weight: 500;
   }
 
   .title-coworking{
     color: #8d4a24;
-    font-size: 30px;
+    font-size: 25px;
     font-style: italic;
   }
 
@@ -128,9 +315,8 @@
   }
 
   .title-logininit{
-    font-size: 25px;
+    font-size: 20px;
     font-weight: 500;
-    padding-bottom: 1rem;
   }
 
   .btns{

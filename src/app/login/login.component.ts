@@ -8,6 +8,9 @@ import { Router } from '@angular/router';
 })
 
 export class LoginComponent {
+  user: string = "";
+  password: string = "";
+
   constructor(private router: Router){}
 
   goToCreateUser(){
@@ -19,6 +22,8 @@ export class LoginComponent {
   }
 
   validateLogin(){
+    alert(this.user + ' ' + this.password);
     this.router.navigate(['/home']);
   }
+
 }
