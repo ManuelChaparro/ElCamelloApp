@@ -16,7 +16,8 @@ const registerUser = async (req, res) =>{
                         let email_binary = crypto.createHash('sha256').update(userBody.email).digest('hex')
                         await connection.query(`Insert into passwords (password, indicador) values ("${pwd_binary}", "${email_binary}")`, (error, result, fields) =>{
                             if(!error){
-                                res.json({message: `Se ha insertado correctamente los datos de ${connection.escape(userBody.nombres)}`})
+                                //res.json({message: `Se ha insertado correctamente los datos de ${connection.escape(userBody.nombres)}`})
+                                res.json({message: `Se ha insertado correctamente los datos`})
                             }else{
                                 res.json({message: error})
                             }
