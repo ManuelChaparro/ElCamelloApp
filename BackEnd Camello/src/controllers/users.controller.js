@@ -6,7 +6,6 @@ const crypto = require("crypto");
 const connection = require('../../config/connections.js');
 const nodemailer = require('nodemailer');
 
-
 const registerUser = async (req, res) =>{
     const userBody = req.body;
     await connection.query(`SELECT nombres FROM usuarios WHERE email = ${connection.escape(userBody.email)};`, async (error, result, fields) =>{
@@ -41,10 +40,10 @@ const modifyUser = async(req, res) =>{
     const {email} = req.body
     jwt.verify(req.token, 'secretkey', async (error) => {
         if(!error){
-            await connection.query(`SELECT nombres FROM usuarios WHERE email = ${connection.escape(email)};`, async (error, result, fields) =>{
+            await connection.query(`SELECT nombres FROM usuarios WHERE email = ${email};`, async (error, result, fields) =>{
                 if(result.length === 1){
                     try{
-                        await connection.query(`update usuarios set nombres = ${connection.escape(userBody.nombres)}, apellidos = ${connection.escape(userBody.apellidos)}, genero = ${connection.escape(userBody.genero)}, telefono = ${connection.escape(userBody.telefono)} where email = ${connection.escape(email)}`, (error, result, fields) =>{
+                        await connection.query(`update usuarios set nombres = ${userBody.nombres}, apellidos = ${userBody.apellidos}, genero = ${userBody.genero}, telefono = ${userBody.telefono} where email = ${email}`, (error, result, fields) =>{
                             res.json({message:`Se ha modificado correctamente el usuario`});
                         });
                     }catch(error){

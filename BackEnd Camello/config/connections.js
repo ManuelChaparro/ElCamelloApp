@@ -9,6 +9,8 @@ const config = {
 }
 const dbconector = mysql.createConnection(config);
 
+dbconector.escape = mysql.escape;
+
 dbconector.connect(function(err) {
     if (err) {
         console.error('error connecting: ' + err.stack);
