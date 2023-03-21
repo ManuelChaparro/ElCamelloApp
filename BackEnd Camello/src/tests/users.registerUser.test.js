@@ -1,6 +1,5 @@
 'use strict'
 require('dotenv').config();
-const { json } = require('express')
 const connection = require('../../config/connections')
 const {registerUser} = require('../controllers/users.controller')
 
