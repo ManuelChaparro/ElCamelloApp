@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { timer } from 'rxjs';
+import { delay } from 'rxjs/operators';
 
 @Component({
   selector: 'app-create-user',
@@ -42,10 +44,8 @@ export class CreateUserComponent {
     const v_pass = this.validationPass();
     const v_birthdate = this.validationBirthdate();
     const v_data_empty = this.validateInputs();
-    alert(1)
-    this.httpPostRequest();
     if(v_email && v_pass && v_birthdate && v_data_empty){
-
+      this.httpPostRequest();
     }
   }
 
@@ -80,13 +80,22 @@ export class CreateUserComponent {
 
   public validationBirthdate(){
     const warn_birth = document.querySelector('.warn_birth') as HTMLElement;
+    const warn_birth_more = document.querySelector('.warn_birth_more') as HTMLElement;
     if(this.birthdate == ''){
       warn_birth.style.display = 'flex';
-      return true;
+      return false;
     }else{
       warn_birth.style.display = 'none';
-      return false;
+      const actualDate: Date = new Date();
+      actualDate.setFullYear(actualDate.getFullYear() - 16 );
+      if(new Date(this.birthdate).getTime() <= actualDate.getTime()){
+        warn_birth_more.style.display = 'none';
+        return true;
+      }else{
+        warn_birth_more.style.display = 'flex';
+      }
     }
+    return false;
   }
 
   public httpPostRequest(){
@@ -111,17 +120,20 @@ export class CreateUserComponent {
     }else{
       data.tipo_documento = 'C.E';
     }
-
-    console.log(data);
-
     this.http.post(url, data).subscribe(response => {
-      console.log(response);
-
       if('message' in response){
-        if(response.message == 'Se ha insertado correctamente los datos'){
-          this.router.navigate(['/login']);
-        }else{
+        if(response.message == '0'){
+          const container = document.querySelector('.container') as HTMLElement;
+          const noticeAccount = document.querySelector('.noticeAccount') as HTMLElement;
+          container.style.display = 'none';
+          noticeAccount.style.display = 'flex';
+          timer(2500).pipe(delay(2500)).subscribe(() => {
+            this.router.navigate(['/login']);
+          });
+        }else if(response.message == '1'){
           alert("El email ya se encuentra registrado");
+        }else{
+          alert("Error");
         }
       }
     });

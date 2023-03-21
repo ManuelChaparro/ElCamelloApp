@@ -10,14 +10,14 @@ const registerUser = async (req, res) =>{
     await connection.query(`SELECT nombres FROM usuarios WHERE email = ${connection.escape(userBody.email)};`, async (error, result, fields) =>{
         if(result.length === 0){
             try {
-                await connection.query(`Insert into usuarios (nombres, apellidos, fecha_nacimiento, email, genero, tipo_documento, identificacion, telefono, rol) values (${connection.escape(userBody.nombres)}, ${connection.escape(userBody.apellidos)}, ${connection.escape(userBody.fecha_nacimiento)}, ${connection.escape(userBody.email)}, ${connection.escape(userBody.genero)}, ${connection.escape(userBody.identificacion)}, ${connection.escape(userBody.tipo_documento)}, ${connection.escape(userBody.telefono)}, ${connection.escape(userBody.rol)})`, async (error, result, fields) =>{
+                await connection.query(`Insert into usuarios (nombres, apellidos, fecha_nacimiento, email, genero, tipo_documento, identificacion, telefono, rol) values (${connection.escape(userBody.nombres)}, ${connection.escape(userBody.apellidos)}, ${connection.escape(userBody.fecha_nacimiento)}, ${connection.escape(userBody.email)}, ${connection.escape(userBody.genero)}, ${connection.escape(userBody.tipo_documento)}, ${connection.escape(userBody.identificacion)}, ${connection.escape(userBody.telefono)}, ${connection.escape(userBody.rol)})`, async (error, result, fields) =>{
                     if(!error){
                         let pwd_binary = crypto.createHash('sha256').update(userBody.password).digest('hex')
                         let email_binary = crypto.createHash('sha256').update(userBody.email).digest('hex')
                         await connection.query(`Insert into passwords (password, indicador) values ("${pwd_binary}", "${email_binary}")`, (error, result, fields) =>{
                             if(!error){
                                 //res.json({message: `Se ha insertado correctamente los datos de ${connection.escape(userBody.nombres)}`})
-                                res.json({message: `Se ha insertado correctamente los datos`})
+                                res.json({message: '0'})
                             }else{
                                 res.json({message: error})
                             }
@@ -30,7 +30,7 @@ const registerUser = async (req, res) =>{
                 res.json({message: `Ha ocurrido un error: ${error}`});
             }
         }else{
-            res.json({message: `El usuario ${connection.escape(userBody.nombres)} ya existe.`})
+            res.json({message: '1'})
         }
     })
 }

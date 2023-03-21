@@ -79,6 +79,7 @@
         <div class="input-form">
           <label for="">Fecha de nacimiento</label>
           <label class="warn warn_birth" for="">Seleccione una fecha de nacimiento</label>
+          <label class="warn warn_birth_more" for="">Debe tener mas de 16 años</label>
           <input [(ngModel)]="birthdate" type="date" name="birthdate">
         </div>
       </div>
@@ -86,6 +87,11 @@
     <div class="input-form con-btn">
       <button type="submit" class="btn btn-primary" (click)="validateUser()">Crear Usuario</button>
     </div>
+  </div>
+  <div class="noticeAccount">
+    <h1>¡Cuenta creada con éxito!</h1>
+    <h3>Serás redireccionado a la página de autenticación</h3>
+    <img src="../../assets/img-stock/LogoElCamello.svg" alt="">
   </div>
 </div>
 

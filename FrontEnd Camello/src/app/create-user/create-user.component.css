@@ -406,4 +406,32 @@ label{
   text-overflow: ellipsis;
 }
 
+.noticeAccount{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border: 1px gray solid;
+  border-radius: 10px;
+  margin: 2rem;
+  gap: 2rem;
+  display: none;
+}
 
+.noticeAccount img{
+  height: 20%;
+  animation-name: notice_account;
+  animation-duration: 3s;
+  filter: opacity(1);
+}
+
+@keyframes notice_account {
+  from{
+    filter: opacity(0);
+  }
+
+  to{
+    filter: opacity(1);
+  }
+}
