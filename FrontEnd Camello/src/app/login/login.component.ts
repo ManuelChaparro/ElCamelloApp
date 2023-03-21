@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -11,7 +12,7 @@ export class LoginComponent {
   user: string = "";
   password: string = "";
 
-  constructor(private router: Router){}
+  constructor(private router: Router, private http: HttpClient){}
 
   goToCreateUser(){
     this.router.navigate(['/createUser']);
@@ -22,8 +23,31 @@ export class LoginComponent {
   }
 
   validateLogin(){
-    alert(this.user + ' ' + this.password);
-    this.router.navigate(['/home']);
+    this.registerUser();
   }
 
+  public registerUser() {
+    const url = 'http://localhost:3005/api/user/login';
+    const data = {
+      email: this.user,
+      password: this.password
+    };
+    this.http.post(url, data).subscribe(response => {
+      if('message' in response){
+        const div_email = document.querySelector('#warn_email') as HTMLElement;
+        const div_pass = document.querySelector('#warn_pass') as HTMLElement;
+        if(response.message == "Email incorrecto"){
+          div_email.style.display = 'flex';
+          div_pass.style.display = 'none';
+        }else{
+          div_email.style.display = 'none';
+          div_pass.style.display = 'flex';
+        }
+      }else if('token' in response){
+        const token = response.token;
+        localStorage.setItem("token", JSON.stringify(token));
+        this.router.navigate(['/home']);
+      }
+    });
+  }
 }

@@ -393,4 +393,22 @@
   .btn-google:hover{
     border: 1px #FF641A solid;
   }
+
+  #warn_email{
+    display: none;
+    color: red;
+    font-size: 13px;
+  }
+
+  #warn_pass{
+    display: none;
+    color: red;
+    font-size: 13px;
+  }
+
+  .label_input{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
 }
