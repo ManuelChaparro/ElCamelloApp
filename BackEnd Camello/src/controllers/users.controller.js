@@ -65,7 +65,7 @@ const loginUser = async (req, res) => {
     await connection.query(`Select password from passwords where indicador = ${connection.escape(email_binary)}`, async (error, result, fields) =>{
         if(result.length === 1){
             if(result[0].password === crypto.createHash('sha256').update(password).digest('hex')){
-                await connection.query(`Select * from usuarios where email = ${connection.escape(email)}`, (error, infoUser, fields) =>{
+                await connection.query(`Select email, rol from usuarios where email = ${connection.escape(email)}`, (error, infoUser, fields) =>{
                     jwt.sign({infoUser}, 'secretkey',{expiresIn: '1h'}, (err, token) => {
                         res.json({token: token});
                     });
