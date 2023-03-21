@@ -40,6 +40,6 @@ describe('registerUser', () => {
 
     await registerUser(req, res);
 
-    expect(res.json).toHaveBeenCalledWith({ message: 'Se ha insertado correctamente los datos' });
+    expect(res.json).toHaveBeenCalledWith({ message: '0' });
     });
 });

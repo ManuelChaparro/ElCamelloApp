@@ -4,6 +4,8 @@ const {json} = require('express');
 const jwt = require('jsonwebtoken');
 const crypto = require("crypto");
 const connection = require('../../config/connections.js');
+const nodemailer = require('nodemailer');
+
 
 const registerUser = async (req, res) =>{
     const userBody = req.body;
@@ -16,7 +18,6 @@ const registerUser = async (req, res) =>{
                         let email_binary = crypto.createHash('sha256').update(userBody.email).digest('hex')
                         await connection.query(`Insert into passwords (password, indicador) values ("${pwd_binary}", "${email_binary}")`, (error, result, fields) =>{
                             if(!error){
-                                //res.json({message: `Se ha insertado correctamente los datos de ${connection.escape(userBody.nombres)}`})
                                 res.json({message: '0'})
                             }else{
                                 res.json({message: error})
@@ -121,7 +122,6 @@ const getUsersList = async(req, res) =>{
     })
 }
 
-// AUthorization: Bearer <token>
 const verifyToken = (req, res, next) =>{
     const bearerHeader = req.headers['authorization'];
     if(typeof bearerHeader !== 'undefined'){
@@ -133,4 +133,63 @@ const verifyToken = (req, res, next) =>{
     }
 }
 
-module.exports = {registerUser, verifyToken, loginUser, modifyUser, deleteUser, getUsersList};
+const generatePassword = (length, chars) => {
+    let password = "";
+    for (let i = 0; i < length; i++) {
+        password += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return password;
+};
+
+const recoverPassword = async (req, res) =>{
+    const {email, identificacion} = req.body;
+    await connection.query(`Select * from usuarios Where email = ${connection.escape(email)} and identificacion = ${connection.escape(identificacion)}`, async (error, result, fields) =>{
+        if(!error){
+            if(result.length === 1){
+                let email_binary = crypto.createHash('sha256').update(email).digest('hex')
+                let password = generatePassword(8, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*_-=+");
+                let newPassword = crypto.createHash('sha256').update(password).digest('hex')
+                await connection.query(`update passwords set password = ${connection.escape(newPassword)} where indicador = ${connection.escape(email_binary)}`, async (error, result, fields) =>{
+                    if(!error){
+                        console.log(result)
+                        if(result.changedRows === 1){
+                            sendRecoveryEmail(email, password)
+                            res.json({message: "0"})
+                        }else{
+                            res.json({message: "1"})
+                        }
+                    }else{
+                        console.log(error)
+                    }
+                })
+            }
+        }
+    })
+}
+
+const sendRecoveryEmail = (email, password) =>{
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'coworkingelcamello@gmail.com',
+            pass: 'hfcrpacedeetyoyl'
+        }
+    });
+    
+    const mailOptions = {
+        from: 'coworkingelcamello@gmail.com',
+        to: email,
+        subject: 'Cambio de contraseña',
+        text: `Esta es tu nueva contraseña: ${password}`
+    };
+    
+    transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email enviado: ' + info.response);
+        }
+    });
+} 
+
+module.exports = {registerUser, verifyToken, loginUser, modifyUser, deleteUser, getUsersList, recoverPassword};

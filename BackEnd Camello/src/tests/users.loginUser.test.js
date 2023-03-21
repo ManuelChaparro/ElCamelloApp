@@ -3,9 +3,9 @@
 const jwt = require('jsonwebtoken');
 const crypto = require("crypto");
 const connection = require('../../config/connections.js');
-const loginUser = require('./loginUser.js'); // import the function to be tested
+const {loginUser} = require('../controllers/users.controller'); // import the function to be tested
 
-jest.mock(connection, () => ({
+jest.mock('../../config/connections', () => ({
     query: jest.fn(),
     escape: jest.fn((val) => `"${val}"`)
 }));
@@ -29,12 +29,12 @@ describe('loginUser', () => {
         jest.clearAllMocks();
     });
 
-    it('should return a token if email and password are correct', async () => {
+    it('Debe devolver un token si el correo electrónico y la contraseña son correctos', async () => {
         const mockResult = [{ password: crypto.createHash('sha256').update('password').digest('hex') }];
         const mockInfoUser = { id: 1, email: 'test@example.com' };
         const mockToken = 'mock-token';
 
-        // mock the database query results
+        // Simulando los resultados de la consulta de la base de datos
         connection.query.mockImplementation((query, callback) => {
             if (query.includes('passwords')) {
                 callback(null, mockResult);
@@ -43,7 +43,7 @@ describe('loginUser', () => {
             }
         });
 
-        // mock the JWT sign method
+        // simular el método de sign JWT
         jwt.sign = jest.fn().mockImplementationOnce((payload, secretOrPrivateKey, options, callback) => {
             callback(null, mockToken);
         });
@@ -55,13 +55,13 @@ describe('loginUser', () => {
         expect(res.json).toHaveBeenCalledWith({ token: mockToken });
     });
 
-    it('should return an error message if the email is incorrect', async () => {
+    it('Debería devolver un mensaje de error si el correo electrónico es incorrecto', async () => {
         const mockResult = [];
         const expectedMessage = 'Email incorrecto';
 
-        // mock the database query results
+        // Simulación de los resultados de la consulta de la base de datos
         connection.query.mockImplementation((query, callback) => {
-        callback(null, mockResult);
+            callback(null, mockResult);
         });
 
         await loginUser(req, res);
@@ -70,13 +70,13 @@ describe('loginUser', () => {
         expect(res.json).toHaveBeenCalledWith({ message: expectedMessage });
     });
 
-    it('should return an error message if the password is incorrect', async () => {
+    it('Debería devolver un mensaje de error si la contraseña es incorrecta', async () => {
         const mockResult = [{ password: 'wrong-password' }];
         const expectedMessage = 'Contraseña incorrecta';
 
-        // mock the database query results
+        // Simulación de los resultados de la consulta de la base de datos
         connection.query.mockImplementation((query, callback) => {
-        callback(null, mockResult);
+            callback(null, mockResult);
         });
 
         await loginUser(req, res);
