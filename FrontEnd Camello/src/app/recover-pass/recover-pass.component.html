@@ -1,10 +1,24 @@
-<div>
-  <h1>Ingresa tu email para recuperar la contraseña.</h1>
-  <p>En breve te llegará un correo para reestablecerla.</p>
-  <form action="">
-    <input type="text" name="email" id="" placeholder="Email a recuperar">
-    <button type="submit">Reestablecer</button>
-  </form>
+<div class="all">
+  <div class="container">
+    <img src="../../assets/img-stock/LogoElCamello.svg" alt="">
+    <div class="info">
+      <h1>Ingresa tu email para recuperar la contraseña.</h1>
+      <p>En breve te llegará un correo para reestablecerla.</p>
+      <label class="warn warn_email" for="">Correo incorrecto</label>
+      <label class="warn warn_em_exist" for="">El correo no existe</label>
+    </div>
+    <div class="div_info">
+      <form action="">
+        <input [(ngModel)]="email" class="form-control" type="email" name="email" id="" placeholder="Ingresa tu Email" >
+        <input [(ngModel)]="document" class="form-control" type="text" name="document" id="" placeholder="Ingresa tu documento" type="number" min="0" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null">
+        <button (click)="sendRecovery()" class="btn btn-primary" type="submit">Reestablecer</button>
+      </form>
+    </div>
+    <div class="notice_recovery">
+      <h1>¡Restauración realizada con éxito!</h1>
+      <h3>Tu nueva contraseña debe llegar a tu correo dentro de poco...</h3>
+      <h4>Redirigiendo a página de autenticación en <span class="routing"></span>...</h4>
+    </div>
 
-
+  </div>
 </div>

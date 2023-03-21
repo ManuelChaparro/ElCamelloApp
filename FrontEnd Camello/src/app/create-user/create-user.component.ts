@@ -121,6 +121,7 @@ export class CreateUserComponent {
       data.tipo_documento = 'C.E';
     }
     this.http.post(url, data).subscribe(response => {
+
       if('message' in response){
         if(response.message == '0'){
           const container = document.querySelector('.container') as HTMLElement;

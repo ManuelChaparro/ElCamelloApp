@@ -25,15 +25,6 @@ export class HomeComponent {
       const exp = decode_token.exp as number;
       const date = new Date(0);
       date.setUTCSeconds(exp);
-      console.log(date.toISOString());
-
-      const format_date = date.setUTCSeconds(exp)
-
-
-      const now = new Date();
-
-      console.log(now); // 👉️ 2023-01-20T12:01:02.900Z
-
     }
 
 
