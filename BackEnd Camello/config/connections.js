@@ -11,12 +11,12 @@ const dbconector = mysql.createConnection(config);
 
 dbconector.escape = mysql.escape;
 
-dbconector.connect(function(err) {
+dbconector.connect((err) =>{
     if (err) {
-        console.error('error connecting: ' + err.stack);
+        console.error('Error conectando la base de datos con el servidor: ' + err.stack);
         return;
     }
-    console.log('connected as id ' + dbconector.threadId);
+    console.log('Se ha conectado exitosamente la base de datos con el servidor, id:' + dbconector.threadId);
 });
 
 module.exports = dbconector;

@@ -121,25 +121,6 @@ const getUsersList = async(req, res) =>{
     })
 }
 
-const verifyToken = (req, res, next) =>{
-    const bearerHeader = req.headers['authorization'];
-    if(typeof bearerHeader !== 'undefined'){
-        const bearerToken = bearerHeader.split(" ")[1];
-        req.token = bearerToken;
-        next();
-    }else{
-        res.sendStatus(403);
-    }
-}
-
-const generatePassword = (length, chars) => {
-    let password = "";
-    for (let i = 0; i < length; i++) {
-        password += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return password;
-};
-
 const recoverPassword = async (req, res) =>{
     const {email, identificacion} = req.body;
     await connection.query(`Select * from usuarios Where email = ${connection.escape(email)} and identificacion = ${connection.escape(identificacion)}`, async (error, result, fields) =>{
@@ -166,6 +147,14 @@ const recoverPassword = async (req, res) =>{
     })
 }
 
+const generatePassword = (length, chars) => {
+    let password = "";
+    for (let i = 0; i < length; i++) {
+        password += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return password;
+};
+
 const sendRecoveryEmail = (email, password) =>{
     const transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -190,5 +179,16 @@ const sendRecoveryEmail = (email, password) =>{
         }
     });
 } 
+
+const verifyToken = (req, res, next) =>{
+    const bearerHeader = req.headers['authorization'];
+    if(typeof bearerHeader !== 'undefined'){
+        const bearerToken = bearerHeader.split(" ")[1];
+        req.token = bearerToken;
+        next();
+    }else{
+        res.sendStatus(403);
+    }
+}
 
 module.exports = {registerUser, verifyToken, loginUser, modifyUser, deleteUser, getUsersList, recoverPassword};

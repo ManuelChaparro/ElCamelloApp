@@ -25,7 +25,7 @@ jest.mock('../../config/connections', () => ({
 }));
 
 describe('modifyUser', () => {
-    it('should modify a user', async () => {
+    it('Deberia modificar un usuario', async () => {
         // Mock de la verificación del token
         jwt.verify = jest.fn((token, secret, callback) => {
             callback(null);
@@ -51,7 +51,7 @@ describe('modifyUser', () => {
         );
     });
 
-    it('should return an error if the user does not exist', async () => {
+    it('Deberia retornar un error si el usuario no existe', async () => {
         jwt.verify = jest.fn((token, secret, callback) => {
             callback(null);
         });
