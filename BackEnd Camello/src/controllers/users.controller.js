@@ -105,6 +105,22 @@ const deleteUser = async(req, res) =>{
     })
 }
 
+const getUsersList = async(req, res) =>{
+    jwt.verify(req.token, 'secretkey', async(error) =>{
+        if(!error){
+            await connection.query(`Select * from usuarios`, async(error, list, fields) =>{
+                if(list.length >= 1){
+                    res.json(list)
+                }else{
+                    res.json({message: 'No hay usuarios'})
+                }
+            })
+        }else{
+            res.json({message: 'No tiene autorización para ingresar'})
+        }
+    })
+}
+
 // AUthorization: Bearer <token>
 const verifyToken = (req, res, next) =>{
     const bearerHeader = req.headers['authorization'];
@@ -117,11 +133,4 @@ const verifyToken = (req, res, next) =>{
     }
 }
 
-const convertBinary = (string) => {
-    return string.split('').map(function (char) {
-        return char.charCodeAt(0).toString(2);
-    });
-}
-
-
-module.exports = {registerUser, verifyToken, loginUser, modifyUser, deleteUser};
+module.exports = {registerUser, verifyToken, loginUser, modifyUser, deleteUser, getUsersList};

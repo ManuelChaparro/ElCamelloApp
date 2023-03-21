@@ -13,7 +13,7 @@ describe('registerUser', () => {
             nombres: 'John',
             apellidos: 'Doe',
             fecha_nacimiento: '1990-01-01',
-            email: 'johndoe@example.com',
+            email: 'ej@email.com',
             genero: 'M',
             tipo_documento: 'C.C.',
             identificacion: '1234567890',
