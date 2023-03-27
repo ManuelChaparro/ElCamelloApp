@@ -6,7 +6,6 @@ const crypto = require("crypto");
 const connection = require('../../config/connections.js');
 const nodemailer = require('nodemailer');
 
-
 const registerUser = async (req, res) =>{
     const userBody = req.body;
     await connection.query(`SELECT nombres FROM usuarios WHERE email = ${connection.escape(userBody.email)};`, async (error, result, fields) =>{
@@ -41,10 +40,10 @@ const modifyUser = async(req, res) =>{
     const {email} = req.body
     jwt.verify(req.token, 'secretkey', async (error) => {
         if(!error){
-            await connection.query(`SELECT nombres FROM usuarios WHERE email = ${connection.escape(email)};`, async (error, result, fields) =>{
+            await connection.query(`SELECT nombres FROM usuarios WHERE email = ${email};`, async (error, result, fields) =>{
                 if(result.length === 1){
                     try{
-                        await connection.query(`update usuarios set nombres = ${connection.escape(userBody.nombres)}, apellidos = ${connection.escape(userBody.apellidos)}, genero = ${connection.escape(userBody.genero)}, telefono = ${connection.escape(userBody.telefono)} where email = ${connection.escape(email)}`, (error, result, fields) =>{
+                        await connection.query(`update usuarios set nombres = ${userBody.nombres}, apellidos = ${userBody.apellidos}, genero = ${userBody.genero}, telefono = ${userBody.telefono} where email = ${email}`, (error, result, fields) =>{
                             res.json({message:`Se ha modificado correctamente el usuario`});
                         });
                     }catch(error){
@@ -122,25 +121,6 @@ const getUsersList = async(req, res) =>{
     })
 }
 
-const verifyToken = (req, res, next) =>{
-    const bearerHeader = req.headers['authorization'];
-    if(typeof bearerHeader !== 'undefined'){
-        const bearerToken = bearerHeader.split(" ")[1];
-        req.token = bearerToken;
-        next();
-    }else{
-        res.sendStatus(403);
-    }
-}
-
-const generatePassword = (length, chars) => {
-    let password = "";
-    for (let i = 0; i < length; i++) {
-        password += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return password;
-};
-
 const recoverPassword = async (req, res) =>{
     const {email, identificacion} = req.body;
     await connection.query(`Select * from usuarios Where email = ${connection.escape(email)} and identificacion = ${connection.escape(identificacion)}`, async (error, result, fields) =>{
@@ -167,6 +147,14 @@ const recoverPassword = async (req, res) =>{
     })
 }
 
+const generatePassword = (length, chars) => {
+    let password = "";
+    for (let i = 0; i < length; i++) {
+        password += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return password;
+};
+
 const sendRecoveryEmail = (email, password) =>{
     const transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -191,5 +179,16 @@ const sendRecoveryEmail = (email, password) =>{
         }
     });
 } 
+
+const verifyToken = (req, res, next) =>{
+    const bearerHeader = req.headers['authorization'];
+    if(typeof bearerHeader !== 'undefined'){
+        const bearerToken = bearerHeader.split(" ")[1];
+        req.token = bearerToken;
+        next();
+    }else{
+        res.sendStatus(403);
+    }
+}
 
 module.exports = {registerUser, verifyToken, loginUser, modifyUser, deleteUser, getUsersList, recoverPassword};
