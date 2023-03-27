@@ -10,6 +10,6 @@ router.delete('/user/delete', verifyToken, deleteUser);
 router.get('/user/list', verifyToken, getUsersList);
 router.delete('/user/ad/delete', verifyToken, deleteUserAdmin);
 router.post('/user/recovery', recoverPassword);
-router.delete('/user/search', verifyToken, getUser);
+router.get('/user/search', verifyToken, getUser);
 
 module.exports = router;

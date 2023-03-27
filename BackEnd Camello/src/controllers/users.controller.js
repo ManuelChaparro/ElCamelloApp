@@ -143,6 +143,7 @@ const deleteUserAdmin = async(req, res) =>{
     jwt.verify(req.token, 'secretkey', async(error)=>{
         if(!error){
             if(rol === "A" || rol === "a"){
+                let email_binary = crypto.createHash('sha256').update(email).digest('hex')
                 await connection.query(`Delete from usuarios where email = ${connection.escape(email)}`, async(error, info, fields) =>{
                     if(!error){
                         await connection.query(`delete from passwords where indicador = ${connection.escape(email_binary)}`, async(error, request, fieldss) =>{
