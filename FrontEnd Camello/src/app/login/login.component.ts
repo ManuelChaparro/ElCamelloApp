@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import jwt_decode from 'jwt-decode';
 
 @Component({
   selector: 'app-login',
@@ -44,9 +45,19 @@ export class LoginComponent {
           div_pass.style.display = 'flex';
         }
       }else if('token' in response){
-        const token = response.token;
-        localStorage.setItem("token", JSON.stringify(token));
-        this.router.navigate(['/home']);
+        const token: string = response.token as string;
+        const decode_token: object = jwt_decode(JSON.stringify(token));
+        localStorage.setItem('token', token);
+        if('infoUser' in decode_token){
+          const data = decode_token.infoUser as Array<object>;
+          if('rol' in data[0]){
+            if(data[0].rol == 'A'){
+              this.router.navigate(['/adminHome']);
+            }else{
+              this.router.navigate(['/home']);
+            }
+          }
+        }
       }
     });
   }

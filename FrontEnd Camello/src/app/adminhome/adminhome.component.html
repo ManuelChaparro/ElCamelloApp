@@ -1,0 +1,22 @@
+<div id="container">
+  <div id="header">
+    <span>ADMINISTRADOR</span>
+    <a href="/adminHome"><h1>El Camello Coworking</h1></a>
+    <a href="">Pepito Pérez</a>
+  </div>
+  <div id="content">
+    <div id="menu">
+      <nav>
+        <ul>
+          <li><button class="option-btn" (click)="cambiarComponente(0)"><img class="img-btn" src="../../assets/img-stock/campusIcon.svg" alt="">Sedes</button></li>
+          <li><button class="option-btn" (click)="cambiarComponente(1)"><img class="img-btn" src="../../assets/img-stock/usersIcon.svg" alt="">Usuarios</button></li>
+          <li><button class="option-btn" (click)="cambiarComponente(2)"><img class="img-btn" src="../../assets/img-stock/bookingIcon.svg" alt="">Reservas</button></li>
+          <li><button class="option-btn" (click)="cambiarComponente(3)"><img class="img-btn" src="../../assets/img-stock/reportsIcon.svg" alt="">Reportes</button></li>
+        </ul>
+      </nav>
+    </div>
+    <div id="data">
+      <ng-container *ngComponentOutlet="componentes[indiceComponenteActual].componente"></ng-container>
+    </div>
+  </div>
+</div>

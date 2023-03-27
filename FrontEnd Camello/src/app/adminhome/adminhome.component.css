@@ -1,0 +1,106 @@
+html, body{
+  margin: 0;
+  padding: 0;
+}
+
+#container{
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  grid-template-rows: 1fr 9fr;
+  grid-template-columns: 1fr;
+}
+
+#content{
+  display: grid;
+  grid-template-columns: 1fr 5fr;
+}
+
+#header{
+  display: grid;
+  grid-template-columns: 1fr 5fr 1fr;
+  justify-content: center;
+  align-items: center;
+  justify-items: center;
+  border-bottom: 1px gray solid;
+  background-color: #502d1d;
+}
+
+#header a img{
+  height: 40px;
+  stroke: white;
+}
+
+#header a{
+  text-decoration: none;
+}
+
+span{
+  font-size: 18px;
+  font-weight: 500;
+  color: white;
+}
+
+#header h1{
+  color: white;
+}
+
+#header a{
+  border: none;
+  font-size: 15px;
+  color: aliceblue;
+}
+
+#menu{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: whitesmoke;
+}
+
+#menu nav{
+  width: 100%;
+}
+
+#menu nav ul{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-items: flex-start;
+  margin: 0;
+  margin-top: 1rem;
+  padding: 0;
+  list-style: none;
+  gap: 1rem;
+}
+
+li{
+  width: 100%;
+  display: flex;
+  justify-content: left;
+  padding: 0 0.5rem;
+}
+
+.option-btn{
+  font-size: 20px;
+  font-weight: 500;
+  width: 100%;
+  height: 40px;
+  border: none;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  background-color: transparent;
+  border-radius: 10px;
+  gap: 1rem;
+}
+
+.option-btn:hover{
+  background-color: antiquewhite;
+}
+
+.img-btn{
+  max-height: 100%;
+  height: 25px;
+}
