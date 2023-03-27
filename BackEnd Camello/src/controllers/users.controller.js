@@ -121,6 +121,50 @@ const getUsersList = async(req, res) =>{
     })
 }
 
+const getUser = async(req, res) =>{
+    const {email} = req.body
+    jwt.verify(req.token, 'secretkey', async(error)=>{
+        if(!error){
+            await connection.query(`select * from usuarios where email = ${connection.escape(email)}`, async(error, user, fields) =>{
+                if(user.length === 1){
+                    res.json(user)
+                }else{
+                    res.json({message: "El usuario que busca, no existe"})
+                }
+            })
+        }else{
+            res.json({message: "No tiene autorización para ingresar"})
+        }
+    })
+}
+
+const deleteUserAdmin = async(req, res) =>{
+    const {email, rol} = req.body
+    jwt.verify(req.token, 'secretkey', async(error)=>{
+        if(!error){
+            if(rol === "A" || rol === "a"){
+                await connection.query(`Delete from usuarios where email = ${connection.escape(email)}`, async(error, info, fields) =>{
+                    if(!error){
+                        await connection.query(`delete from passwords where indicador = ${connection.escape(email_binary)}`, async(error, request, fieldss) =>{
+                            if(!error){
+                                res.json({message: "Se elimino correctamente el usuario"})
+                            }else{
+                                res.json({message: "El usuario no se ha podido eliminar correctamente"})
+                            }
+                        })
+                    }else{
+                        res.json({message: "No ha sido posible eliminar usuario"})
+                    }
+                })
+            }else{
+                res.json({message: "Lo sentimos, no tiene permisos para realizar esta acción"})
+            }
+        }else{
+            res.json({message: "No tiene autorización para realizar esta accíon"})
+        }
+    })
+}
+
 const recoverPassword = async (req, res) =>{
     const {email, identificacion} = req.body;
     await connection.query(`Select * from usuarios Where email = ${connection.escape(email)} and identificacion = ${connection.escape(identificacion)}`, async (error, result, fields) =>{
@@ -191,4 +235,4 @@ const verifyToken = (req, res, next) =>{
     }
 }
 
-module.exports = {registerUser, verifyToken, loginUser, modifyUser, deleteUser, getUsersList, recoverPassword};
+module.exports = {registerUser, verifyToken, loginUser, modifyUser, deleteUser, getUsersList, recoverPassword, getUser, deleteUserAdmin};
