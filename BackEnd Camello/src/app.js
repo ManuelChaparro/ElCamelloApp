@@ -6,6 +6,7 @@ const cors = require('cors');
 const conn = require('../config/connections')
 const userRoutes = require('../src/routes/users.routes.js');
 const headquarterRoutes = require('../src/routes/headquaters.routes.js')
+const spacesRoutes = require('../src/routes/spaces.routes.js')
 
 //initialization
 const app = express();
@@ -22,5 +23,6 @@ app.use(cors());
 //routes
 app.use('/api', userRoutes);
 app.use('/api', headquarterRoutes);
+app.use('/api', spacesRoutes);
 
 module.exports = app;

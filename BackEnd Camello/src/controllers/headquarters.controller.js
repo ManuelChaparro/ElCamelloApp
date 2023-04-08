@@ -2,9 +2,7 @@
 
 const {json} = require('express');
 const jwt = require('jsonwebtoken');
-const crypto = require("crypto");
 const connection = require('../../config/connections.js');
-const nodemailer = require('nodemailer');
 
 const createSchedule = async(req, res) =>{
     const {schedule_name, start_date, end_date, rol} = req.body
@@ -125,7 +123,7 @@ const searchSchedule = async(req, res) =>{
 }
 
 const createHeadquarter = async(req, res) =>{
-    const {headquater_name, address, schedule_id} = req.body
+    const {headquater_name, address, schedule_id, rol} = req.body
     jwt.verify(req.token, 'secretkey', async(error)=>{
         if(!error){
             if(rol === "A" || rol === "a"){
@@ -145,4 +143,107 @@ const createHeadquarter = async(req, res) =>{
     })
 }
 
-module.exports = {createSchedule, modifySchedule, deleteSchedule, getSchedules, searchSchedule, createHeadquarter}
+const modifyHeadquarter = async(req, res) =>{
+    const {headquarter_id, headquarter_schedule_id, headquater_new_name, new_adress, rol} = req.body
+    jwt.verify(req.token, 'secretkey', async(error) =>{
+        if(!error){
+            if(rol === "A" || rol === "a"){
+                await connection.query(`Select * from sedes where id_sede = ${connection.escape(headquarter_id)}`, async(err, result, fields) =>{
+                    if(!err){
+                        if(result.length === 1){
+                            await connection.query(`Update sedes set id_horario = ${connection.escape(headquarter_schedule_id)}, direccion = ${connection.escape(new_adress)}, nombre = ${connection.escape(headquater_new_name)}`, async(err, results, fields) =>{
+                                if(!err){
+                                    res.json({message: "Se modifico correctamente la sede"})
+                                }else{
+                                    res.json({message: "No fue posible modificar la sede"})
+                                }
+                            })
+                        }else{
+                            res.json({message: "La sede que intenta modificar no existe"})
+                        }
+                    }else{
+                        res.json({message: "Ha ocurrido un error al buscar la sede que desea modificar"})
+                    }
+                })
+            }else{
+                res.json({message: "No tiene los permisos para realizar esta acción"})
+            }
+        }else{
+            res.json({message: "No tiene autorización para ingresar"})
+        }
+    })
+}
+
+const deleteHeadquarter = async(req, res) =>{
+    const {headquarter_id, rol} = req.body
+    jwt.verify(req.token, 'secretkey', async(error) =>{
+        if(!error){
+            if(rol === "A" || rol === "a"){
+                await connection.query(`select * from sedes id_sede = ${connection.escape(headquarter_id)}`, async(err, result, fields) =>{
+                    if(!err){
+                        if(result.length === 1){
+                            await connection.query(`Delete from sedes where id_sede = ${connection.escape(headquarter_id)}`, async(error, finalResult, fields) =>{
+                                if(!error){
+                                    res.json({message: "Se elimino correctamente la sede"})
+                                }else{
+                                    res.json({message: "No fue posible eliminar la sede"})
+                                }
+                            })
+                        }else{
+                            res.json({message: "La sede que intenta eliminar no existe"})
+                        }
+                    }else{
+                        res.json({message: "Ha ocurrido un error al buscar la sede que desea eliminar"})
+                    }
+                })
+            }else{
+                res.json({message: "No tiene los permisos para realizar esta acción"})
+            }
+        }else{
+            res.json({message: "No tiene autorización para ingresar"})
+        }
+    })
+}
+
+const getHeadquarterList = async(req, res) =>{
+    jwt.verify(req.token, 'secretkey', async(error) =>{
+        if(!error){
+            await connection.query(`select s.nombre as nombre_sede, s.direccion, h.nombre as horario, h.fecha_inicio as apertura, h.fecha_final as cierre from sedes s, horarios h where s.id_horario = h.id_horario`, async(err, list, fields) =>{
+                if(!err){
+                    if(list.length >= 1){
+                        res.json(list)
+                    }else{
+                        res.json({message: "La lista de sedes esta vacia"})
+                    }
+                }else{
+                    res.json({message: "Ha ocurrido un error al buscar la lista de sedes"})
+                }
+            })
+        }else{
+            res.json({message: "No tiene autorización para ingresar"})
+        }
+    })
+}
+
+const searchHeadquarter = async(req, res) => {
+    const{headquarter_id} = req.body
+    jwt.verify(req.token, 'secretkey', async(error) => {
+        if(!error){
+            await connection.query(`select s.nombre as nombre_sede, s.direccion, h.nombre as horario, h.fecha_inicio as apertura, h.fecha_final as cierre from sedes s, horarios h where s.id_horario = h.id_horario and s.id_sede = ${connection.escape(headquarter_id)}`, async(error, result, fiedls) =>{
+                if(!error){
+                    if(result.length === 1){
+                        res.json(result)
+                    }else{
+                        res.json({message: "La sede que busca no existe"})
+                    }
+                }else{
+                    res.json({message: "Ha ocurrido un error al buscar la sede"})
+                }
+            })
+        }else{
+            res.json({message: "No tiene autorización para ingresar"})
+        }
+    })
+}
+
+module.exports = {createSchedule, modifySchedule, deleteSchedule, getSchedules, searchSchedule, createHeadquarter, modifyHeadquarter, deleteHeadquarter, getHeadquarterList, searchHeadquarter}
