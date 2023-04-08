@@ -44,7 +44,11 @@ const modifyUser = async(req, res) =>{
                 if(result.length === 1){
                     try{
                         await connection.query(`update usuarios set nombres = ${userBody.nombres}, apellidos = ${userBody.apellidos}, genero = ${userBody.genero}, telefono = ${userBody.telefono} where email = ${email}`, (error, result, fields) =>{
-                            res.json({message:`Se ha modificado correctamente el usuario`});
+                            if(!error){
+                                res.json({message:`Se ha modificado correctamente el usuario`});
+                            }else{
+                                res.json({message: "No se pudo modificar el usuario deseado"})
+                            }
                         });
                     }catch(error){
                         res.json({message: `Ha ocurrido un error: ${error}`});
