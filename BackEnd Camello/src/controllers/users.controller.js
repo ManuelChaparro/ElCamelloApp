@@ -143,7 +143,7 @@ const getUser = async(req, res) =>{
 }
 
 const deleteUserAdmin = async(req, res) =>{
-    const {email, rol} = req.body
+    const {email, rol, id_user} = req.body
     jwt.verify(req.token, 'secretkey', async(error)=>{
         if(!error){
             if(rol === "A" || rol === "a"){
@@ -152,7 +152,13 @@ const deleteUserAdmin = async(req, res) =>{
                     if(!error){
                         await connection.query(`delete from passwords where indicador = ${connection.escape(email_binary)}`, async(error, request, fieldss) =>{
                             if(!error){
-                                res.json({message: "0"})
+                                await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripción) values (${id_user}, NOW(), "Eliminacion", 'Se inhabilito al usuario ${connection.escape(email)}, de la tabla de usuarios')`, async(error, info, fields) =>{
+                                    if(!error){
+                                        res.json({message: "0"})
+                                    }else{
+                                        res.json({message: "Error log"})
+                                    }
+                                })
                             }else{
                                 res.json({message: "El usuario no se ha podido eliminar correctamente"})
                             }

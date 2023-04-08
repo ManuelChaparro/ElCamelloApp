@@ -5,13 +5,19 @@ const jwt = require('jsonwebtoken');
 const connection = require('../../config/connections.js');
 
 const createSchedule = async(req, res) =>{
-    const {schedule_name, start_date, end_date, rol} = req.body
+    const {schedule_name, start_date, end_date, rol, id_user} = req.body
     jwt.verify(req.token, 'secretkey', async(error)=>{
         if(!error){
             if(rol === "A" || rol === "a"){
                 await connection.query(`Insert into horarios (nombre, fecha_inicio, fecha_final) values (${connection.escape(schedule_name)}, ${connection.escape(start_date)}, ${connection.escape(end_date)})`, async(err, result, fields) =>{
                     if(!err){
-                        res.json({message: "Se ha ingresado correctamente el horario"})
+                        await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripción) values (${id_user}, NOW(), "Agregacion", 'Se agregó el horario ${connection.escape(schedule_name)} a la tabla de horarios')`, async(error, info, fields) =>{
+                            if(!error){
+                                res.json({message: "Se ha ingresado correctamente el horario"})
+                            }else{
+                                res.json({message: "Error log"})
+                            }
+                        })
                     }else{
                         res.json({message: "Ha ocurrido un error al ingresar un nuevo horario"})
                     }
@@ -26,7 +32,7 @@ const createSchedule = async(req, res) =>{
 }
 
 const modifySchedule = async(req, res) =>{
-    const {id_schedule, schedule_name, start_date, end_date, rol} = req.body
+    const {id_schedule, schedule_name, start_date, end_date, rol, id_user} = req.body
     jwt.verify(req.token, 'secretkey', async(error)=>{
         if(!error){
             if(rol === "A" || rol === "a"){
@@ -35,7 +41,13 @@ const modifySchedule = async(req, res) =>{
                         if(result.length === 1){
                             await connection.query(`update horarios set nombre = ${connection.escape(schedule_name)}, fecha_inicio = ${connection.escape(start_date)}, fecha_final = ${connection.escape(end_date)}`, async(err, result, fields) =>{
                                 if(!err){
-                                    res.json({message: "Se modifico correctamente el horario"})
+                                    await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripción) values (${id_user}, NOW(), "Modificacion", 'Se modifico el horario ${connection.escape(schedule_name)} en la tabla de horarios')`, async(error, info, fields) =>{
+                                        if(!error){
+                                            res.json({message: "Se modifico correctamente el horario"})
+                                        }else{
+                                            res.json({message: "Error log"})
+                                        }
+                                    })
                                 }else{
                                     res.json({message: "No se pudo modifcar el horario deseado"})
                                 }
@@ -57,7 +69,7 @@ const modifySchedule = async(req, res) =>{
 }
 
 const deleteSchedule = async(req, res) =>{
-    const {schedule_name, rol} = req.body
+    const {schedule_name, rol, id_user} = req.body
     jwt.verify(req.token, 'secretkey', async(error) =>{
         if(!error){
             if(rol === "A" || rol === "a"){
@@ -66,6 +78,13 @@ const deleteSchedule = async(req, res) =>{
                         if(result.length === 1){
                             await connection.query(`delete from horarios where nombre = ${connection.escape(schedule_name)}`, async(err, info, fields) =>{
                                 if(!err){
+                                    await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripción) values (${id_user}, NOW(), "Eliminacion", 'Se elimino el horario ${connection.escape(schedule_name)} de la tabla de horarios')`, async(error, info, fields) =>{
+                                        if(!error){
+                                            res.json({message: "Se elimino correctamente el horario"})
+                                        }else{
+                                            res.json({message: "Error log"})
+                                        }
+                                    })
                                     res.json({message: "El horario se ha eliminado correctamente"})
                                 }else{
                                     res.json({message: "No se pudo eliminar el horario deseado"})
@@ -123,13 +142,19 @@ const searchSchedule = async(req, res) =>{
 }
 
 const createHeadquarter = async(req, res) =>{
-    const {headquater_name, address, schedule_id, rol} = req.body
+    const {headquater_name, address, schedule_id, rol, id_user} = req.body
     jwt.verify(req.token, 'secretkey', async(error)=>{
         if(!error){
             if(rol === "A" || rol === "a"){
                 await connection.query(`Insert into sedes (id_horario, direccion, nombre) values (${connection.escape(schedule_id)}, ${connection.escape(address)}, ${connection.escape(headquater_name)})`, async(err, result, fields) =>{
                     if(!err){
-                        res.json({message: "Se ha creado correctamente la sede"})
+                        await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripción) values (${id_user}, NOW(), "Agregacion", 'Se agrego la sede ${connection.escape(headquater_name)} a la tabla de sedes')`, async(error, info, fields) =>{
+                            if(!error){
+                                res.json({message: "Se ha creado correctamente la sede"})
+                            }else{
+                                res.json({message: "Error log"})
+                            }
+                        })
                     }else{
                         res.json({message: "Ha ocurrido un problema al crear la sede"})
                     }
@@ -144,7 +169,7 @@ const createHeadquarter = async(req, res) =>{
 }
 
 const modifyHeadquarter = async(req, res) =>{
-    const {headquarter_id, headquarter_schedule_id, headquater_new_name, new_adress, rol} = req.body
+    const {headquarter_id, headquarter_schedule_id, headquater_new_name, new_adress, rol, id_user} = req.body
     jwt.verify(req.token, 'secretkey', async(error) =>{
         if(!error){
             if(rol === "A" || rol === "a"){
@@ -153,7 +178,13 @@ const modifyHeadquarter = async(req, res) =>{
                         if(result.length === 1){
                             await connection.query(`Update sedes set id_horario = ${connection.escape(headquarter_schedule_id)}, direccion = ${connection.escape(new_adress)}, nombre = ${connection.escape(headquater_new_name)}`, async(err, results, fields) =>{
                                 if(!err){
-                                    res.json({message: "Se modifico correctamente la sede"})
+                                    await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripción) values (${id_user}, NOW(), "Modificacion", 'Se modifico la sede ${connection.escape(headquater_new_name)} de la tabla de sedes')`, async(error, info, fields) =>{
+                                        if(!error){
+                                            res.json({message: "Se modifico correctamente la sede"})
+                                        }else{
+                                            res.json({message: "Error log"})
+                                        }
+                                    })
                                 }else{
                                     res.json({message: "No fue posible modificar la sede"})
                                 }
@@ -184,7 +215,13 @@ const deleteHeadquarter = async(req, res) =>{
                         if(result.length === 1){
                             await connection.query(`Delete from sedes where id_sede = ${connection.escape(headquarter_id)}`, async(error, finalResult, fields) =>{
                                 if(!error){
-                                    res.json({message: "Se elimino correctamente la sede"})
+                                    await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripción) values (${id_user}, NOW(), "Eliminacion", 'Se elimino la sede ${connection.escape(headquarter_id)} de la tabla de sedes')`, async(error, info, fields) =>{
+                                        if(!error){
+                                            res.json({message: "Se elimino correctamente la sede"})
+                                        }else{
+                                            res.json({message: "Error log"})
+                                        }
+                                    })
                                 }else{
                                     res.json({message: "No fue posible eliminar la sede"})
                                 }
