@@ -1,0 +1,199 @@
+<div id="container">
+  <div id="btns-option">
+    <button (click)="changePanel(0)">Información Sede</button>
+    <button (click)="changePanel(1)">Inventario</button>
+    <button (click)="changePanel(2)">Espacios</button>
+  </div>
+  <div id="info">
+    <div class="row">
+      <div class="column">
+        <label for="">Nombres</label>
+        <label class="warn warn_name" for="">El nombre no puede estar vacío</label>
+        <input [(ngModel)]="campusName" type="text" name="name" placeholder="Ingrese el nombre del campus">
+      </div>
+      <div class="column">
+        <label for="">Dirección</label>
+        <label class="warn warn_name" for="">La dirección no puede estar vacía</label>
+        <input [(ngModel)]="direction" type="text" name="name" placeholder="Ingrese su dirección">
+      </div>
+    </div>
+    <div class="row">
+      <div class="column">
+        <label for="">Ciudad</label>
+        <label class="warn warn_name" for="">La ciudad no puede estar vacía</label>
+        <input [(ngModel)]="city" type="text" name="name" placeholder="Ingrese la ciudad">
+      </div>
+      <div class="column">
+        <label for="">Departamento</label>
+        <label class="warn warn_name" for="">El departamento no puede estar vacío</label>
+        <input [(ngModel)]="department" type="text" name="name" placeholder="Ingrese el departamento">
+      </div>
+    </div>
+    <div class="row">
+      <div class="column">
+        <label for="">Descripción</label>
+        <label class="warn warn_name" for="">El nombre no puede estar vacío</label>
+        <textarea style="resize: none" [(ngModel)]="description" type="text" name="name" placeholder="Ingrese la Descripción del campus" name="" id="" cols="30" rows="10"></textarea>
+      </div>
+      <div class="column">
+        <label for="">Horario</label>
+        <label class="warn warn_name" for="">El horario no puede estar vacío</label>
+        <select class="form-select" #schedule (change)="changeDay(schedule.value)">
+          <option selected>Lunes</option>
+          <option>Martes</option>
+          <option>Miércoles</option>
+          <option>Jueves</option>
+          <option>Viernes</option>
+          <option>Sábado</option>
+          <option>Domingo</option>
+        </select>
+        <div>
+          <label for="">Primer Horario</label>
+          <div>
+            <label for="">Apertura</label>
+            <input #firstOpen (change)="changeFirstSchedule(firstOpen.value, firstClose.value)" type="time" id="firstOpen" name="firstOpen" required>
+            <label for="">Cierre</label>
+            <input #firstClose (change)="changeFirstSchedule(firstOpen.value, firstClose.value)" type="time" id="firstClose" name="firstClose" required>
+          </div>
+         </div>
+        <div>
+          <label for="">Segundo Horario</label>
+          <div>
+            <label for="">Apertura</label>
+            <input #secondOpen (change)="changeSecondSchedule(secondOpen.value, secondClose.value)" type="time" id="secondOpen" name="secondOpen" required>
+            <label for="">Cierre</label>
+            <input #secondClose (change)="changeSecondSchedule(secondOpen.value, secondClose.value)" type="time" id="secondClose" name="secondClose" required>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="stock">
+    <div id="stock-info">
+      <div class="stock-row">
+        <div class="input-div">
+          <label for="">Nombre</label>
+          <label class="warn warn_name" for="">El nombre no puede estar vacío</label>
+          <input [(ngModel)]="stockName" type="text"  placeholder="Ingrese el nombre del producto">
+        </div>
+        <div class="input-div">
+          <label for="">Tipo</label>
+          <label class="warn warn_name" for="">La ciudad no puede estar vacía</label>
+          <select class="form-select" #stockType (change)="changeStockType(stockType.value)">
+            <option selected>Mueble</option>
+            <option>Equipo Electrónico</option>
+            <option>Herramienta</option>
+            <option>Artículo de Oficina</option>
+            <option>Otro</option>
+          </select></div>
+      </div>
+      <div class="stock-row">
+        <div class="input-div">
+          <label for="">Descripción</label>
+          <label class="warn warn_name" for="">La ciudad no puede estar vacía</label>
+          <input [(ngModel)]="stockDescription" type="text"  placeholder="Ingrese la Descripción">
+        </div>
+        <div class="input-div">
+          <label for="">Valor Comercial</label>
+          <label class="warn warn_name" for="">La ciudad no puede estar vacía</label>
+          <input [(ngModel)]="stockPrice" type="number"  placeholder="Ingrese el valor comercial">
+        </div>
+      </div>
+      <button (click)="addObjToStock()" class="stock-add btn btn-primary">Agregar</button>
+    </div>
+    <div class="stock-list">
+      <table class="table" id="table-list">
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Nombre</th>
+            <th>Precio</th>
+            <th>Eliminar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let stockObj of listStock">
+            <td>{{ stockObj.id }}</td>
+            <td>{{ stockObj.name }}</td>
+            <td>{{ stockObj.price }}</td>
+            <td class="td-img"><button (click)="deleteObjList(stockObj.id)" class="btn-table"><img class="btn-table-img" src="../../assets/img-stock/deleteIcon.svg" alt=""></button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div id="space">
+    <div>
+      <div class="input-div">
+        <label for="">Nombre</label>
+        <label class="warn warn_name" for="">El nombre no puede estar vacío</label>
+        <input [(ngModel)]="spaceName" type="text"  placeholder="Ingrese el nombre del producto">
+      </div>
+      <div class="input-div">
+        <label for="">Descripción</label>
+        <label class="warn warn_name" for="">La ciudad no puede estar vacía</label>
+        <textarea style="resize: none" [(ngModel)]="spaceDescription" type="text" name="name" placeholder="Ingrese la Descripción del campus" name="" id="" cols="30" rows="10"></textarea>
+      </div>
+    </div>
+    <div id="space-data-table">
+      <div id="optionStockInSpace">
+        <div>
+          <label for="">Qué incluye</label>
+          <select id="selectObjSpace" class="form-select" #stockOption (change)="setObjsInSpace(stockOption.value)">
+            <option selected>Mueble</option>
+            <option>Equipo Electrónico</option>
+            <option>Herramienta</option>
+            <option>Artículo de Oficina</option>
+            <option>Otro</option>
+          </select>
+        </div>
+        <div>
+          <label for="">Objeto</label>
+          <select #selectObj id="objSpaceSelect" class="form-select"></select>
+        </div>
+        <button (click)="addObjToSpace(selectObj.value, stockOption.value)">Agregar</button>
+      </div>
+
+      <div class="stock-list objSpaceTable">
+        <table class="table" id="table-list">
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>Nombre</th>
+              <th>Eliminar</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let objSpace of objsSpace">
+              <td>{{ objSpace.id }}</td>
+              <td>{{ objSpace.name }}</td>
+              <td class="td-img"><button (click)="deleteObjStock(objSpace.id, stockOption.value)" class="btn-table"><img class="btn-table-img" src="../../assets/img-stock/deleteIcon.svg" alt=""></button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <button (click)="addSpace()">Agregar Espacio</button>
+    </div>
+    <div>
+      <h3>Lista de Espacios</h3>
+      <div class="stock-list">
+        <table class="table" id="table-list">
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>Nombre</th>
+              <th>Eliminar</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let space of spaces">
+              <td>{{ space.id }}</td>
+              <td>{{ space.name }}</td>
+              <td class="td-img"><button (click)="deleteSpace(space.id, stockOption.value)" class="btn-table"><img class="btn-table-img" src="../../assets/img-stock/deleteIcon.svg" alt=""></button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

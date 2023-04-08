@@ -1,2 +1,15 @@
-<h1>{{name}}</h1>
-<h1>{{rol}}</h1>
+<div id="container">
+  <div id="header">
+    <div id="cont-btn-booking">
+      <button (click)="cambiarComponente(1)" id="btn-booking"><img id="booking-img" src="../../assets/img-stock/bookingWhite.webp" alt="">Mis Reservas</button>
+    </div>
+    <button (click)="cambiarComponente(0)" id="btn-home"><img id="camello-img" src="../../assets/img-stock/logoWhite.png" alt=""><h1>El Camello Coworking</h1></button>
+    <div>
+      <button id="btn-user"><img id="user-img" src="../../assets/img-stock/user.webp" alt="">{{name}} {{surname}}</button>
+    </div>
+
+  </div>
+  <div id="content">
+    <ng-container *ngComponentOutlet="componentes[indiceComponenteActual].componente"></ng-container>
+  </div>
+</div>

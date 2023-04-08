@@ -148,7 +148,7 @@ const deleteUserAdmin = async(req, res) =>{
                     if(!error){
                         await connection.query(`delete from passwords where indicador = ${connection.escape(email_binary)}`, async(error, request, fieldss) =>{
                             if(!error){
-                                res.json({message: "Se elimino correctamente el usuario"})
+                                res.json({message: "0"})
                             }else{
                                 res.json({message: "El usuario no se ha podido eliminar correctamente"})
                             }

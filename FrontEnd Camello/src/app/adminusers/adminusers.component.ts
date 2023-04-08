@@ -41,6 +41,23 @@ export class AdminusersComponent {
     this.loadUserList();
   }
 
+  public saveChanges(){
+    const url = 'http://localhost:3005/api/user/modify';
+    const headers = new HttpHeaders({
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+    });
+    const data = {
+      nombres: this.name,
+      apellidos: this.surname,
+      genero: this.gender,
+      telefono: this.number
+    };
+    this.http.post(url, data, { headers }).subscribe((data) => {
+      alert(data);
+    });
+
+  }
+
   public loadUserList(){
     const url = 'http://localhost:3005/api/user/list';
     const headers = new HttpHeaders({
@@ -49,21 +66,56 @@ export class AdminusersComponent {
 
     this.http.get(url, { headers }).subscribe((data) => {
       this.usuarios = data as Iterable<any>;
-      console.log(this.usuarios);
-
     });
 
+  }
+
+  public deleteUser(email: string){
+    if(window.confirm("Está seguro que desea eliminar al usuario?")){
+      const decode_token: object = jwt_decode(JSON.stringify(localStorage.getItem('token')));
+      if('infoUser' in decode_token){
+        const infoUser =  decode_token.infoUser as Array<object>;
+        if('rol' in infoUser[0]){
+          const data = {
+            email: email,
+            rol: infoUser[0].rol
+          };
+          const url = 'http://localhost:3005/api/user/ad/delete';
+          const headers = new HttpHeaders({
+            Authorization: 'Bearer ' + localStorage.getItem('token'),
+          });
+          this.http.post(url, data, {headers}).subscribe(response => {
+            if('message' in response){
+              if(response.message == '0'){
+                alert("Eliminado existosamente")
+                location.reload();
+              }else{
+                alert("No se pudo eliminar")
+              }
+            }
+          });
+        }
+      }
+    }
   }
 
   public changeOption(option: number){
     const div_create = document.querySelector('#create-user') as HTMLElement;
     const div_list = document.querySelector('#table-list') as HTMLElement;
-    if(option==0){
-      div_create.style.display = 'block';
+    const div_modify = document.querySelector('#modify-user') as HTMLElement;
+    if(option===0){
+      this.cleanData();
+      div_create.style.display = 'flex';
       div_list.style.display = 'none';
+      div_modify.style.display = 'none';
+    }else if(option === 1){
+      div_create.style.display = 'none';
+      div_modify.style.display = 'none';
+      div_list.style.display = '';
     }else{
       div_create.style.display = 'none';
-      div_list.style.display = 'block';
+      div_modify.style.display = 'flex';
+      div_list.style.display = 'none';
     }
   }
 
@@ -106,6 +158,7 @@ export class AdminusersComponent {
         if(response.message == '0'){
           this.cleanData();
           this.changeOption(1);
+          this.loadUserList();
         }else if(response.message == '1'){
           alert("El email ya se encuentra registrado");
         }else{
@@ -127,6 +180,32 @@ export class AdminusersComponent {
     this.document = undefined;
     this.birthdate = '';
     this.rol = 'Cliente';
+  }
+
+  public modifyUser(email: string){
+    this.loadData(email);
+  }
+
+  public loadData(email: string){
+    const url = 'http://localhost:3005/api/user/search';
+    const data = {
+      email: email,
+    };
+    const headers = new HttpHeaders({
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+    });
+    this.http.post(url, data, {headers}).subscribe(response => {
+      const data = response as Array<object>;
+      if('nombres' in data[0] && 'apellidos' in data[0] && 'telefono' in data[0] && 'email' in data[0]
+      && 'genero' in data[0]){
+        this.name = data[0].nombres as string;
+        this.surname = data[0].apellidos as string;
+        this.number = data[0].telefono as number;
+        this.gender = data[0].genero as string;
+        this.email = data[0].email as string;
+        this.changeOption(2);
+      }
+    });
   }
 
   public registerUser() {

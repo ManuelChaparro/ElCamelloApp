@@ -1,1 +1,10 @@
-<p>admincampus works!</p>
+<div id="container">
+  <div id="title">
+    <h1>Sedes</h1>
+    <button class="btn-option" id="btn-create" (click)="cambiarComponente(1)"><img class="btn-img" src="../../assets/img-stock/addIcon.svg" alt="">Crear Sede</button>
+    <button class="btn-option" id="btn-list" (click)="cambiarComponente(0)"><img class="btn-img" src="../../assets/img-stock/listIcon.svg" alt="">Ver Lista de Sedes</button>
+  </div>
+  <div id="data">
+    <ng-container *ngComponentOutlet="componentes[indiceComponenteActual].componente"></ng-container>
+  </div>
+</div>

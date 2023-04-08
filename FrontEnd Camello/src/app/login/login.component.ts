@@ -46,6 +46,8 @@ export class LoginComponent {
         }
       }else if('token' in response){
         const token: string = response.token as string;
+        console.log(response.token);
+
         const decode_token: object = jwt_decode(JSON.stringify(token));
         localStorage.setItem('token', token);
         if('infoUser' in decode_token){

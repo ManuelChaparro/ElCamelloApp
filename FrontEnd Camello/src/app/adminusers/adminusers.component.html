@@ -5,10 +5,11 @@
     <button class="btn-option" id="btn-list" (click)="changeOption(1)"><img class="btn-img" src="../../assets/img-stock/listIcon.svg" alt="">Ver Lista de Usuarios</button>
   </div>
   <div>
-    <table class="table" id="table-list">
+    <table id="table-list">
       <thead>
         <tr>
           <th>ID</th>
+          <th>Rol</th>
           <th>Nombre</th>
           <th>Apellido</th>
           <th>Email</th>
@@ -21,13 +22,14 @@
       <tbody>
         <tr *ngFor="let usuario of usuarios">
           <td>{{ usuario.id_usuario }}</td>
+          <td>{{ usuario.rol }}</td>
           <td>{{ usuario.nombres }}</td>
           <td>{{ usuario.apellidos }}</td>
           <td>{{ usuario.email }}</td>
           <td>{{ usuario.tipo_documento }}</td>
           <td>{{ usuario.identificacion }}</td>
-          <td class="td-img"><button class="btn-table"><img class="btn-table-img" src="../../assets/img-stock/deleteIcon.svg" alt=""></button></td>
-          <td class="td-img"><button class="btn-table"><img class="btn-table-img" src="../../assets/img-stock/modifyIcon.svg" alt=""></button></td>
+          <td class="td-img"><button (click)="modifyUser(usuario.email)" class="btn-table"><img class="btn-table-img" src="../../assets/img-stock/modifyIcon.svg" alt=""></button></td>
+          <td class="td-img"><button (click)="deleteUser(usuario.email)" class="btn-table"><img class="btn-table-img" src="../../assets/img-stock/deleteIcon.svg" alt=""></button></td>
         </tr>
       </tbody>
     </table>
@@ -60,18 +62,17 @@
             <input [(ngModel)]="email" type="text" name="email" placeholder="Ingrese su Email">
           </div>
 
-          <div class="input-form">
+          <div class="input-form show-or-hide">
             <label for="">Contraseña</label>
             <label class="warn warn_pass" for="">Debe tener mínimo 8 carácteres</label>
             <input [(ngModel)]="password" type="password" name="password" placeholder="Ingrese su Contraseña">
           </div>
 
-          <div class="input-form">
+          <div class="input-form show-or-hide">
             <label for="">Confirmar contraseña</label>
             <label class="warn warn_con_pass" for="">No coinciden</label>
             <input [(ngModel)]="confirm_pass" type="password" name="con-password" placeholder="Confirme su contraseña">
           </div>
-
         </div>
         <div class="column-form" id="div-personalinfo">
           <div class="input-form">
@@ -83,7 +84,7 @@
             </select>
           </div>
 
-          <div class="input-form">
+          <div class="input-form show-or-hide">
             <label for="">Tipo de documento</label>
             <select class="form-select" #doctypes (change)="changeDocType(doctypes.value)">
               <option selected>Cédula de Ciudadanía</option>
@@ -91,29 +92,66 @@
             </select>
           </div>
 
-          <div class="input-form">
+          <div class="input-form show-or-hide">
             <label for="">Documento</label>
             <label class="warn warn_doc" for="">El documento no puede estar vacío</label>
             <input [(ngModel)]="document" name="document" placeholder="Ingrese su Número de Documento" type="number" min="0" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null">
           </div>
         </div>
         <div class="column-form column-date" id="div-date">
-          <div class="input-form">
+          <div class="input-form show-or-hide">
             <label for="">Fecha de nacimiento</label>
             <label class="warn warn_birth" for="">Seleccione una fecha de nacimiento</label>
             <label class="warn warn_birth_more" for="">Debe tener mas de 16 años</label>
             <input [(ngModel)]="birthdate" type="date" name="birthdate">
           </div>
-          <div class="input-form">
+          <div class="input-form show-or-hide">
             <label for="">Rol</label>
             <select class="form-select" #rol (change)="changeRol(rol.value)">
               <option selected>Cliente</option>
               <option>Administrador</option>
             </select>
           </div>
-          <div class="input-form">
-            <button (click)="registerUser()">Crear</button>
+          <div class="input-form div-btn">
+            <button class="btn btn-primary btn-create-user" (click)="registerUser()">Crear</button>
           </div>
+        </div>
+      </form>
+    </div>
+
+
+    <div id="modify-user">
+      <form action="" class="form">
+        <div class="column-form-modify" id="div-identification">
+          <div class="input-form">
+            <label for="">Nombres</label>
+            <label class="warn warn_name" for="">El nombre no puede estar vacío</label>
+            <input [(ngModel)]="name" type="text" name="name" placeholder="Ingrese su Nombre">
+          </div>
+
+          <div class="input-form">
+            <label for="">Apellidos</label>
+            <label class="warn warn_surname" for="">El apellido no puede estar vacío</label>
+            <input [(ngModel)]="surname" type="text" name="surname" placeholder="Ingrese sus Apellidos">
+          </div>
+        </div>
+        <div class="column-form-modify" id="div-credential">
+          <div class="input-form">
+            <label for="">Celular</label>
+            <label class="warn warn_phone" for="">El celular no puede estar vacío</label>
+            <input [(ngModel)]="number" name="cellphone" placeholder="Ingrese su Número" type="number" min="0" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null">
+          </div>
+          <div class="input-form">
+            <label for="">Género</label>
+            <select class="form-select" #genders (change)="changeGender(genders.value)">
+              <option selected>Masculino</option>
+              <option>Femenino</option>
+              <option>Prefiero no decirlo</option>
+            </select>
+          </div>
+        </div>
+        <div class="input-form div-btn-modify">
+          <button class="btn btn-primary btn-modify-user" (click)="saveChanges()">Guardar</button>
         </div>
       </form>
     </div>

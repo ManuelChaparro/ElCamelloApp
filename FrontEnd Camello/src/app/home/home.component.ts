@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 import jwt_decode from 'jwt-decode';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { CampusComponent } from '../campus/campus.component';
+import { BookingsComponent } from '../bookings/bookings.component';
 
 @Component({
   selector: 'app-home',
@@ -12,31 +15,40 @@ export class HomeComponent {
   public number: number | undefined;
   public rol: string | unknown;
 
-  constructor(){
+  constructor(private http: HttpClient){
+    const decode_token: object = jwt_decode(JSON.stringify(localStorage.getItem('token')));
+    if('infoUser' in decode_token){
+      const infoUser =  decode_token.infoUser as Array<object>;
+      if('email' in infoUser[0]){
+        const url = 'http://localhost:3005/api/user/search';
+        const token_email = infoUser[0].email;
+        const data = {
+          email: token_email as string,
+        };
+        const headers = new HttpHeaders({
+          Authorization: 'Bearer ' + localStorage.getItem('token'),
+        });
+        this.http.post(url, data, {headers}).subscribe(response => {
+          const data = response as Array<object>;
+          if('nombres' in data[0] && 'apellidos' in data[0]){
+            const names = data[0].nombres as string
+            const surnames = data[0].apellidos as string
+            this.name = names.split(" ")[0];
+            this.surname = surnames.split(" ")[0];
+          }
+        });
+      }
+    }
     this.name = '';
     this.surname = '';
-    this.number = undefined;
-    this.rol = '';
-
-    const token = localStorage.getItem('token');
-    const decode_token: object = jwt_decode(JSON.stringify(token));
-
-    if('exp' in decode_token){
-      const exp = decode_token.exp as number;
-      const date = new Date(0);
-      date.setUTCSeconds(exp);
-    }
-
-
-    if('infoUser' in decode_token){
-      const xd = decode_token.infoUser as Array<object>;
-      if('rol' in xd[0] && 'email' in xd[0]){
-        this.name = xd[0].email;
-        this.rol = xd[0].rol;
-      }
-
-
-    }
   }
 
+  componentes = [
+    { nombre: 'Componente 1', componente: CampusComponent},
+    { nombre: 'Componente 2', componente: BookingsComponent}
+  ];
+  indiceComponenteActual = 0;
+  cambiarComponente(indice: number) {
+    this.indiceComponenteActual = indice;
+  }
 }
