@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import * as bootstrap from 'bootstrap';
 
-
 interface stockObject{
   id: number,
   name: string,
@@ -9,8 +8,6 @@ interface stockObject{
   description: string,
   price: number
 }
-
-
 
 @Component({
   selector: 'app-newstock',

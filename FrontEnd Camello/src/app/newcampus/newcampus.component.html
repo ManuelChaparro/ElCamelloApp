@@ -7,37 +7,31 @@
     <div id="info">
       <div class="info-rows">
         <div class="input-containers">
-          <label for="campusName">Nombres</label>
-          <label class="warn warn_name" for="">El nombre no puede estar vacío</label>
+          <label for="campusName">Nombres <span style="display: none; color: red;" id="warn-name">*</span></label>
           <input id="campusName" class="form-control" [(ngModel)]="campusName" type="text" name="name" placeholder="Ingrese el nombre del campus">
         </div>
         <div class="input-containers">
-          <label for="">Dirección</label>
-          <label class="warn warn_name" for="">La dirección no puede estar vacía</label>
-          <input class="form-control" [(ngModel)]="direction" type="text" name="name" placeholder="Ingrese su dirección">
+          <label for="">Dirección <span style="display: none; color: red;" id="warn-direction">*</span></label>
+          <input id="campusDirection" class="form-control" [(ngModel)]="direction" type="text" name="name" placeholder="Ingrese su dirección">
         </div>
       </div>
       <div class="info-rows">
         <div class="input-containers">
-          <label for="">Ciudad</label>
-          <label class="warn warn_name" for="">La ciudad no puede estar vacía</label>
-          <input class="form-control" [(ngModel)]="city" type="text" name="name" placeholder="Ingrese la ciudad">
+          <label for="">Ciudad <span style="display: none; color: red;" id="warn-city">*</span></label>
+          <input id="campusCity" class="form-control" [(ngModel)]="city" type="text" name="name" placeholder="Ingrese la ciudad">
         </div>
         <div class="input-containers">
-          <label for="">Departamento</label>
-          <label class="warn warn_name" for="">El departamento no puede estar vacío</label>
-          <input class="form-control" [(ngModel)]="department" type="text" name="name" placeholder="Ingrese el departamento">
+          <label for="">Departamento <span style="display: none; color: red;" id="warn-department">*</span></label>
+          <input id="campusDepartment" class="form-control" [(ngModel)]="department" type="text" name="name" placeholder="Ingrese el departamento">
         </div>
       </div>
       <div class="info-rows">
         <div class="input-containers">
-          <label for="">Descripción</label>
-          <label class="warn warn_name" for="">El nombre no puede estar vacío</label>
-          <textarea class="form-control" style="resize: none" [(ngModel)]="description" type="text" name="name" placeholder="Ingrese la Descripción del campus" name="" id="" cols="30" rows="3"></textarea>
+          <label for="">Descripción <span style="display: none; color: red;" id="warn-description">*</span></label>
+          <textarea id="campusDescription" class="form-control" style="resize: none" [(ngModel)]="description" type="text" name="name" placeholder="Ingrese la Descripción del campus" name="" id="" cols="30" rows="3"></textarea>
         </div>
         <div class="input-containers">
-          <label for="">Horario</label>
-          <label class="warn warn_name" for="">El horario no puede estar vacío</label>
+          <label for="">Horario <span style="display: none; color: red;" id="warn-schedule">*</span></label>
           <select class="form-select" #schedule (change)="changeDay(schedule.value)">
             <option selected>Lunes</option>
             <option>Martes</option>
@@ -73,20 +67,18 @@
     <div id="space">
       <div class="space-containers">
         <div class="input-containers">
-          <label for="">Nombre</label>
-          <label class="warn warn_name" for="">El nombre no puede estar vacío</label>
+          <label for="">Nombre <span style="display: none; color: red;" id="warn-space-name">*</span></label>
           <input class="form-control" [(ngModel)]="spaceName" type="text"  placeholder="Ingrese el nombre del producto">
         </div>
         <div class="input-containers col-space">
-          <label for="">Descripción</label>
-          <label class="warn warn_name" for="">La ciudad no puede estar vacía</label>
+          <label for="">Descripción <span style="display: none; color: red;" id="warn-space-desc">*</span></label>
           <textarea class="form-control" id="description-space" style="resize: none" [(ngModel)]="spaceDescription" type="text" name="name" placeholder="Ingrese la Descripción del campus" name="" cols="30" rows="4"></textarea>
         </div>
       </div>
       <div class="space-containers">
         <div id="options-obj-space">
           <div class="input-containers px-0">
-            <label for="">Qué incluye</label>
+            <label for="">Qué incluye <span style="display: none; color: red;" id="warn-space-objs">*</span></label>
             <select id="selectObjSpace" class="form-select" #stockOption (change)="setObjsInSpace(stockOption.value)">
               <option selected>Mueble</option>
               <option>Equipo Electrónico</option>
@@ -127,7 +119,7 @@
       </div>
       <div class="space-containers">
         <div class="input-containers text-center">
-          <h3>Lista de Espacios</h3>
+          <h3>Lista de Espacios <span style="display: none; color: red;" id="warn-space-list">*</span></h3>
         </div>
         <div class="input-containers table-objs">
           <table class="table" id="table-list">
@@ -147,7 +139,24 @@
             </tbody>
           </table>
         </div>
-        <button class="btn btn-success">Crear Sede</button>
+        <button (click)="validationInfo()" class="btn btn-success">Crear Sede</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="container mt-3">
+  <div class="modal fade" id=infoModal>
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Información Insuficiente</h5>
+          <button class="btn btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body" id="modal-body">
+
+        </div>
       </div>
     </div>
   </div>
