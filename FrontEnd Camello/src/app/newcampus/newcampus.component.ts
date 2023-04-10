@@ -30,19 +30,11 @@ export class NewcampusComponent {
   public schedule;
   public selectedSchedule: string;
 
-  public countObjs: number;
-  public stockName: string;
-  public stockType: string;
-  public stockDescription: string;
-  public stockPrice: number;
-  public listStock: Array<stockObject>;
-
   public countSpace: number;
   public spaceName: string;
   public spaceDescription: string;
   public objsSpace: Array<stockObject>;
   public spaces: Array<space>;
-
 
   constructor(){
     this.campusName = '';
@@ -61,13 +53,6 @@ export class NewcampusComponent {
       { dia: 'Domingo', firstOpen: '', firstClose: '', secondOpen: '', secondClose: '' }
     ];
 
-    this.countObjs = 1;
-    this.stockName = '';
-    this.stockType = 'Mueble';
-    this.stockDescription = '';
-    this.stockPrice = 0;
-    this.listStock = [];
-
     this.countSpace = 1;
     this.spaceName = '';
     this.spaceDescription = '';
@@ -76,11 +61,10 @@ export class NewcampusComponent {
   }
 
   ngOnInit() {
-    this.changeDay(this.selectedSchedule);
-    const stock = document.querySelector('#stock') as HTMLElement;
+    //this.changeDay(this.selectedSchedule);
     const space = document.querySelector('#space') as HTMLElement;
-    stock.style.display = 'none';
     space.style.display = 'none';
+
   }
 
   changeDay(value:string): void {
@@ -121,37 +105,17 @@ export class NewcampusComponent {
 
   changePanel(option: number){
     const info = document.querySelector('#info') as HTMLElement;
-    const stock = document.querySelector('#stock') as HTMLElement;
     const space = document.querySelector('#space') as HTMLElement;
     const miSelect = document.querySelector('#selectObjSpace') as HTMLSelectElement;
     if(option === 0){
       info.style.display = '';
-      stock.style.display = 'none';
       space.style.display = 'none';
     }else if(option === 1){
       info.style.display = 'none';
-      stock.style.display = '';
-      space.style.display = 'none';
-    }else{
-      info.style.display = 'none';
-      stock.style.display = 'none';
       space.style.display = '';
       this.setObjsInSpace('Mueble');
       miSelect.value = 'Mueble';
     }
-  }
-
-  addObjToStock(){
-    this.listStock?.push({ id: this.countObjs,name: this.stockName, type: this.stockType, description: this.stockDescription, price: this.stockPrice});
-    this.countObjs++;
-  }
-
-  deleteObjList(id: number){
-    let indice: number = this.listStock.findIndex(obj => obj.id == id);
-    if(indice != undefined){
-      this.listStock.splice(indice, 1);
-    }
-    this.sortListStock();
   }
 
   deleteObjStock(id: number, selectValue: string){
@@ -159,13 +123,12 @@ export class NewcampusComponent {
     this.objsSpace.forEach(n => {
       if(n.id === id){
         indice = this.objsSpace.findIndex(obj => obj.id == id);
-        this.listStock.push(n);
+        //this.listStock.push(n);
       }
     });
     if(indice != undefined){
       this.objsSpace.splice(indice, 1);
     }
-    this.sortListStock();
     this.setObjsInSpace(selectValue);
   }
 
@@ -175,29 +138,24 @@ export class NewcampusComponent {
       if(n.id === id){
         indice = this.spaces.findIndex(obj => obj.id == id);
         n.stock.forEach(s => {
-          this.listStock.push(s);
+          //this.listStock.push(s);
         });
       }
     });
     if(indice != undefined){
       this.spaces.splice(indice, 1);
     }
-    this.sortListStock();
     this.setObjsInSpace(selectValue);
   }
 
-  sortListStock(){
-    this.listStock.sort((a, b) => a.id - b.id);
-  }
 
-  changeStockType(value:string): void{
-    this.stockType = value;
-  }
+
+
 
   setObjsInSpace(value: string){
     const miSelect = document.querySelector('#objSpaceSelect') as HTMLSelectElement;
     miSelect.innerHTML = '';
-    this.listStock.forEach(n => {
+    /*this.listStock.forEach(n => {
       if(n.type === value){
         const elementOption = document.createElement('option');
         elementOption.textContent = n.id + " - " + n.name;
@@ -205,12 +163,13 @@ export class NewcampusComponent {
         miSelect.appendChild(elementOption);
       }
     });
+    */
   }
 
   addObjToSpace(value: string, selectValue: string){
     const result = value.split(' - ');
     let indice: number | undefined = undefined;
-    this.listStock.find(n => {
+    /*this.listStock.find(n => {
       if(n.id.toString() == result[0]){
         indice = this.listStock.findIndex(obj => obj.id.toString() == result[0]);
         this.objsSpace.push({ id: n.id,name: n.name, type: n.type, description: n.description, price: n.price});
@@ -220,6 +179,7 @@ export class NewcampusComponent {
       this.listStock.splice(indice, 1);
     }
     this.setObjsInSpace(selectValue);
+    */
   }
 
   addSpace(){

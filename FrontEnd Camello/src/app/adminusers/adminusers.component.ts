@@ -101,7 +101,7 @@ export class AdminusersComponent {
 
   public changeOption(option: number){
     const div_create = document.querySelector('#create-user') as HTMLElement;
-    const div_list = document.querySelector('#table-list') as HTMLElement;
+    const div_list = document.querySelector('#table-user') as HTMLElement;
     const div_modify = document.querySelector('#modify-user') as HTMLElement;
     if(option===0){
       this.cleanData();

@@ -17,11 +17,6 @@
   height: 20px;
 }
 
-h1{
-  font-size: 25px;
-  border-bottom: 1px gray solid;
-}
-
 #create-user{
   display: none;
   width: 100%;
@@ -90,23 +85,6 @@ h1{
 
 .btn-option:hover{
   background-color: whitesmoke;
-}
-
-table{
-  color: black;
-  width: 100%;
-  max-width: 100%;
-  border-top: 1px gray solid;
-  border-bottom: 1px gray solid;
-}
-
-tr{
-  border-bottom: 1px wheat solid;
-  height: max-content;
-}
-
-td{
-  color: black;
 }
 
 .btn-table-img{

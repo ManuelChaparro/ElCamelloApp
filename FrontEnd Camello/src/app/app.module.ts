@@ -18,6 +18,9 @@ import { CampusComponent } from './campus/campus.component';
 import { BookingsComponent } from './bookings/bookings.component';
 import { NewcampusComponent } from './newcampus/newcampus.component';
 import { CampuslistComponent } from './campuslist/campuslist.component';
+import { AdminstockComponent } from './adminstock/adminstock.component';
+import { StocklistComponent } from './stocklist/stocklist.component';
+import { NewstockComponent } from './newstock/newstock.component';
 
 const appRoutes:Routes=[
   {path:'login', component:LoginComponent},
@@ -43,6 +46,9 @@ const appRoutes:Routes=[
     BookingsComponent,
     NewcampusComponent,
     CampuslistComponent,
+    AdminstockComponent,
+    StocklistComponent,
+    NewstockComponent,
 
   ],
   imports: [
@@ -50,7 +56,7 @@ const appRoutes:Routes=[
     AppRoutingModule,
     RouterModule.forRoot(appRoutes),
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

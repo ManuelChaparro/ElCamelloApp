@@ -5,6 +5,7 @@ import { AdminbookingsComponent } from '../adminbookings/adminbookings.component
 import { AdminreportsComponent } from '../adminreports/adminreports.component';
 import { HttpClient, HttpHeaders} from '@angular/common/http';
 import jwt_decode from 'jwt-decode';
+import { AdminstockComponent } from '../adminstock/adminstock.component';
 
 @Component({
   selector: 'app-adminhome',
@@ -67,9 +68,12 @@ export class AdminhomeComponent {
     { nombre: 'Componente 2', componente: AdminusersComponent},
     { nombre: 'Componente 3', componente: AdminbookingsComponent },
     { nombre: 'Componente 4', componente: AdminreportsComponent },
+    { nombre: 'Componente 4', componente: AdminstockComponent },
   ];
   indiceComponenteActual = 0;
   cambiarComponente(indice: number) {
     this.indiceComponenteActual = indice;
   }
+
+
 }

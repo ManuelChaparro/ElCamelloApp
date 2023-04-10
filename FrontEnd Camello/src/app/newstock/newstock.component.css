@@ -1,0 +1,17 @@
+.warn{
+  display: none;
+  color: red;
+}
+
+.btn-height{
+  height: max-content;
+}
+
+.btn-table-img{
+  height: 25px;
+}
+
+.btn-table{
+  border: none;
+  background-color: transparent;
+}
