@@ -5,7 +5,7 @@ const { createSpace, modifySpace, deleteSpace, getSpacesList, searchSpace } = re
 const {verifyToken} = require('../controllers/users.controller')
 
 router.post('/spaces/add', verifyToken, createSpace)
-router.fetch('/spaces/modify', verifyToken, modifySpace)
+router.put('/spaces/modify', verifyToken, modifySpace)
 router.delete('/spaces/delete', verifyToken, deleteSpace)
 router.get('/spaces/list', verifyToken, getSpacesList)
 router.get('/spaces/search', verifyToken, searchSpace)
