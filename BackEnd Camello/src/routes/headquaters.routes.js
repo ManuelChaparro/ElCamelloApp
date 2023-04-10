@@ -5,12 +5,12 @@ const {createSchedule, modifySchedule, deleteSchedule, getSchedules, searchSched
 const { verifyToken } = require('../controllers/users.controller');
 
 router.post('/schedules/createSchedule', verifyToken, createSchedule)
-router.fetch('/schedules/modifySchedule', verifyToken, modifySchedule)
+router.put('/schedules/modifySchedule', verifyToken, modifySchedule)
 router.delete('/schedules/deleteSchedule', verifyToken, deleteSchedule)
 router.get('/schedules/showSchedules', verifyToken, getSchedules)
 router.get('/schedules/seachSchedule', verifyToken, searchSchedule)
 router.post('/headquearters/create', verifyToken, createHeadquarter)
-router.fetch('/headquarters/modify', verifyToken, modifyHeadquarter)
+router.put('/headquarters/modify', verifyToken, modifyHeadquarter)
 router.delete('/headquarters/delete', verifyToken, deleteHeadquarter)
 router.get('/headquarters/list', verifyToken, getHeadquarterList)
 router.get('/headquarters/search', verifyToken, searchHeadquarter)
