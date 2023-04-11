@@ -8,7 +8,8 @@ import jwt_decode from 'jwt-decode';
 import { AdminstockComponent } from '../adminstock/adminstock.component';
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
-
+import { InfouserComponent } from '../infouser/infouser.component';
+import { ServiceUserInfoService } from '../service-user-info.service';
 
 @Component({
   selector: 'app-adminhome',
@@ -19,7 +20,7 @@ export class AdminhomeComponent {
   public name: string;
   public surname: string;
 
-  constructor(private http: HttpClient, private router: Router){
+  constructor(private http: HttpClient, private router: Router, private serviceInfoUser: ServiceUserInfoService){
     const decode_token: object = jwt_decode(JSON.stringify(localStorage.getItem('token')));
     if('infoUser' in decode_token){
       const infoUser =  decode_token.infoUser as Array<object>;
@@ -37,8 +38,10 @@ export class AdminhomeComponent {
           if('nombres' in data[0] && 'apellidos' in data[0]){
             const names = data[0].nombres as string
             const surnames = data[0].apellidos as string
-            this.name = names.split(" ")[0];
-            this.surname = surnames.split(" ")[0];
+            serviceInfoUser.setName(data[0].nombres as string);
+            serviceInfoUser.setSurname(data[0].apellidos as string);
+            this.name = serviceInfoUser.getName() as string;
+            this.surname = serviceInfoUser.getSurname() as string;
           }
         });
       }
@@ -71,7 +74,8 @@ export class AdminhomeComponent {
     { nombre: 'Componente 2', componente: AdminusersComponent},
     { nombre: 'Componente 3', componente: AdminbookingsComponent },
     { nombre: 'Componente 4', componente: AdminreportsComponent },
-    { nombre: 'Componente 4', componente: AdminstockComponent },
+    { nombre: 'Componente 5', componente: AdminstockComponent },
+    { nombre: 'Componente 6', componente: InfouserComponent },
   ];
   indiceComponenteActual = 0;
   cambiarComponente(indice: number) {

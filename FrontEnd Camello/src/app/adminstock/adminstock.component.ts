@@ -13,11 +13,8 @@ export class AdminstockComponent {
     { nombre: 'Componente 1', componente: StocklistComponent},
     { nombre: 'Componente 2', componente: NewstockComponent}
   ];
-  indiceComponenteActual = 1;
+  indiceComponenteActual = 0;
   cambiarComponente(indice: number) {
     this.indiceComponenteActual = indice;
   }
-
-
-
 }

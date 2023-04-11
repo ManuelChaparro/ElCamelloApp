@@ -5,32 +5,34 @@
   </div>
   <div id="data">
     <div id="info">
-      <div class="info-rows">
-        <div class="input-containers">
+      <div class="d-flex">
+        <div class="input-containers" style="flex-basis: 50%;">
           <label for="campusName">Nombres <span style="display: none; color: red;" id="warn-name">*</span></label>
           <input id="campusName" class="form-control" [(ngModel)]="campusName" type="text" name="name" placeholder="Ingrese el nombre del campus">
         </div>
-        <div class="input-containers">
+        <div class="input-containers" style="flex-basis: 50%;">
           <label for="">Dirección <span style="display: none; color: red;" id="warn-direction">*</span></label>
           <input id="campusDirection" class="form-control" [(ngModel)]="direction" type="text" name="name" placeholder="Ingrese su dirección">
         </div>
       </div>
-      <div class="info-rows">
-        <div class="input-containers">
+      <div class="d-flex">
+        <div class="input-containers" style="flex-basis: 50%;">
           <label for="">Ciudad <span style="display: none; color: red;" id="warn-city">*</span></label>
           <input id="campusCity" class="form-control" [(ngModel)]="city" type="text" name="name" placeholder="Ingrese la ciudad">
         </div>
-        <div class="input-containers">
+        <div class="input-containers" style="flex-basis: 50%;">
           <label for="">Departamento <span style="display: none; color: red;" id="warn-department">*</span></label>
           <input id="campusDepartment" class="form-control" [(ngModel)]="department" type="text" name="name" placeholder="Ingrese el departamento">
         </div>
       </div>
-      <div class="info-rows">
-        <div class="input-containers">
-          <label for="">Descripción <span style="display: none; color: red;" id="warn-description">*</span></label>
-          <textarea id="campusDescription" class="form-control" style="resize: none" [(ngModel)]="description" type="text" name="name" placeholder="Ingrese la Descripción del campus" name="" id="" cols="30" rows="3"></textarea>
+      <div class="d-flex">
+        <div class="input-containers d-flex flex-column gap-2" style="flex-basis: 50%;">
+          <div class="flex-grow-1 d-flex flex-column">
+            <label for="">Descripción <span style="display: none; color: red;" id="warn-description">*</span></label>
+            <textarea id="campusDescription" class="form-control flex-grow-1" style="resize: none" [(ngModel)]="description" type="text" name="name" placeholder="Ingrese la Descripción del campus" name="" id="" cols="30" rows="3"></textarea>
+          </div>
         </div>
-        <div class="input-containers">
+        <div class="input-containers gap-2" style="flex-basis: 50%;">
           <label for="">Horario <span style="display: none; color: red;" id="warn-schedule">*</span></label>
           <select class="form-select" #schedule (change)="changeDay(schedule.value)">
             <option selected>Lunes</option>
@@ -41,8 +43,8 @@
             <option>Sábado</option>
             <option>Domingo</option>
           </select>
-          <div id="schedule-time">
-            <div class="schedule-time-con">
+          <div id="schedule-time" class="gap-2">
+            <div class="card p-3">
               <label class="h6 text-center" for="">Mañana</label>
               <div class="input-schedule">
                 <label for="">Apertura</label>
@@ -51,7 +53,7 @@
                 <input  class="form-control" #firstClose (change)="changeFirstSchedule(firstOpen.value, firstClose.value)" type="time" id="firstClose" name="firstClose" required>
               </div>
             </div>
-            <div class="schedule-time-con">
+            <div class="card p-3">
               <label class="h6 text-center" for="">Tarde</label>
               <div class="input-schedule">
                 <label for="">Apertura</label>
@@ -65,17 +67,21 @@
       </div>
     </div>
     <div id="space">
-      <div class="space-containers">
-        <div class="input-containers">
+      <div class="card p-2 d-flex flex-column w-100 h-100 gap-1">
+        <div class="flex-basis:20%;">
           <label for="">Nombre <span style="display: none; color: red;" id="warn-space-name">*</span></label>
           <input class="form-control" [(ngModel)]="spaceName" type="text"  placeholder="Ingrese el nombre del producto">
         </div>
-        <div class="input-containers col-space">
+        <div class="flex-basis:20%;">
+          <label for="">Tarifa <span style="display: none; color: red;" id="warn-space-fee">*</span></label>
+          <input [(ngModel)]="spaceFee" placeholder="Ingrese el valor de la tarifa" id="stock-price" type="text" class="form-control" min="0" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null" />
+        </div>
+        <div class="flex-basis:60%;">
           <label for="">Descripción <span style="display: none; color: red;" id="warn-space-desc">*</span></label>
           <textarea class="form-control" id="description-space" style="resize: none" [(ngModel)]="spaceDescription" type="text" name="name" placeholder="Ingrese la Descripción del campus" name="" cols="30" rows="4"></textarea>
         </div>
       </div>
-      <div class="space-containers">
+      <div class="space-containers card p-2">
         <div id="options-obj-space">
           <div class="input-containers px-0">
             <label for="">Qué incluye <span style="display: none; color: red;" id="warn-space-objs">*</span></label>
@@ -115,9 +121,9 @@
             </tbody>
           </table>
         </div>
-        <button class="btn btn-primary" (click)="addSpace()">Agregar Espacio</button>
+        <button class="btn btn-outline-primary" (click)="addSpace()">Agregar Espacio</button>
       </div>
-      <div class="space-containers">
+      <div class="space-containers card p-2">
         <div class="input-containers text-center">
           <h3>Lista de Espacios <span style="display: none; color: red;" id="warn-space-list">*</span></h3>
         </div>

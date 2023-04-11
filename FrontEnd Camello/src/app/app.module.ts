@@ -22,6 +22,7 @@ import { AdminstockComponent } from './adminstock/adminstock.component';
 import { StocklistComponent } from './stocklist/stocklist.component';
 import { NewstockComponent } from './newstock/newstock.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { InfouserComponent } from './infouser/infouser.component';
 
 const appRoutes:Routes=[
   {path:'login', component:LoginComponent},
@@ -50,6 +51,7 @@ const appRoutes:Routes=[
     AdminstockComponent,
     StocklistComponent,
     NewstockComponent,
+    InfouserComponent,
 
   ],
   imports: [

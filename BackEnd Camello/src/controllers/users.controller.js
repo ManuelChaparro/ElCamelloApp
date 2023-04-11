@@ -99,17 +99,17 @@ const deleteUser = async(req, res) =>{
                     await connection.query(`Select * from usuarios where email = ${connection.escape(email)}`, async (error, infoUser, fields) =>{
                         await connection.query(`delete from usuarios where email = ${connection.escape(email)}`)
                         await connection.query(`delete from passwords where indicador = ${connection.escape(email_binary)}`)
-                        res.json({message: "Usuario eliminado correctamente"})
+                        res.json({message: "0"})
                     })
                 }else{
-                    res.json({message: "Contraseña incorrecta"})
+                    res.json({message: "1"})
                 }
             }else{
-                res.json({message: "Email incorrecto"})
+                res.json({message: "1"})
             }  
             })
         }else{
-            res.json({message: "No tiene autorización para ingresar"})
+            res.json({message: "2"})
         }
     })
 }
@@ -161,7 +161,7 @@ const deleteUserAdmin = async(req, res) =>{
                                     if(!error){
                                         res.json({message: "0"})
                                     }else{
-                                        res.json({message: "Error log"})
+                                        res.json({message: error})
                                     }
                                 })
                             }else{

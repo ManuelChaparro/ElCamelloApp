@@ -13,6 +13,7 @@ interface space{
   id: number,
   name: string,
   description: string,
+  fee: number,
   stock: Array<stockObject>
 }
 
@@ -33,6 +34,7 @@ export class NewcampusComponent {
 
   public countSpace: number;
   public spaceName: string;
+  public spaceFee: number;
   public spaceDescription: string;
   public objsSpace: Array<stockObject>;
   public spaces: Array<space>;
@@ -45,6 +47,7 @@ export class NewcampusComponent {
     this.city = '';
     this.department = '';
     this.description = '';
+    this.spaceFee = 0;
     this.selectedSchedule = 'Lunes'
     this.schedule = [
       { dia: 'Lunes', firstOpen: '', firstClose: '', secondOpen: '', secondClose: '' },
@@ -156,6 +159,7 @@ export class NewcampusComponent {
     let toReturn: boolean = true;
     const name = document.querySelector('#warn-space-name') as HTMLInputElement;
     const description = document.querySelector('#warn-space-desc') as HTMLInputElement;
+    const fee = document.querySelector('#warn-space-fee') as HTMLInputElement;
     if(this.spaceName == ''){
       name.style.display = '';
       toReturn = false;
@@ -164,6 +168,12 @@ export class NewcampusComponent {
     }
     if(this.spaceDescription == ''){
       description.style.display = '';
+      toReturn = false;
+    }else{
+      description.style.display = 'none';
+    }
+    if(this.spaceFee == 0){
+      fee.style.display = '';
       toReturn = false;
     }else{
       description.style.display = 'none';
@@ -291,7 +301,7 @@ export class NewcampusComponent {
 
   addSpace(){
     if(this.validationSpaceInfo()){
-      let newSpace: space = { id: this.countSpace, name: this.spaceName, description: this.spaceDescription, stock: []};
+      let newSpace: space = { id: this.countSpace, name: this.spaceName, fee: this.spaceFee, description: this.spaceDescription, stock: []};
       newSpace.stock = this.objsSpace;
       this.spaces.push(newSpace);
       this.objsSpace = [];

@@ -14,17 +14,12 @@ export class AdmincampusComponent {
 
   }
 
-  changeOption(option: number){
-
-  }
-
   componentes = [
     { nombre: 'Componente 1', componente: CampuslistComponent},
     { nombre: 'Componente 2', componente: NewcampusComponent}
   ];
-  indiceComponenteActual = 1;
+  indiceComponenteActual = 0;
   cambiarComponente(indice: number) {
     this.indiceComponenteActual = indice;
   }
-
 }
