@@ -182,6 +182,46 @@ const deleteUserAdmin = async(req, res) =>{
     })
 }
 
+const changePassword = async(req, res) =>{
+    const {email, current_password, new_password} = req.body
+    jwt.verify(req.token, 'secretkey', async(error) =>{
+        if(!error){
+            await connection.query(`Select * from usuarios where email = ${connection.escape(email)}`, async(error, result, field) =>{
+                if(!error){
+                    if(result.length === 1){
+                        let email_binary = crypto.createHash('sha256').update(email).digest('hex')
+                        let currentPassword = crypto.createHash('sha256').update(current_password).digest('hex')
+                        let newPassword = crypto.createHash('sha256').update(new_password).digest('hex')
+                        await connection.query(`Select * from passwords where indicador = ${connection.escape(email_binary)} and password = ${connection.escape(currentPassword)}`, async(error, validation, fields) =>{
+                            if(!error){
+                                if(validation.length === 1){
+                                    await connection.query(`update passwords set password = ${connection.escape(newPassword)} where indicador = ${connection.escape(email_binary)}`, async (error, result, fields) =>{
+                                        if(!error){
+                                            res.json({message: "1"})
+                                        }else{
+                                            res.json({message: "0"})
+                                        }
+                                    })
+                                }else{
+                                    res.json({message: "1"})
+                                }
+                            }else{
+                                res.json({message: "1"})
+                            }
+                        })
+                    }else{
+                        res.json({message: "1"})
+                    }
+                }else{
+                    res.json({message: "1"})
+                }
+            })
+        }else{
+            res.json({message: "1"})
+        }
+    })
+}
+
 const recoverPassword = async (req, res) =>{
     const {email, identificacion} = req.body;
     await connection.query(`Select * from usuarios Where email = ${connection.escape(email)} and identificacion = ${connection.escape(identificacion)}`, async (error, result, fields) =>{
@@ -252,4 +292,4 @@ const verifyToken = (req, res, next) =>{
     }
 }
 
-module.exports = {registerUser, verifyToken, loginUser, modifyUser, deleteUser, getUsersList, recoverPassword, getUser, deleteUserAdmin};
+module.exports = {registerUser, verifyToken, loginUser, modifyUser, deleteUser, getUsersList, recoverPassword, getUser, deleteUserAdmin, changePassword};
