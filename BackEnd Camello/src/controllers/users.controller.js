@@ -12,11 +12,11 @@ const registerUser = async (req, res) =>{
     await connection.query(`SELECT nombres FROM usuarios WHERE email = ${connection.escape(userBody.email)};`, async (error, result, fields) =>{
         if(result.length === 0){
             try {
-                await connection.query(`Insert into usuarios (nombres, apellidos, fecha_nacimiento, email, genero, tipo_documento, identificacion, telefono, rol) values (${connection.escape(userBody.nombres)}, ${connection.escape(userBody.apellidos)}, ${connection.escape(userBody.fecha_nacimiento)}, ${connection.escape(userBody.email)}, ${connection.escape(userBody.genero)}, ${connection.escape(userBody.tipo_documento)}, ${connection.escape(userBody.identificacion)}, ${connection.escape(userBody.telefono)}, ${connection.escape(userBody.rol)})`, async (error, result, fields) =>{
+                await connection.query(`Insert into usuarios (nombres, apellidos, fecha_nacimiento, email, genero, tipo_documento, identificacion, telefono, rol, estado) values (${connection.escape(userBody.nombres)}, ${connection.escape(userBody.apellidos)}, ${connection.escape(userBody.fecha_nacimiento)}, ${connection.escape(userBody.email)}, ${connection.escape(userBody.genero)}, ${connection.escape(userBody.tipo_documento)}, ${connection.escape(userBody.identificacion)}, ${connection.escape(userBody.telefono)}, ${connection.escape(userBody.rol)}, 'A')`, async (error, result, fields) =>{
                     if(!error){
                         let pwd_binary = crypto.createHash('sha256').update(userBody.password).digest('hex')
                         let email_binary = crypto.createHash('sha256').update(userBody.email).digest('hex')
-                        await connection.query(`Insert into passwords (password, indicador) values ("${pwd_binary}", "${email_binary}")`, (error, result, fields) =>{
+                        await connection.query(`Insert into passwords (password, indicador) values (${connection.escape(pwd_binary)}, ${connection.escape(email_binary)})`, (error, result, fields) =>{
                             if(!error){
                                 res.json({message: '0'})
                             }else{
@@ -71,19 +71,28 @@ const modifyUser = async(req, res) =>{
 const loginUser = async (req, res) => {
     const {email, password} = req.body;
     let email_binary = crypto.createHash('sha256').update(email).digest('hex')
+    console.log(email_binary)
     await connection.query(`Select password from passwords where indicador = ${connection.escape(email_binary)}`, async (error, result, fields) =>{
         if(result.length === 1){
             if(result[0].password === crypto.createHash('sha256').update(password).digest('hex')){
-                await connection.query(`Select email, rol from usuarios where email = ${connection.escape(email)}`, (error, infoUser, fields) =>{
-                    jwt.sign({infoUser}, 'secretkey',{expiresIn: '1h'}, (err, token) => {
-                        res.json({token: token});
-                    });
+                await connection.query(`Select email, rol from usuarios where email = ${connection.escape(email)} and estado = 'A'`, (error, infoUser, fields) =>{
+                    if(!error){
+                        if(infoUser.length > 0){
+                            jwt.sign({infoUser}, 'secretkey',{expiresIn: '1h'}, (err, token) => {
+                                res.json({token: token});
+                            });
+                        }else{
+                            res.json({message: "Usuario inactivo"})
+                        }     
+                    }else{
+                        res.json({message: "Hubo un error"})
+                    }  
                 })
             }else{
                 res.json({message: "Contraseña incorrecta"})
             }
         }else{
-            res.json({message: "Email incorrecto"})
+            res.json({message: "usuario no valido"})
         }
     })
 }
@@ -97,6 +106,8 @@ const deleteUser = async(req, res) =>{
             if(result.length === 1){
                 if(result[0].password === crypto.createHash('sha256').update(password).digest('hex')){
                     await connection.query(`Select * from usuarios where email = ${connection.escape(email)}`, async (error, infoUser, fields) =>{
+                        await connection.query(`update usuarios set estado = 'I' where email = ${connection.escape(email)}`)
+                        res.json({message: "Usuario eliminado correctamente"})
                         await connection.query(`delete from usuarios where email = ${connection.escape(email)}`)
                         await connection.query(`delete from passwords where indicador = ${connection.escape(email_binary)}`)
                         res.json({message: "0"})
@@ -117,7 +128,7 @@ const deleteUser = async(req, res) =>{
 const getUsersList = async(req, res) =>{
     jwt.verify(req.token, 'secretkey', async(error) =>{
         if(!error){
-            await connection.query(`Select * from usuarios`, async(error, list, fields) =>{
+            await connection.query(`Select * from usuarios where estado = 'A'`, async(error, list, fields) =>{
                 if(list.length >= 1){
                     res.json(list)
                 }else{
@@ -152,11 +163,11 @@ const deleteUserAdmin = async(req, res) =>{
     jwt.verify(req.token, 'secretkey', async(error)=>{
         if(!error){
             if(rol === "A" || rol === "a"){
-                let email_binary = crypto.createHash('sha256').update(email).digest('hex')
-                await connection.query(`Delete from usuarios where email = ${connection.escape(email)}`, async(error, info, fields) =>{
+                await connection.query(`update usuarios set estado = 'I' where email = ${connection.escape(email)}`, async(error, info, fields) =>{
                     if(!error){
-                        await connection.query(`delete from passwords where indicador = ${connection.escape(email_binary)}`, async(error, request, fieldss) =>{
+                        await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripcion) values (${id_user}, NOW(), "Eliminacion", "Se inhabilito al usuario ${connection.escape(email)}, de la tabla de usuarios")`, async(error, info, fields) =>{
                             if(!error){
+                                res.json({message: "0"})
                                 await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripción) values (${id_user}, NOW(), "Eliminacion", 'Se inhabilito al usuario ${connection.escape(email)}, de la tabla de usuarios')`, async(error, info, fields) =>{
                                     if(!error){
                                         res.json({message: "0"})
@@ -165,7 +176,7 @@ const deleteUserAdmin = async(req, res) =>{
                                     }
                                 })
                             }else{
-                                res.json({message: "El usuario no se ha podido eliminar correctamente"})
+                                res.json({message: error})
                             }
                         })
                     }else{
