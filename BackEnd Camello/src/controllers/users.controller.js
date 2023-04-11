@@ -108,19 +108,16 @@ const deleteUser = async(req, res) =>{
                     await connection.query(`Select * from usuarios where email = ${connection.escape(email)}`, async (error, infoUser, fields) =>{
                         await connection.query(`update usuarios set estado = 'I' where email = ${connection.escape(email)}`)
                         res.json({message: "Usuario eliminado correctamente"})
-                        await connection.query(`delete from usuarios where email = ${connection.escape(email)}`)
-                        await connection.query(`delete from passwords where indicador = ${connection.escape(email_binary)}`)
-                        res.json({message: "0"})
                     })
                 }else{
-                    res.json({message: "1"})
+                    res.json({message: "Contraseña incorrecta"})
                 }
             }else{
-                res.json({message: "1"})
+                res.json({message: "Email incorrecto"})
             }  
             })
         }else{
-            res.json({message: "2"})
+            res.json({message: "No tiene autorización para ingresar"})
         }
     })
 }
@@ -168,13 +165,6 @@ const deleteUserAdmin = async(req, res) =>{
                         await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripcion) values (${id_user}, NOW(), "Eliminacion", "Se inhabilito al usuario ${connection.escape(email)}, de la tabla de usuarios")`, async(error, info, fields) =>{
                             if(!error){
                                 res.json({message: "0"})
-                                await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripción) values (${id_user}, NOW(), "Eliminacion", 'Se inhabilito al usuario ${connection.escape(email)}, de la tabla de usuarios')`, async(error, info, fields) =>{
-                                    if(!error){
-                                        res.json({message: "0"})
-                                    }else{
-                                        res.json({message: error})
-                                    }
-                                })
                             }else{
                                 res.json({message: error})
                             }
