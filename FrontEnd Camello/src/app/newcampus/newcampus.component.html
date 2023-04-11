@@ -43,7 +43,7 @@
           </select>
           <div id="schedule-time">
             <div class="schedule-time-con">
-              <label class="h6 text-center" for="">Primer Horario</label>
+              <label class="h6 text-center" for="">Mañana</label>
               <div class="input-schedule">
                 <label for="">Apertura</label>
                 <input class="form-control" #firstOpen (change)="changeFirstSchedule(firstOpen.value, firstClose.value)" type="time" id="firstOpen" name="firstOpen" required>
@@ -52,7 +52,7 @@
               </div>
             </div>
             <div class="schedule-time-con">
-              <label class="h6 text-center" for="">Segundo Horario</label>
+              <label class="h6 text-center" for="">Tarde</label>
               <div class="input-schedule">
                 <label for="">Apertura</label>
                 <input class="form-control" #secondOpen (change)="changeSecondSchedule(secondOpen.value, secondClose.value)" type="time" id="secondOpen" name="secondOpen" required>

@@ -3,7 +3,19 @@
     <span class="col">ADMINISTRADOR</span>
     <a class="col" href="/adminHome"><h1 class="h2 text-white">El Camello Coworking</h1></a>
     <div class="col w-50">
-      <button class="btn btn-outline-light">{{name}} {{surname}}</button>
+
+      <button type="button" class="btn btn-outline-light" placement="bottom" [ngbPopover]="popoverContent">
+        {{name}} {{surname}}
+      </button>
+
+      <ng-template #popoverContent>
+        <div class="d-flex flex-column gap-2">
+          <button type="button" class="btn btn-outline-primary mr-2">Ver Perfil</button>
+          <button (click)="logout()" type="button" class="btn btn-outline-danger">Cerrar Sesión</button>
+        </div>
+      </ng-template>
+
+
     </div>
   </div>
   <div class="flex-grow-1 d-flex flex-row w-100 justify-items-start">

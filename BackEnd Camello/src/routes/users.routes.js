@@ -5,7 +5,7 @@ const {verifyToken, loginUser, registerUser, modifyUser, deleteUser, getUsersLis
 
 router.post('/user/register', registerUser);
 router.post('/user/login', loginUser);
-router.post('/user/modify', verifyToken, modifyUser);
+router.put('/user/modify', verifyToken, modifyUser);
 router.delete('/user/delete', verifyToken, deleteUser);
 router.get('/user/list', verifyToken, getUsersList);
 router.post('/user/ad/delete', verifyToken, deleteUserAdmin);

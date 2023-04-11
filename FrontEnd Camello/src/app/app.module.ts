@@ -21,6 +21,7 @@ import { CampuslistComponent } from './campuslist/campuslist.component';
 import { AdminstockComponent } from './adminstock/adminstock.component';
 import { StocklistComponent } from './stocklist/stocklist.component';
 import { NewstockComponent } from './newstock/newstock.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 const appRoutes:Routes=[
   {path:'login', component:LoginComponent},
@@ -52,11 +53,12 @@ const appRoutes:Routes=[
 
   ],
   imports: [
+    NgbModule,
     BrowserModule,
     AppRoutingModule,
     RouterModule.forRoot(appRoutes),
     FormsModule,
-    HttpClientModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

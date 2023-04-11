@@ -31,7 +31,7 @@
           <td>{{ usuario.tipo_documento }}</td>
           <td>{{ usuario.identificacion }}</td>
           <td class="td-img"><button (click)="modifyUser(usuario.email)" class="btn-table"><img class="btn-table-img" src="../../assets/img-stock/modifyIcon.svg" alt=""></button></td>
-          <td class="td-img"><button (click)="deleteUser(usuario.email)" class="btn-table btn-close"></button></td>
+          <td class="td-img"><button (click)="confirmDelete(usuario.email)" class="btn-table btn-close"></button></td>
         </tr>
       </tbody>
     </table>
@@ -128,20 +128,20 @@
           <div class="input-form">
             <label for="">Nombres</label>
             <label class="warn warn_name" for="">El nombre no puede estar vacío</label>
-            <input [(ngModel)]="name" type="text" name="name" placeholder="Ingrese su Nombre">
+            <input class="form-control" [(ngModel)]="name" type="text" name="name" placeholder="Ingrese su Nombre">
           </div>
 
           <div class="input-form">
             <label for="">Apellidos</label>
             <label class="warn warn_surname" for="">El apellido no puede estar vacío</label>
-            <input [(ngModel)]="surname" type="text" name="surname" placeholder="Ingrese sus Apellidos">
+            <input class="form-control" [(ngModel)]="surname" type="text" name="surname" placeholder="Ingrese sus Apellidos">
           </div>
         </div>
         <div class="column-form-modify" id="div-credential">
           <div class="input-form">
             <label for="">Celular</label>
             <label class="warn warn_phone" for="">El celular no puede estar vacío</label>
-            <input [(ngModel)]="number" name="cellphone" placeholder="Ingrese su Número" type="number" min="0" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null">
+            <input class="form-control" [(ngModel)]="number" name="cellphone" placeholder="Ingrese su Número" type="number" min="0" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null">
           </div>
           <div class="input-form">
             <label for="">Género</label>
@@ -152,10 +152,46 @@
             </select>
           </div>
         </div>
-        <div class="input-form div-btn-modify">
+        <div class="input-form div-btn-modify d-flex justify-content-center">
           <button class="btn btn-primary btn-modify-user" (click)="saveChanges()">Guardar</button>
         </div>
       </form>
     </div>
   </div>
 </div>
+
+<div class="container mt-3">
+  <div class="modal fade" id=infoModal>
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Modificación Exitosa</h5>
+          <button class="btn btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body" id="modal-body">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container mt-3">
+  <div class="modal fade" id=deleteModal>
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Eliminación de usuario</h5>
+          <button class="btn btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body" id="modal-body">
+          ¿ Está seguro que desea eliminar al usuario {{emailToDelete}} ?
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-danger" (click)="deleteUser()">Eliminar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+

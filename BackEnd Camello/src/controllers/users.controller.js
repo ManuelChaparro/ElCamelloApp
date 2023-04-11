@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const crypto = require("crypto");
 const connection = require('../../config/connections.js');
 const nodemailer = require('nodemailer');
+const { log } = require('console');
 
 const registerUser = async (req, res) =>{
     const userBody = req.body;
@@ -40,21 +41,25 @@ const modifyUser = async(req, res) =>{
     const {email} = req.body
     jwt.verify(req.token, 'secretkey', async (error) => {
         if(!error){
-            await connection.query(`SELECT nombres FROM usuarios WHERE email = ${email};`, async (error, result, fields) =>{
-                if(result.length === 1){
-                    try{
-                        await connection.query(`update usuarios set nombres = ${userBody.nombres}, apellidos = ${userBody.apellidos}, genero = ${userBody.genero}, telefono = ${userBody.telefono} where email = ${email}`, (error, result, fields) =>{
-                            if(!error){
-                                res.json({message:`Se ha modificado correctamente el usuario`});
-                            }else{
-                                res.json({message: "No se pudo modificar el usuario deseado"})
-                            }
-                        });
-                    }catch(error){
-                        res.json({message: `Ha ocurrido un error: ${error}`});
+            await connection.query(`SELECT * FROM usuarios WHERE email = ${connection.escape(email)}`, async (error, result, fields) =>{
+                if(!error){
+                    if(result.length === 1){
+                        try{
+                            await connection.query(`update usuarios set nombres = ${connection.escape(userBody.nombres)}, apellidos = ${connection.escape(userBody.apellidos)}, genero = ${connection.escape(userBody.genero)}, telefono = ${connection.escape(userBody.telefono)} where email = ${connection.escape(email)}`, (error, result, fields) =>{
+                                if(!error){
+                                    res.json({message:`Se ha modificado correctamente el usuario`});
+                                }else{
+                                    res.json({message: error})
+                                }
+                            });
+                        }catch(error){
+                            res.json({message: `Ha ocurrido un error: ${error}`});
+                        }
+                    }else{
+                        res.json({message: "El usuario que intenta modificar, no existe."})
                     }
                 }else{
-                    res.json({message: "El usuario que intenta modificar, no existe."})
+                    res.json({message: "Ha ocurrido un problema al validar la existencai del usuario."})
                 }
             })
         }else{

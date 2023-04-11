@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders} from '@angular/common/http';
 import jwt_decode from 'jwt-decode';
+import * as bootstrap from 'bootstrap';
 
 @Component({
   selector: 'app-adminusers',
@@ -21,6 +22,7 @@ export class AdminusersComponent {
   public document: number|undefined;
   public birthdate: string;
   public usuarios: Iterable<any> | null | undefined;
+  public emailToDelete: string;
 
   constructor(private router: Router, private http: HttpClient){
     this.name = '';
@@ -35,6 +37,7 @@ export class AdminusersComponent {
     this.birthdate = '';
     this.rol = 'Cliente';
     this.usuarios = undefined;
+    this.emailToDelete = '';
   }
 
   ngOnInit() {
@@ -47,13 +50,20 @@ export class AdminusersComponent {
       Authorization: 'Bearer ' + localStorage.getItem('token'),
     });
     const data = {
+      email: this.email,
       nombres: this.name,
       apellidos: this.surname,
       genero: this.gender,
       telefono: this.number
     };
-    this.http.post(url, data, { headers }).subscribe((data) => {
-      alert(data);
+    this.http.put(url, data, { headers }).subscribe((data) => {
+      const body = document.querySelector('#modal-body') as HTMLElement;
+      const modal = document.querySelector('#infoModal') as HTMLElement;
+      const bootstrapModal = new bootstrap.Modal(modal);
+      body.innerHTML = 'El usuario ha sido modificado exitosamente ! ';
+      bootstrapModal.show();
+      this.changeOption(1);
+      this.loadUserList();
     });
 
   }
@@ -70,14 +80,13 @@ export class AdminusersComponent {
 
   }
 
-  public deleteUser(email: string){
-    if(window.confirm("Está seguro que desea eliminar al usuario?")){
+  public deleteUser(){
       const decode_token: object = jwt_decode(JSON.stringify(localStorage.getItem('token')));
       if('infoUser' in decode_token){
         const infoUser =  decode_token.infoUser as Array<object>;
         if('rol' in infoUser[0]){
           const data = {
-            email: email,
+            email: this.emailToDelete,
             rol: infoUser[0].rol
           };
           const url = 'http://localhost:3005/api/user/ad/delete';
@@ -95,8 +104,15 @@ export class AdminusersComponent {
             }
           });
         }
-      }
+
     }
+  }
+
+  public confirmDelete(email: string){
+    const modal = document.querySelector('#deleteModal') as HTMLElement;
+    const bootstrapModal = new bootstrap.Modal(modal);
+    bootstrapModal.show();
+    this.emailToDelete = email;
   }
 
   public changeOption(option: number){

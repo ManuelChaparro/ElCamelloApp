@@ -39,9 +39,6 @@ export class NewcampusComponent {
 
   public stock: Array<stockObject>;
 
-  public bodyModal: HTMLElement;
-  public bootstrapModal: any;
-
   constructor(){
     this.campusName = '';
     this.direction = '';
@@ -72,9 +69,6 @@ export class NewcampusComponent {
       {id: 3, name: 'Silla 4', type: 'Mueble', description: 'Blanca', price: 120},
       {id: 4, name: 'Silla 5', type: 'Mueble', description: 'Blanca', price: 120},
     ];
-
-    this.bodyModal = document.querySelector('#modal-body') as HTMLElement;
-    this.bootstrapModal = new bootstrap.Modal(document.querySelector('#infoModal') as HTMLElement);
   }
 
   ngOnInit() {
@@ -85,23 +79,27 @@ export class NewcampusComponent {
   }
 
   validationInfo(){
+    const body = document.querySelector('#modal-body') as HTMLElement;
+    const modal = document.querySelector('#infoModal') as HTMLElement;
+    const bootstrapModal = new bootstrap.Modal(modal);
+
     const info : boolean = this.validationCampusInfo();
     const space : boolean = this.validationSpaceInfo();
 
     if(!info && !space){
-      this.bodyModal.innerHTML = 'Ambos';
-      this.bootstrapModal.show();
+      body.innerHTML = 'Para crear una nueva sede, es necesario que ingrese la información requerida en "Información Sede" y "Espacios"';
+      bootstrapModal.show();
     }else{
       if(info){
         if(space){
 
         }else{
-          this.bodyModal.innerHTML = 'Space';
-          this.bootstrapModal.show();
+          body.innerHTML = 'Es necesario completar toda la información requerida en "Espacios"';
+          bootstrapModal.show();
         }
       }else{
-        this.bodyModal.innerHTML = 'Info';
-        this.bootstrapModal.show();
+        body.innerHTML = 'Es necesario completar toda la información requerida en "Información Sede"';
+        bootstrapModal.show();
       }
     }
 
@@ -114,25 +112,42 @@ export class NewcampusComponent {
     const city = document.querySelector('#warn-city') as HTMLInputElement;
     const department = document.querySelector('#warn-department') as HTMLInputElement;
     const description = document.querySelector('#warn-description') as HTMLInputElement;
+    const spaceList = document.querySelector('#warn-space-list') as HTMLInputElement;
     if(this.campusName == ''){
       name.style.display = '';
       toReturn = false;
+    }else{
+      name.style.display = 'none';
     }
     if(this.direction == ''){
       direction.style.display = '';
       toReturn = false;
+    }else{
+      direction.style.display = 'none';
     }
     if(this.city == ''){
       city.style.display = '';
       toReturn = false;
+    }else{
+      city.style.display = 'none';
     }
     if(this.department == ''){
       department.style.display = '';
       toReturn = false;
+    }else{
+      department.style.display = 'none';
     }
     if(this.description == ''){
       description.style.display = '';
       toReturn = false;
+    }else{
+      description.style.display = 'none';
+    }
+    if(this.spaces.length == 0){
+      spaceList.style.display = '';
+      toReturn = false;
+    }else{
+      spaceList.style.display = 'none';
     }
     return toReturn;
   }
@@ -141,23 +156,17 @@ export class NewcampusComponent {
     let toReturn: boolean = true;
     const name = document.querySelector('#warn-space-name') as HTMLInputElement;
     const description = document.querySelector('#warn-space-desc') as HTMLInputElement;
-    const objs = document.querySelector('#warn-space-objs') as HTMLInputElement;
-    const spaceList = document.querySelector('#warn-space-list') as HTMLInputElement;
     if(this.spaceName == ''){
       name.style.display = '';
       toReturn = false;
+    }else{
+      name.style.display = 'none';
     }
     if(this.spaceDescription == ''){
       description.style.display = '';
       toReturn = false;
-    }
-    if(this.objsSpace.length == 0){
-      objs.style.display = '';
-      toReturn = false;
-    }
-    if(this.spaces.length == 0){
-      spaceList.style.display = '';
-      toReturn = false;
+    }else{
+      description.style.display = 'none';
     }
     return toReturn;
   }
@@ -288,9 +297,11 @@ export class NewcampusComponent {
       this.objsSpace = [];
       this.countSpace++;
     }else{
-      this.bodyModal.innerHTML = 'Space';
-      this.bootstrapModal.show();
+      const body = document.querySelector('#modal-body') as HTMLElement;
+      const modal = document.querySelector('#infoModal') as HTMLElement;
+      const bootstrapModal = new bootstrap.Modal(modal);
+      body.innerHTML = 'Verifique que la información requerida para crear un espacio este completa';
+      bootstrapModal.show();
     }
-
   }
 }
