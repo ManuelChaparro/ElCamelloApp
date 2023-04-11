@@ -1,7 +1,7 @@
 'use strict'
 
 const router = require('express').Router();
-const {verifyToken, loginUser, registerUser, modifyUser, deleteUser, getUsersList, recoverPassword, deleteUserAdmin, getUser} = require('../controllers/users.controller.js')
+const {verifyToken, loginUser, registerUser, modifyUser, deleteUser, getUsersList, recoverPassword, deleteUserAdmin, getUser, changePassword} = require('../controllers/users.controller.js')
 
 router.post('/user/register', registerUser);
 router.post('/user/login', loginUser);
@@ -11,5 +11,5 @@ router.get('/user/list', verifyToken, getUsersList);
 router.delete('/user/ad/delete', verifyToken, deleteUserAdmin);
 router.post('/user/recovery', recoverPassword);
 router.post('/user/search', verifyToken, getUser);
-
+router.put('/user/changepass', verifyToken, changePassword)
 module.exports = router;

@@ -11,7 +11,7 @@ const createSpace = async(req, res) =>{
             if(rol === "A" || rol === "a"){
                 await connection.query(`Insert into espacios (id_sede, nombre, tarifa, descripcion) values (${connection.escape(headquarter_id)}, ${connection.escape(space_name)}, ${connection.escape(space_fee)}, ${connection.escape(space_description)})`, async(error, result, fields) =>{
                     if(!error){
-                        await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripción) values (${id_user}, NOW(), "Agregacion", 'Se agrego el espacio ${connection.escape(space_name)} a la tabla de espacios')`, async(error, info, fields) =>{
+                        await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripción) values (${id_user}, NOW(), "Agregacion", "Se agrego el espacio ${connection.escape(space_name)} a la tabla de espacios")`, async(error, info, fields) =>{
                             if(!error){
                                 res.json({message: "Se ha ingresado correctamente el nuevo espacio"})
                             }else{
@@ -41,7 +41,7 @@ const modifySpace = async(req, res) =>{
                         if(validate.length === 1){
                             await connection.query(`Update espacios set id_sede = ${connection.escape(new_headquarter_id)}, nombre = ${connection.escape(new_space_name)}, tarifa = ${connection.escape(new_space_fee)}, descripcion = ${connection.escape(new_space_description)}`, async(err, result, fields) =>{
                                 if(!err){
-                                    await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripción) values (${id_user}, NOW(), "Modificacion", 'Se modifico el espacio ${connection.escape(new_space_name)} en la tabla de espacios')`, async(error, info, fields) =>{
+                                    await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripción) values (${id_user}, NOW(), "Modificacion", "Se modifico el espacio ${connection.escape(new_space_name)} en la tabla de espacios")`, async(error, info, fields) =>{
                                         if(!error){
                                             res.json({message: "El espacio se modifico correctamente"})
                                         }else{
@@ -78,7 +78,7 @@ const deleteSpace = async(req, res) => {
                         if(validation.length === 1){
                             await connection.query(`delete from espacios where id_espacio = ${connection.escape(space_id)}`, async(err, result, fields) =>{
                                 if(!err){
-                                    await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripción) values (${id_user}, NOW(), "Eliminacion", 'Se elimino el espacio ${connection.escape(space_id)} de la tabla de espacios')`, async(error, info, fields) =>{
+                                    await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripción) values (${id_user}, NOW(), "Eliminacion", "Se elimino el espacio ${connection.escape(space_id)} de la tabla de espacios")`, async(error, info, fields) =>{
                                         if(!error){
                                             res.json({message: "Se ha eliminado correctamente el espacio"})
                                         }else{
