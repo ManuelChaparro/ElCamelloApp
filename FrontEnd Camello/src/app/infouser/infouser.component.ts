@@ -109,6 +109,32 @@ export class InfouserComponent {
     }
   }
 
+  changePassword(email: string, actualPass: string, newPass: string){
+    const decode_token: object = jwt_decode(JSON.stringify(localStorage.getItem('token')));
+    if('infoUser' in decode_token){
+      const data = {
+        email: email,
+        password: actualPass,
+        newPass: newPass
+      };
+      const url = 'http://localhost:3005/api/user/delete';
+      const headers = new HttpHeaders({
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
+      });
+      this.http.post(url, data, {headers}).subscribe(response => {
+        if('message' in response){
+          if(response.message === '0'){
+
+          }else if(response.message === '1'){
+
+          }else{
+            alert("No tiene permisos")
+          }
+        }
+      });
+    }
+  }
+
   saveChanges(){
     const url = 'http://localhost:3005/api/user/modify';
     const headers = new HttpHeaders({
@@ -145,6 +171,12 @@ export class InfouserComponent {
 
   deleteUser(){
     const modal = document.querySelector('#deleteModal') as HTMLElement;
+    const bootstrapModal = new bootstrap.Modal(modal);
+    bootstrapModal.show();
+  }
+
+  changeUserPassword(){
+    const modal = document.querySelector('#passModal') as HTMLElement;
     const bootstrapModal = new bootstrap.Modal(modal);
     bootstrapModal.show();
   }

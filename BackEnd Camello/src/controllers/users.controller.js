@@ -107,17 +107,17 @@ const deleteUser = async(req, res) =>{
                 if(result[0].password === crypto.createHash('sha256').update(password).digest('hex')){
                     await connection.query(`Select * from usuarios where email = ${connection.escape(email)}`, async (error, infoUser, fields) =>{
                         await connection.query(`update usuarios set estado = 'I' where email = ${connection.escape(email)}`)
-                        res.json({message: "Usuario eliminado correctamente"})
+                        res.json({message: "0"})
                     })
                 }else{
-                    res.json({message: "Contraseña incorrecta"})
+                    res.json({message: "1"})
                 }
             }else{
-                res.json({message: "Email incorrecto"})
+                res.json({message: "1"})
             }  
             })
         }else{
-            res.json({message: "No tiene autorización para ingresar"})
+            res.json({message: "2"})
         }
     })
 }
