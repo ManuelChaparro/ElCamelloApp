@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CampuslistComponent } from '../campuslist/campuslist.component';
 import { NewcampusComponent } from '../newcampus/newcampus.component';
 
+
 @Component({
   selector: 'app-admincampus',
   templateUrl: './admincampus.component.html',

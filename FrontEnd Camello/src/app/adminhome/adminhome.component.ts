@@ -1,4 +1,4 @@
-import { Component, HostListener} from '@angular/core';
+import { Component, HostListener, ViewChild } from '@angular/core';
 import { AdmincampusComponent } from '../admincampus/admincampus.component';
 import { AdminusersComponent } from '../adminusers/adminusers.component';
 import { AdminbookingsComponent } from '../adminbookings/adminbookings.component';
@@ -6,6 +6,9 @@ import { AdminreportsComponent } from '../adminreports/adminreports.component';
 import { HttpClient, HttpHeaders} from '@angular/common/http';
 import jwt_decode from 'jwt-decode';
 import { AdminstockComponent } from '../adminstock/adminstock.component';
+import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-adminhome',
@@ -16,7 +19,7 @@ export class AdminhomeComponent {
   public name: string;
   public surname: string;
 
-  constructor(private http: HttpClient){
+  constructor(private http: HttpClient, private router: Router){
     const decode_token: object = jwt_decode(JSON.stringify(localStorage.getItem('token')));
     if('infoUser' in decode_token){
       const infoUser =  decode_token.infoUser as Array<object>;
@@ -75,5 +78,22 @@ export class AdminhomeComponent {
     this.indiceComponenteActual = indice;
   }
 
+  @ViewChild(NgbPopover) popover!: NgbPopover;
+  button1Active = false;
+  button2Active = false;
+  title = 'Perfil';
 
+  toggleButton1() {
+    this.button1Active = !this.button1Active;
+    if (this.button1Active) {
+      this.popover.open();
+    } else {
+      this.popover.close();
+    }
+  }
+
+  logout(){
+    localStorage.removeItem('token');
+    this.router.navigate(['/login']);
+  }
 }

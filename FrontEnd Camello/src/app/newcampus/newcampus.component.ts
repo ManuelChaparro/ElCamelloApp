@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import * as bootstrap from 'bootstrap';
 
 interface stockObject{
   id: number,
@@ -36,6 +37,8 @@ export class NewcampusComponent {
   public objsSpace: Array<stockObject>;
   public spaces: Array<space>;
 
+  public stock: Array<stockObject>;
+
   constructor(){
     this.campusName = '';
     this.direction = '';
@@ -58,6 +61,14 @@ export class NewcampusComponent {
     this.spaceDescription = '';
     this.objsSpace = [];
     this.spaces = [];
+
+    this.stock = [
+      {id: 0, name: 'Silla 1', type: 'Mueble', description: 'Blanca', price: 120},
+      {id: 1, name: 'Silla 2', type: 'Mueble', description: 'Blanca', price: 120},
+      {id: 2, name: 'Silla 3', type: 'Mueble', description: 'Blanca', price: 120},
+      {id: 3, name: 'Silla 4', type: 'Mueble', description: 'Blanca', price: 120},
+      {id: 4, name: 'Silla 5', type: 'Mueble', description: 'Blanca', price: 120},
+    ];
   }
 
   ngOnInit() {
@@ -65,6 +76,99 @@ export class NewcampusComponent {
     const space = document.querySelector('#space') as HTMLElement;
     space.style.display = 'none';
 
+  }
+
+  validationInfo(){
+    const body = document.querySelector('#modal-body') as HTMLElement;
+    const modal = document.querySelector('#infoModal') as HTMLElement;
+    const bootstrapModal = new bootstrap.Modal(modal);
+
+    const info : boolean = this.validationCampusInfo();
+    const space : boolean = this.validationSpaceInfo();
+
+    if(!info && !space){
+      body.innerHTML = 'Para crear una nueva sede, es necesario que ingrese la información requerida en "Información Sede" y "Espacios"';
+      bootstrapModal.show();
+    }else{
+      if(info){
+        if(space){
+
+        }else{
+          body.innerHTML = 'Es necesario completar toda la información requerida en "Espacios"';
+          bootstrapModal.show();
+        }
+      }else{
+        body.innerHTML = 'Es necesario completar toda la información requerida en "Información Sede"';
+        bootstrapModal.show();
+      }
+    }
+
+  }
+
+  validationCampusInfo(): boolean{
+    let toReturn: boolean = true;
+    const name = document.querySelector('#warn-name') as HTMLInputElement;
+    const direction = document.querySelector('#warn-direction') as HTMLInputElement;
+    const city = document.querySelector('#warn-city') as HTMLInputElement;
+    const department = document.querySelector('#warn-department') as HTMLInputElement;
+    const description = document.querySelector('#warn-description') as HTMLInputElement;
+    const spaceList = document.querySelector('#warn-space-list') as HTMLInputElement;
+    if(this.campusName == ''){
+      name.style.display = '';
+      toReturn = false;
+    }else{
+      name.style.display = 'none';
+    }
+    if(this.direction == ''){
+      direction.style.display = '';
+      toReturn = false;
+    }else{
+      direction.style.display = 'none';
+    }
+    if(this.city == ''){
+      city.style.display = '';
+      toReturn = false;
+    }else{
+      city.style.display = 'none';
+    }
+    if(this.department == ''){
+      department.style.display = '';
+      toReturn = false;
+    }else{
+      department.style.display = 'none';
+    }
+    if(this.description == ''){
+      description.style.display = '';
+      toReturn = false;
+    }else{
+      description.style.display = 'none';
+    }
+    if(this.spaces.length == 0){
+      spaceList.style.display = '';
+      toReturn = false;
+    }else{
+      spaceList.style.display = 'none';
+    }
+    return toReturn;
+  }
+
+  validationSpaceInfo(): boolean{
+    let toReturn: boolean = true;
+    const name = document.querySelector('#warn-space-name') as HTMLInputElement;
+    const description = document.querySelector('#warn-space-desc') as HTMLInputElement;
+    if(this.spaceName == ''){
+      name.style.display = '';
+      toReturn = false;
+    }else{
+      name.style.display = 'none';
+    }
+    if(this.spaceDescription == ''){
+      description.style.display = '';
+      toReturn = false;
+    }else{
+      description.style.display = 'none';
+    }
+    return toReturn;
   }
 
   changeDay(value:string): void {
@@ -123,12 +227,14 @@ export class NewcampusComponent {
     this.objsSpace.forEach(n => {
       if(n.id === id){
         indice = this.objsSpace.findIndex(obj => obj.id == id);
-        //this.listStock.push(n);
+        this.stock.push(n);
       }
     });
     if(indice != undefined){
       this.objsSpace.splice(indice, 1);
     }
+    this.setObjsInSpace(selectValue);
+    this.sortListStock();
     this.setObjsInSpace(selectValue);
   }
 
@@ -138,7 +244,7 @@ export class NewcampusComponent {
       if(n.id === id){
         indice = this.spaces.findIndex(obj => obj.id == id);
         n.stock.forEach(s => {
-          //this.listStock.push(s);
+          this.stock.push(s);
         });
       }
     });
@@ -146,16 +252,18 @@ export class NewcampusComponent {
       this.spaces.splice(indice, 1);
     }
     this.setObjsInSpace(selectValue);
+    this.sortListStock();
+    this.setObjsInSpace(selectValue);
   }
 
-
-
-
+  sortListStock(){
+    this.stock.sort((a, b) => a.id - b.id);
+  }
 
   setObjsInSpace(value: string){
     const miSelect = document.querySelector('#objSpaceSelect') as HTMLSelectElement;
     miSelect.innerHTML = '';
-    /*this.listStock.forEach(n => {
+    this.stock.forEach(n => {
       if(n.type === value){
         const elementOption = document.createElement('option');
         elementOption.textContent = n.id + " - " + n.name;
@@ -163,30 +271,37 @@ export class NewcampusComponent {
         miSelect.appendChild(elementOption);
       }
     });
-    */
+
   }
 
   addObjToSpace(value: string, selectValue: string){
     const result = value.split(' - ');
     let indice: number | undefined = undefined;
-    /*this.listStock.find(n => {
+    this.stock.find(n => {
       if(n.id.toString() == result[0]){
-        indice = this.listStock.findIndex(obj => obj.id.toString() == result[0]);
+        indice = this.stock.findIndex(obj => obj.id.toString() == result[0]);
         this.objsSpace.push({ id: n.id,name: n.name, type: n.type, description: n.description, price: n.price});
       }
     });
     if(indice != undefined){
-      this.listStock.splice(indice, 1);
+      this.stock.splice(indice, 1);
     }
     this.setObjsInSpace(selectValue);
-    */
   }
 
   addSpace(){
-    let newSpace: space = { id: this.countSpace, name: this.spaceName, description: this.spaceDescription, stock: []};
-    newSpace.stock = this.objsSpace;
-    this.spaces.push(newSpace);
-    this.objsSpace = [];
-    this.countSpace++;
+    if(this.validationSpaceInfo()){
+      let newSpace: space = { id: this.countSpace, name: this.spaceName, description: this.spaceDescription, stock: []};
+      newSpace.stock = this.objsSpace;
+      this.spaces.push(newSpace);
+      this.objsSpace = [];
+      this.countSpace++;
+    }else{
+      const body = document.querySelector('#modal-body') as HTMLElement;
+      const modal = document.querySelector('#infoModal') as HTMLElement;
+      const bootstrapModal = new bootstrap.Modal(modal);
+      body.innerHTML = 'Verifique que la información requerida para crear un espacio este completa';
+      bootstrapModal.show();
+    }
   }
 }
