@@ -3,6 +3,11 @@ import * as bootstrap from 'bootstrap';
 import jwt_decode from 'jwt-decode';
 import { HttpClient, HttpHeaders} from '@angular/common/http';
 
+interface campus{
+  name: string,
+  description: string,
+}
+
 interface stockObject{
   id: number,
   name: string,
@@ -45,6 +50,8 @@ export class NewcampusComponent {
   public stock: Array<stockObject>;
 
   constructor(private http: HttpClient){
+
+
     this.campusName = '';
     this.direction = '';
     this.cities = [];
