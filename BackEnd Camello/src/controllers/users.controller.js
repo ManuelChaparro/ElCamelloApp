@@ -197,9 +197,9 @@ const changePassword = async(req, res) =>{
                                 if(validation.length === 1){
                                     await connection.query(`update passwords set password = ${connection.escape(newPassword)} where indicador = ${connection.escape(email_binary)}`, async (error, result, fields) =>{
                                         if(!error){
-                                            res.json({message: "0"})
-                                        }else{
                                             res.json({message: "1"})
+                                        }else{
+                                            res.json({message: "0"})
                                         }
                                     })
                                 }else{
@@ -292,15 +292,15 @@ const verifyToken = (req, res, next) =>{
     }
 }
 
-const validateCurrentToken = async(req, res) =>{
+const validCurrentToken = async(req, res) =>{
     const bearerHeader = req.headers['authorization'];
     if(typeof bearerHeader !== 'undefined'){
         const bearerToken = bearerHeader.split(" ")[1];
         req.token = bearerToken;
-        next();
+        return true
     }else{
-        res.sendStatus(403);
+        return false
     }
 }
 
-module.exports = {registerUser, verifyToken, loginUser, modifyUser, deleteUser, getUsersList, recoverPassword, getUser, deleteUserAdmin, changePassword};
+module.exports = {registerUser, verifyToken, loginUser, modifyUser, deleteUser, getUsersList, recoverPassword, getUser, deleteUserAdmin, changePassword, validCurrentToken};
