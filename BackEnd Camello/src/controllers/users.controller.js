@@ -75,7 +75,7 @@ const loginUser = async (req, res) => {
     await connection.query(`Select password from passwords where indicador = ${connection.escape(email_binary)}`, async (error, result, fields) =>{
         if(result.length === 1){
             if(result[0].password === crypto.createHash('sha256').update(password).digest('hex')){
-                await connection.query(`Select email, rol from usuarios where email = ${connection.escape(email)} and estado = 'A'`, (error, infoUser, fields) =>{
+                await connection.query(`Select id_usuario, email, rol from usuarios where email = ${connection.escape(email)} and estado = 'A'`, (error, infoUser, fields) =>{
                     if(!error){
                         if(infoUser.length > 0){
                             jwt.sign({infoUser}, 'secretkey',{expiresIn: '1h'}, (err, token) => {
@@ -282,6 +282,17 @@ const sendRecoveryEmail = (email, password) =>{
 } 
 
 const verifyToken = (req, res, next) =>{
+    const bearerHeader = req.headers['authorization'];
+    if(typeof bearerHeader !== 'undefined'){
+        const bearerToken = bearerHeader.split(" ")[1];
+        req.token = bearerToken;
+        next();
+    }else{
+        res.sendStatus(403);
+    }
+}
+
+const validateCurrentToken = async(req, res) =>{
     const bearerHeader = req.headers['authorization'];
     if(typeof bearerHeader !== 'undefined'){
         const bearerToken = bearerHeader.split(" ")[1];

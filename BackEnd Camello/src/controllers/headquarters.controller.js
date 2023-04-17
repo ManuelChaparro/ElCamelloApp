@@ -188,7 +188,6 @@ const createHeadquarter = async(req, res) =>{
     })
 }
 
-
 const modifyHeadquarter = async(req, res) =>{
     const {headquarter_id, headquarter_schedule_id, headquater_new_name, new_adress, rol, id_user} = req.body
     jwt.verify(req.token, 'secretkey', async(error) =>{
