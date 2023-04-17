@@ -198,7 +198,7 @@ const modifyHeadquarter = async(req, res) =>{
                         if(result.length === 1){
                             await connection.query(`Update sedes set id_horario = ${connection.escape(headquarter_schedule_id)}, direccion = ${connection.escape(new_adress)}, nombre = ${connection.escape(headquater_new_name)}`, async(err, results, fields) =>{
                                 if(!err){
-                                    await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripción) values (${id_user}, NOW(), "Modificacion", "Se modifico la sede ${connection.escape(headquater_new_name)} de la tabla de sedes")`, async(error, info, fields) =>{
+                                    await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripcion) values (${id_user}, NOW(), "Modificacion", "Se modifico la sede ${connection.escape(headquater_new_name)} de la tabla de sedes")`, async(error, info, fields) =>{
                                         if(!error){
                                             res.json({message: "0"})
                                         }else{
@@ -226,16 +226,16 @@ const modifyHeadquarter = async(req, res) =>{
 }
 
 const deleteHeadquarter = async(req, res) =>{
-    const {headquarter_id, rol} = req.body
+    const {headquarter_id, rol, id_user} = req.body
     jwt.verify(req.token, 'secretkey', async(error) =>{
         if(!error){
             if(rol === "A" || rol === "a"){
-                await connection.query(`select * from sedes id_sede = ${connection.escape(headquarter_id)}`, async(err, result, fields) =>{
+                await connection.query(`select * from sedes where id_sede = ${connection.escape(headquarter_id)}`, async(err, result, fields) =>{
                     if(!err){
                         if(result.length === 1){
                             await connection.query(`Delete from sedes where id_sede = ${connection.escape(headquarter_id)}`, async(error, finalResult, fields) =>{
                                 if(!error){
-                                    await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripción) values (${id_user}, NOW(), "Eliminacion", "Se elimino la sede ${connection.escape(headquarter_id)} de la tabla de sedes")`, async(error, info, fields) =>{
+                                    await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripcion) values (${id_user}, NOW(), "Eliminacion", "Se elimino la sede ${connection.escape(headquarter_id)} de la tabla de sedes")`, async(error, info, fields) =>{
                                         if(!error){
                                             res.json({message: "0"})
                                         }else{
@@ -265,7 +265,7 @@ const deleteHeadquarter = async(req, res) =>{
 const getHeadquarterList = async(req, res) =>{
     jwt.verify(req.token, 'secretkey', async(error) =>{
         if(!error){
-            await connection.query(`select s.nombre as nombre_sede, s.descripcion, cs.direccion from sedes s, ciudades_sedes cs where s.id_sede = cs.id_sede`, async(err, list, fields) =>{
+            await connection.query(`select s.id_sede, s.nombre as nombre_sede, s.descripcion, cs.direccion from sedes s, ciudades_sedes cs where s.id_sede = cs.id_sede`, async(err, list, fields) =>{
                 if(!err){
                     if(list.length >= 1){
                         res.json(list)
