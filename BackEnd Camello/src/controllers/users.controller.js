@@ -297,9 +297,9 @@ const validCurrentToken = async(req, res) =>{
     if(typeof bearerHeader !== 'undefined'){
         const bearerToken = bearerHeader.split(" ")[1];
         req.token = bearerToken;
-        return true
+        res.json({message: "true"})
     }else{
-        return false
+        res.json({message: "false"})
     }
 }
 
