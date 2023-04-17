@@ -303,4 +303,45 @@ const searchHeadquarter = async(req, res) => {
     })
 }
 
-module.exports ={createSchedule, modifySchedule, deleteSchedule, getSchedules, searchSchedule, createHeadquarter, modifyHeadquarter, deleteHeadquarter, getHeadquarterList, searchHeadquarter}
+const getDepartments = async(req, res) =>{
+    jwt.verify(req.token, 'secretkey', async(error) =>{
+        if(!error){
+            await connection.query(`Select * from departamentos`, async(error, result, fields) =>{
+                if(!error){
+                    if(result.length >= 1){
+                        res.json(result)
+                    }else{
+                        res.json({message: "1"})
+                    }
+                }else{
+                    res.json({message: "1"})
+                }
+            })
+        }else{
+            res.json({message: "1"})
+        }
+    })
+}
+
+const getCities = async(req, res) =>{
+    const {department_name} = req.body
+    jwt.verify(req.token, 'secretkey', async(error) =>{
+        if(!error){
+            await connection.query(`select * from ciudades c, departamentos d where d.id_departamento = c.id_departamento and d.nombre = ${connection.escape(department_name)}`, async(error, result, fields) =>{
+                if(!error){
+                    if(result.length >=1){
+                        res.json(result)
+                    }else{
+                        res.json({message: "1"})
+                    }
+                }else{
+                    res.json({message: "1"})
+                }
+            })
+        }else{
+            res.json({message: "1"})
+        }
+    })
+}
+
+module.exports ={createSchedule, modifySchedule, deleteSchedule, getSchedules, searchSchedule, createHeadquarter, modifyHeadquarter, deleteHeadquarter, getHeadquarterList, searchHeadquarter, getDepartments, getCities}
