@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 import { InfouserComponent } from '../infouser/infouser.component';
 import { ServiceUserInfoService } from '../service-user-info.service';
 import { AdminscheduleComponent } from '../adminschedule/adminschedule.component';
+import * as bootstrap from 'bootstrap';
 
 @Component({
   selector: 'app-adminhome',
@@ -22,25 +23,26 @@ export class AdminhomeComponent {
   public surname: string;
 
   ngOnInit(){
-    setInterval(() => {
-      this.validateUser();
-    }, 5000);
-  }
-
-  validateUser():void{
-
-    const url = 'http://localhost:3005/api/user/validUser';
-    const headers = new HttpHeaders({
-      Authorization: 'Bearer ' + localStorage.getItem('token'),
-    });
-    this.http.post(url, {headers}).subscribe(response => {
-        if(response){
-          alert(true)
-        }else{
-          alert(false)
-        }
-    });
-
+    const interval = setInterval(() => {
+      const url = 'http://localhost:3005/api/user/validUser';
+      const headers = new HttpHeaders({
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
+      });
+      this.http.post(url, {headers}).subscribe(response => {
+          if(!response){
+            const modal = document.querySelector('#infoModal') as HTMLElement;
+            const bootstrapModal = new bootstrap.Modal(modal);
+            bootstrapModal.show();
+            localStorage.removeItem('token');
+            clearInterval(interval);
+            setTimeout(() => {
+              bootstrapModal.dispose();
+              bootstrapModal.hide();
+              this.router.navigate(['/login']);
+            }, 5000);
+          }
+      });
+      }, 30000);
   }
 
   constructor(private http: HttpClient, private router: Router, private serviceInfoUser: ServiceUserInfoService){

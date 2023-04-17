@@ -17,13 +17,16 @@
       </div>
       <div class="d-flex">
         <div class="input-containers" style="flex-basis: 50%;">
-          <label for="">Ciudad <span style="display: none; color: red;" id="warn-city">*</span></label>
-          <input id="campusCity" class="form-control" [(ngModel)]="city" type="text" name="name" placeholder="Ingrese la ciudad">
+          <label for="">Departamento <span style="display: none; color: red;" id="warn-department">*</span></label>
+          <select (change)="setCity()" class="form-control" name="" id="selectDepartment">
+            <option *ngFor="let department of departments" >{{department}}</option>
+          </select>
         </div>
         <div class="input-containers" style="flex-basis: 50%;">
-          <label for="">Departamento <span style="display: none; color: red;" id="warn-department">*</span></label>
-          <input id="campusDepartment" class="form-control" [(ngModel)]="department" type="text" name="name" placeholder="Ingrese el departamento">
-        </div>
+          <label for="">Ciudad <span style="display: none; color: red;" id="warn-city">*</span></label>
+          <select class="form-control" name="" id="selectCity">
+            <option *ngFor="let city of cities" >{{city}}</option>
+          </select></div>
       </div>
       <div class="d-flex">
         <div class="input-containers d-flex flex-column gap-2" style="flex-basis: 50%;">
@@ -130,7 +133,21 @@
           <button class="btn btn-close" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body" id="modal-body">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
+<div class="container mt-3">
+  <div class="modal fade" id=successModal>
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Movimiento</h5>
+          <button class="btn btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body" id="modal-body">
         </div>
       </div>
     </div>

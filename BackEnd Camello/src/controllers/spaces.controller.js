@@ -11,7 +11,7 @@ const createSpace = async(req, res) =>{
             if(rol === "A" || rol === "a"){
                 await connection.query(`Insert into espacios (id_sede, nombre, tarifa, descripcion) values (${connection.escape(headquarter_id)}, ${connection.escape(space_name)}, ${connection.escape(space_fee)}, ${connection.escape(space_description)})`, async(error, result, fields) =>{
                     if(!error){
-                        await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripción) values (${id_user}, NOW(), "Agregacion", "Se agrego el espacio ${connection.escape(space_name)} a la tabla de espacios")`, async(error, info, fields) =>{
+                        await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripcion) values (${id_user}, NOW(), "Agregacion", "Se agrego el espacio ${connection.escape(space_name)} a la tabla de espacios")`, async(error, info, fields) =>{
                             if(!error){
                                 res.json({message: "Se ha ingresado correctamente el nuevo espacio"})
                             }else{
