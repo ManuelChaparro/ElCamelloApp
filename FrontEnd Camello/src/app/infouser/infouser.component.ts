@@ -114,14 +114,14 @@ export class InfouserComponent {
     if('infoUser' in decode_token){
       const data = {
         email: email,
-        password: actualPass,
-        newPass: newPass
+        current_password: actualPass,
+        new_password: newPass
       };
-      const url = 'http://localhost:3005/api/user/delete';
+      const url = 'http://localhost:3005/api/user/changepass';
       const headers = new HttpHeaders({
         Authorization: 'Bearer ' + localStorage.getItem('token'),
       });
-      this.http.post(url, data, {headers}).subscribe(response => {
+      this.http.put(url, data, {headers}).subscribe(response => {
         if('message' in response){
           if(response.message === '0'){
 

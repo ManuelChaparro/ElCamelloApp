@@ -23,6 +23,9 @@ import { StocklistComponent } from './stocklist/stocklist.component';
 import { NewstockComponent } from './newstock/newstock.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { InfouserComponent } from './infouser/infouser.component';
+import { AdminscheduleComponent } from './adminschedule/adminschedule.component';
+import { NewscheduleComponent } from './newschedule/newschedule.component';
+import { SchedulelistComponent } from './schedulelist/schedulelist.component';
 
 const appRoutes:Routes=[
   {path:'login', component:LoginComponent},
@@ -52,6 +55,9 @@ const appRoutes:Routes=[
     StocklistComponent,
     NewstockComponent,
     InfouserComponent,
+    AdminscheduleComponent,
+    NewscheduleComponent,
+    SchedulelistComponent,
 
   ],
   imports: [

@@ -10,6 +10,7 @@ import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
 import { InfouserComponent } from '../infouser/infouser.component';
 import { ServiceUserInfoService } from '../service-user-info.service';
+import { AdminscheduleComponent } from '../adminschedule/adminschedule.component';
 
 @Component({
   selector: 'app-adminhome',
@@ -76,6 +77,7 @@ export class AdminhomeComponent {
     { nombre: 'Componente 4', componente: AdminreportsComponent },
     { nombre: 'Componente 5', componente: AdminstockComponent },
     { nombre: 'Componente 6', componente: InfouserComponent },
+    { nombre: 'Componente 7', componente: AdminscheduleComponent },
   ];
   indiceComponenteActual = 0;
   cambiarComponente(indice: number) {
