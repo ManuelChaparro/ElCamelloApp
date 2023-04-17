@@ -303,6 +303,27 @@ const searchHeadquarter = async(req, res) => {
     })
 }
 
+const getQuantitySpaces = async(req, res) =>{
+    const {headquarter_id, rol} = req.body
+    jwt.verify(req.token, 'secretkey', async(error) =>{
+        if(!error){
+            if(rol === "A" || rol == "a"){
+                await connection.query(`SELECT s.nombre, COUNT(s.id_sede) FROM espacios es, sedes s WHERE es.id_sede = s.id_sede AND s.id_sede = ${connection.escape(headquarter_id)}`, async(error, result, fields)=>{
+                    if(!error){
+                        res.json(result)
+                    }else{
+                        res.json({message: "0"})
+                    }
+                })
+            }else{
+                res.json({message: "0"})
+            }
+        }else{
+            res.json({message: "1"})
+        }
+    })
+}
+
 const getDepartments = async(req, res) =>{
     console.log(1);
     jwt.verify(req.token, 'secretkey', async(error) =>{
@@ -345,4 +366,4 @@ const getCities = async(req, res) =>{
     })
 }
 
-module.exports ={createSchedule, modifySchedule, deleteSchedule, getSchedules, searchSchedule, createHeadquarter, modifyHeadquarter, deleteHeadquarter, getHeadquarterList, searchHeadquarter, getDepartments, getCities}
+module.exports ={createSchedule, modifySchedule, deleteSchedule, getSchedules, searchSchedule, createHeadquarter, modifyHeadquarter, deleteHeadquarter, getHeadquarterList, searchHeadquarter, getQuantitySpaces, getDepartments, getCities}

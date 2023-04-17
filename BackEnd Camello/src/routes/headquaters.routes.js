@@ -1,7 +1,7 @@
 'use strict'
 
 const router = require('express').Router();
-const {modifySchedule, deleteSchedule, getSchedules, searchSchedule, createHeadquarter, modifyHeadquarter, deleteHeadquarter, getHeadquarterList, searchHeadquarter, getDepartments, getCities} = require('../controllers/headquarters.controller');
+const {modifySchedule, deleteSchedule, getSchedules, searchSchedule, createHeadquarter, modifyHeadquarter, deleteHeadquarter, getHeadquarterList, searchHeadquarter, getDepartments, getCities, getQuantitySpaces} = require('../controllers/headquarters.controller');
 const { verifyToken } = require('../controllers/users.controller');
 
 router.post('/schedules/createSchedule', verifyToken, createHeadquarter)
@@ -16,5 +16,6 @@ router.get('/headquarters/list', verifyToken, getHeadquarterList)
 router.get('/headquarters/search', verifyToken, searchHeadquarter)
 router.get('/headquarters/departments/list', verifyToken, getDepartments)
 router.post('/headquearters/cities/search', verifyToken, getCities)
+router.post('/headquarters/spaces/quantity', verifyToken, getQuantitySpaces)
 
 module.exports = router
