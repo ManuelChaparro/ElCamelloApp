@@ -229,14 +229,8 @@ export class NewcampusComponent {
           const headers = new HttpHeaders({
             Authorization: 'Bearer ' + localStorage.getItem('token'),
           });
-          this.http.post(url, data, {headers}).subscribe(response => {
-            if('message' in response){
-              alert(response.message);
-            }
-          });
-
+          this.http.post(url, data, {headers}).subscribe(response => {});
         });
-
       }
     }
   }
