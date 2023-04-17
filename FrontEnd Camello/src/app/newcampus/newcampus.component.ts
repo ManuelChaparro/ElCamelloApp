@@ -28,8 +28,9 @@ interface space{
 export class NewcampusComponent {
   public campusName: string;
   public direction: string;
-  public city: string;
-  public department: string;
+  public cities: Array<string>;
+  public citiesId: Array<number>;
+  public departments: Array<string>;
   public description: string;
   public schedule;
   public selectedSchedule: string;
@@ -46,8 +47,9 @@ export class NewcampusComponent {
   constructor(private http: HttpClient){
     this.campusName = '';
     this.direction = '';
-    this.city = '';
-    this.department = '';
+    this.cities = [];
+    this.citiesId = [];
+    this.departments = [];
     this.description = '';
     this.spaceFee = 0;
     this.selectedSchedule = 'Lunes'
@@ -77,9 +79,70 @@ export class NewcampusComponent {
   }
 
   ngOnInit() {
-    //this.changeDay(this.selectedSchedule);
     const space = document.querySelector('#space') as HTMLElement;
     space.style.display = 'none';
+    const url = 'http://localhost:3005/api/headquarters/departments/list';
+    const headers = new HttpHeaders({
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+    });
+    this.http.get(url, {headers}).subscribe(response => {
+      const data = response as Array<string>;
+      data.forEach(n => {
+        const department = n as Object;
+        if('nombre' in department){
+          this.departments.push(department.nombre as string);
+        }
+      });
+    });
+    this.setDefaultCity();
+  }
+
+  setDefaultCity(){
+    const url = 'http://localhost:3005/api/headquearters/cities/search';
+    const data = {
+      department_name: 'ANTIOQUIA'
+    };
+    const headers = new HttpHeaders({
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+    });
+
+    this.http.post(url, data, {headers}).subscribe(response => {
+      this.cities = [];
+      this.citiesId = [];
+      const data = response as Array<string>;
+      data.forEach(n => {
+        const city = n as Object;
+        if('nombre_ciudad' in city && 'id_ciudad' in city){
+          this.cities.push(city.nombre_ciudad as string);
+          this.citiesId.push(city.id_ciudad as number);
+        }
+
+      });
+    });
+  }
+
+  setCity(){
+    const department = document.querySelector('#selectDepartment') as HTMLSelectElement;
+    const url = 'http://localhost:3005/api/headquearters/cities/search';
+    const data = {
+      department_name: department.value
+    };
+    const headers = new HttpHeaders({
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+    });
+
+    this.http.post(url, data, {headers}).subscribe(response => {
+      this.cities = [];
+      this.citiesId = [];
+      const data = response as Array<string>;
+      data.forEach(n => {
+        const city = n as Object;
+        if('nombre_ciudad' in city && 'id_ciudad' in city){
+          this.cities.push(city.nombre_ciudad as string);
+          this.citiesId.push(city.id_ciudad as number);
+        }
+      });
+    });
 
   }
 
@@ -115,10 +178,12 @@ export class NewcampusComponent {
     if('infoUser' in decode_token){
       const infoUser = decode_token.infoUser as Array<object>;
       if('rol' in infoUser[0] && 'id_usuario' in infoUser[0]){
+        const city = document.querySelector('#selectCity') as HTMLSelectElement;
+        const id_city = this.citiesId[city.selectedIndex];
         const data = {
           headquater_name: this.campusName,
           description: this.description,
-          city: this.city,
+          city: id_city,
           address: this.direction,
           rol: infoUser[0].rol,
           id_user: infoUser[0].id_usuario
@@ -129,16 +194,42 @@ export class NewcampusComponent {
         });
         this.http.post(url, data, {headers}).subscribe(response => {
           if('message' in response){
-            if(response.message === '0'){
-              alert('entro')
-            }else if(response.message === '1'){
-              alert('no entro')
-            }
-            else{
-              alert("No tiene permisos")
-            }
+            this.createSpaces(response.message as number);
           }
         });
+
+      }
+    }
+  }
+
+  createSpaces(idCampus: number):void{
+    const decode_token: object = jwt_decode(JSON.stringify(localStorage.getItem('token')));
+    if('infoUser' in decode_token){
+      const infoUser = decode_token.infoUser as Array<object>;
+      if('rol' in infoUser[0] && 'id_usuario' in infoUser[0]){
+        const rol = infoUser[0].rol;
+        const id_usuario = infoUser[0].id_usuario;
+        this.spaces.forEach(space => {
+          const data = {
+            headquarter_id: idCampus,
+            space_name: space.name,
+            space_fee: space.fee,
+            space_description: space.description,
+            rol: rol,
+            id_user: id_usuario
+          };
+          const url = 'http://localhost:3005/api/spaces/add';
+          const headers = new HttpHeaders({
+            Authorization: 'Bearer ' + localStorage.getItem('token'),
+          });
+          this.http.post(url, data, {headers}).subscribe(response => {
+            if('message' in response){
+              alert(response.message);
+            }
+          });
+
+        });
+
       }
     }
   }
@@ -163,13 +254,13 @@ export class NewcampusComponent {
     }else{
       direction.style.display = 'none';
     }
-    if(this.city == ''){
+    if(this.cities.length === 0){
       city.style.display = '';
       toReturn = false;
     }else{
       city.style.display = 'none';
     }
-    if(this.department == ''){
+    if(this.departments.length === 0){
       department.style.display = '';
       toReturn = false;
     }else{

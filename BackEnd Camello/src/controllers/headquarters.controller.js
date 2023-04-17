@@ -154,36 +154,36 @@ const createHeadquarter = async(req, res) =>{
                                     await connection.query(`Insert into ciudades_sedes (id_ciudad, id_sede, direccion) values (${connection.escape(city)}, ${connection.escape(idHeadquearter)}, ${connection.escape(address)})`, async(error, result, fields) =>{
                                         if(!error){
                                             if(!err){
-                                                await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripción) values (${id_user}, NOW(), "Agregacion", "Se agrego la sede ${connection.escape(headquater_name)} a la tabla de sedes")`, async(error, info, fields) =>{
+                                                await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripcion) values (${id_user}, NOW(), "Agregacion", "Se agrego la sede ${connection.escape(headquater_name)} a la tabla de sedes")`, async(error, info, fields) =>{
                                                     if(!error){
                                                         res.json({message: idHeadquearter})
                                                     }else{
-                                                        res.json({message: "1"})
+                                                        res.json({message: error})
                                                     }
                                                 })
                                             }else{
-                                                res.json({message: "1"})
+                                                res.json({message: "2"})
                                             }
                                         }else{
-                                            res.json({message: "1"})
+                                            res.json({message: error})
                                         }
                                     })
                                 }else{
-                                    res.json({message: "1"})
+                                    res.json({message: "4"})
                                 }
                             })
                         }else{
-                            res.json({message: "1"})
+                            res.json({message: "5"})
                         }
                     }else{
-                        res.json({message: "1"})
+                        res.json({message: "6"})
                     }
                 })
             }else{
-                res.json({message: "1"})
+                res.json({message: "7"})
             }
         }else{
-            res.json({message: "1"})
+            res.json({message: "8"})
         }
     })
 }
@@ -304,6 +304,7 @@ const searchHeadquarter = async(req, res) => {
 }
 
 const getDepartments = async(req, res) =>{
+    console.log(1);
     jwt.verify(req.token, 'secretkey', async(error) =>{
         if(!error){
             await connection.query(`Select * from departamentos`, async(error, result, fields) =>{

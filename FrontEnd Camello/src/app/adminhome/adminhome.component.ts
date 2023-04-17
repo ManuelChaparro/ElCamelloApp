@@ -43,9 +43,7 @@ export class AdminhomeComponent {
           }
       });
       }, 30000);
-
   }
-
 
   constructor(private http: HttpClient, private router: Router, private serviceInfoUser: ServiceUserInfoService){
     const decode_token: object = jwt_decode(JSON.stringify(localStorage.getItem('token')));
