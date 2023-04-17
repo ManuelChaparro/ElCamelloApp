@@ -5,28 +5,28 @@ const jwt = require('jsonwebtoken');
 const connection = require('../../config/connections.js');
 
 const createSchedule = async(req, res) =>{
-    const {schedule_name, start_date, end_date, rol, id_user} = req.body
+    const {working_day, opening_time, closing_time, rol, id_user} = req.body
     jwt.verify(req.token, 'secretkey', async(error)=>{
         if(!error){
             if(rol === "A" || rol === "a"){
-                await connection.query(`Insert into horarios (nombre, fecha_inicio, fecha_final) values (${connection.escape(schedule_name)}, ${connection.escape(start_date)}, ${connection.escape(end_date)})`, async(err, result, fields) =>{
+                await connection.query(`Insert into horarios (jornada, hora_apertura, hora_cierre) values (${connection.escape(working_day)}, ${connection.escape(opening_time)}, ${connection.escape(closing_time)})`, async(err, result, fields) =>{
                     if(!err){
-                        await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripción) values (${id_user}, NOW(), "Agregacion", 'Se agregó el horario ${connection.escape(schedule_name)} a la tabla de horarios')`, async(error, info, fields) =>{
+                        await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripción) values (${id_user}, NOW(), "Agregacion", 'Se agregó el horario ${connection.escape(working_day)} a la tabla de horarios')`, async(error, info, fields) =>{
                             if(!error){
-                                res.json({message: "Se ha ingresado correctamente el horario"})
+                                res.json({message: "0"})
                             }else{
-                                res.json({message: "Error log"})
+                                res.json({message: "1"})
                             }
                         })
                     }else{
-                        res.json({message: "Ha ocurrido un error al ingresar un nuevo horario"})
+                        res.json({message: "1"})
                     }
                 })
             }else{
-                res.json({message: "No tiene los permisos para realizar esta acción"})
+                res.json({message: "1"})
             }
         }else{
-            res.json({message: "No tiene autorización para ingresar"})
+            res.json({message: "1"})
         }
     })
 }
@@ -43,27 +43,27 @@ const modifySchedule = async(req, res) =>{
                                 if(!err){
                                     await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripción) values (${id_user}, NOW(), "Modificacion", "Se modifico el horario ${connection.escape(day)} en la tabla de horarios")`, async(error, info, fields) =>{
                                         if(!error){
-                                            res.json({message: "Se modifico correctamente el horario"})
+                                            res.json({message: "0"})
                                         }else{
-                                            res.json({message: "Error log"})
+                                            res.json({message: "1"})
                                         }
                                     })
                                 }else{
-                                    res.json({message: "No se pudo modifcar el horario deseado"})
+                                    res.json({message: "1"})
                                 }
                             })
                         }else{
-                            res.json({message: "El horario que intenta modificar no existe"})
+                            res.json({message: "1"})
                         }
                     }else{
-                        res.json({message: "Ha ocurrido un error al buscar el horario que desea modificar"})
+                        res.json({message: "1"})
                     }
                 })
             }else{
-                res.json({message: "No tiene los permisos para realizar esta acción"})
+                res.json({message: "1"})
             }
         }else{
-            res.json({message: "No tiene autorización para ingresar"})
+            res.json({message: "1"})
         }
     })
 }
@@ -80,28 +80,27 @@ const deleteSchedule = async(req, res) =>{
                                 if(!err){
                                     await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripción) values (${id_user}, NOW(), "Eliminacion", "Se elimino el horario ${connection.escape(schedule_id)} de la tabla de horarios")`, async(error, info, fields) =>{
                                         if(!error){
-                                            res.json({message: "Se elimino correctamente el horario"})
+                                            res.json({message: "0"})
                                         }else{
-                                            res.json({message: "Error log"})
+                                            res.json({message: "1"})
                                         }
                                     })
-                                    res.json({message: "El horario se ha eliminado correctamente"})
                                 }else{
-                                    res.json({message: "No se pudo eliminar el horario deseado"})
+                                    res.json({message: "1"})
                                 }
                             })
                         }else{
-                            res.json({message: "El horario que intenta eliminar no existe"})
+                            res.json({message: "1"})
                         }
                     }else{
-                        res.json({message: "Ha ocurrido un error al buscar el horario que desea eliminar"})
+                        res.json({message: "1"})
                     }
                 })
             }else{
-                res.json({message: "No tiene los permisos para realizar esta acción"})
+                res.json({message: "1"})
             }
         }else{
-            res.json({message: "No tiene autorización para ingresar"})
+            res.json({message: "1"})
         }
     })
 }
@@ -113,11 +112,11 @@ const getSchedules = async(req, res) =>{
                 if(!err){
                     res.json(result)
                 }else{
-                    res.json({message: "Ha ocurrido un error al buscar la lista de horarios"})
+                    res.json({message: "1"})
                 }
             })
         }else{
-            res.json({message: "No tiene autorización para ingresar"})
+            res.json({message: "1"})
         }
     })
 }
@@ -132,74 +131,63 @@ const searchSchedule = async(req, res) =>{
                         res.json(result)
                     }
                 }else{
-                    res.json({message: "Ha ocurrido un error al buscar el horario deseado"})
+                    res.json({message: "1"})
                 }
             })
         }else{
-            res.json({message: "No tiene autorización para ingresar"})
+            res.json({message: "1"})
         }
     })
 }
 
-
-const schedulesList = [
-    { dia: 'Lunes', firstOpen: '', firstClose: '', secondOpen: '', secondClose: '' },
-    { dia: 'Martes', firstOpen: '', firstClose: '', secondOpen: '', secondClose: '' },
-    { dia: 'Miércoles', firstOpen: '', firstClose: '', secondOpen: '', secondClose: '' },
-    { dia: 'Jueves', firstOpen: '', firstClose: '', secondOpen: '', secondClose: '' },
-    { dia: 'Viernes', firstOpen: '', firstClose: '', secondOpen: '', secondClose: '' },
-    { dia: 'Sábado', firstOpen: '', firstClose: '', secondOpen: '', secondClose: '' },
-    { dia: 'Domingo', firstOpen: '', firstClose: '', secondOpen: '', secondClose: '' }
-];
-
-
 const createHeadquarter = async(req, res) =>{
-    const {headquater_name, description, city, address, schedules, rol, id_user} = req.body
+    const {headquater_name, description, city, address, rol, id_user} = req.body
     jwt.verify(req.token, 'secretkey', async(error)=>{
         if(!error){
             if(rol === "A" || rol === "a"){
-                await connection.query(`Insert into sedes (nombre, descripcion) values (${connection.escape(headquater_name)}, ${connection.escape(description)})`, async(err, result, fields) =>{
-                    let idHeadquearter = result.insertId
-                    await connection.query(`Insert into ciudades_sedes (id_ciudad, id_sede, direccion) values (${connection.escape(city)}, ${connection.escape(idHeadquearter)}, ${connection.escape(address)})`)
-                    for (let i = 0; i < schedulesList.length; i++) {
-                        const day = schedulesList[i].dia
-                        const openningTimeMorning = schedulesList[i].firstOpen;
-                        const closingTimeMorning = schedulesList[i].firstClose;
-                        const openningTimeEvening = schedulesList[i].secondOpen;
-                        const closingTimeEvening = schedulesList[i].secondClose;
-                        await connection.query(`Insert into horarios(jornada, hora_apertura, hora_cierre) values ("Mañana", ${connection.escape(openningTimeMorning)}, ${connection.escape(closingTimeMorning)})`, async(error, result, fields)=>{
-                            let idMorningSchedule = result.insertId
-                            await connection.query(`Insert into horarios_sede (id_sede, id_horario, dia) values (${connection.escape(idHeadquearter)}, ${connection.escape(idMorningSchedule)}, ${connection.escape(day)})`)
-                        })
-                        await connection.query(`Insert into horarios(jornada, hora_apertura, hora_cierre) values ("Tarde", ${connection.escape(openningTimeEvening)}, ${connection.escape(closingTimeEvening)})`, async(error, result, fields)=>{
-                            let idEveningSchedule = result.insertId
-                            await connection.query(`Insert into horarios_sede (id_sede, id_horario, dia) values (${connection.escape(idHeadquearter)}, ${connection.escape(idEveningSchedule)}, ${connection.escape(day)})`)
-                        })
+                await connection.query(`Select * from sedes where nombre = ${connection.escape(headquater_name)}`, async(error, validation, fields) =>{
+                    if(!error){
+                        if(validation.length === 0){
+                            await connection.query(`Insert into sedes (nombre, descripcion) values (${connection.escape(headquater_name)}, ${connection.escape(description)})`, async(err, result, fields) =>{
+                                if(!error){
+                                    let idHeadquearter = result.insertId
+                                    await connection.query(`Insert into ciudades_sedes (id_ciudad, id_sede, direccion) values (${connection.escape(city)}, ${connection.escape(idHeadquearter)}, ${connection.escape(address)})`, async(error, result, fields) =>{
+                                        if(!error){
+                                            if(!err){
+                                                await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripción) values (${id_user}, NOW(), "Agregacion", "Se agrego la sede ${connection.escape(headquater_name)} a la tabla de sedes")`, async(error, info, fields) =>{
+                                                    if(!error){
+                                                        res.json({message: "0"})
+                                                    }else{
+                                                        res.json({message: "1"})
+                                                    }
+                                                })
+                                            }else{
+                                                res.json({message: "1"})
+                                            }
+                                        }else{
+                                            res.json({message: "1"})
+                                        }
+                                    })
+                                }else{
+                                    res.json({message: "1"})
+                                }
+                            })
+                        }else{
+                            res.json({message: "1"})
+                        }
+                    }else{
+                        res.json({message: "1"})
                     }
-                    res.json({message: "Se agrego correctamente la sede"})
                 })
             }else{
-                res.json({message: "No tiene los permisos para realizar esta acción"})
+                res.json({message: "1"})
             }
         }else{
-            res.json({message: "No tiene autorización para ingresar"})
+            res.json({message: "1"})
         }
     })
 }
 
-/*
-if(!err){
-    await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripción) values (${id_user}, NOW(), "Agregacion", "Se agrego la sede ${connection.escape(headquater_name)} a la tabla de sedes")`, async(error, info, fields) =>{
-        if(!error){
-            res.json({message: "Se ha creado correctamente la sede"})
-        }else{
-            res.json({message: "Error log"})
-        }
-    })
-}else{
-    res.json({message: "Ha ocurrido un problema al crear la sede"})
-}
-*/
 
 const modifyHeadquarter = async(req, res) =>{
     const {headquarter_id, headquarter_schedule_id, headquater_new_name, new_adress, rol, id_user} = req.body
@@ -213,27 +201,27 @@ const modifyHeadquarter = async(req, res) =>{
                                 if(!err){
                                     await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripción) values (${id_user}, NOW(), "Modificacion", "Se modifico la sede ${connection.escape(headquater_new_name)} de la tabla de sedes")`, async(error, info, fields) =>{
                                         if(!error){
-                                            res.json({message: "Se modifico correctamente la sede"})
+                                            res.json({message: "0"})
                                         }else{
-                                            res.json({message: "Error log"})
+                                            res.json({message: "1"})
                                         }
                                     })
                                 }else{
-                                    res.json({message: "No fue posible modificar la sede"})
+                                    res.json({message: "1"})
                                 }
                             })
                         }else{
-                            res.json({message: "La sede que intenta modificar no existe"})
+                            res.json({message: "1"})
                         }
                     }else{
-                        res.json({message: "Ha ocurrido un error al buscar la sede que desea modificar"})
+                        res.json({message: "1"})
                     }
                 })
             }else{
-                res.json({message: "No tiene los permisos para realizar esta acción"})
+                res.json({message: "1"})
             }
         }else{
-            res.json({message: "No tiene autorización para ingresar"})
+            res.json({message: "1"})
         }
     })
 }
@@ -250,27 +238,27 @@ const deleteHeadquarter = async(req, res) =>{
                                 if(!error){
                                     await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripción) values (${id_user}, NOW(), "Eliminacion", "Se elimino la sede ${connection.escape(headquarter_id)} de la tabla de sedes")`, async(error, info, fields) =>{
                                         if(!error){
-                                            res.json({message: "Se elimino correctamente la sede"})
+                                            res.json({message: "0"})
                                         }else{
-                                            res.json({message: "Error log"})
+                                            res.json({message: "1"})
                                         }
                                     })
                                 }else{
-                                    res.json({message: "No fue posible eliminar la sede"})
+                                    res.json({message: "1"})
                                 }
                             })
                         }else{
-                            res.json({message: "La sede que intenta eliminar no existe"})
+                            res.json({message: "1"})
                         }
                     }else{
-                        res.json({message: "Ha ocurrido un error al buscar la sede que desea eliminar"})
+                        res.json({message: "1"})
                     }
                 })
             }else{
-                res.json({message: "No tiene los permisos para realizar esta acción"})
+                res.json({message: "1"})
             }
         }else{
-            res.json({message: "No tiene autorización para ingresar"})
+            res.json({message: "1"})
         }
     })
 }
@@ -283,14 +271,14 @@ const getHeadquarterList = async(req, res) =>{
                     if(list.length >= 1){
                         res.json(list)
                     }else{
-                        res.json({message: "La lista de sedes esta vacia"})
+                        res.json({message: "1"})
                     }
                 }else{
-                    res.json({message: "Ha ocurrido un error al buscar la lista de sedes"})
+                    res.json({message: "1"})
                 }
             })
         }else{
-            res.json({message: "No tiene autorización para ingresar"})
+            res.json({message: "1"})
         }
     })
 }
@@ -304,14 +292,14 @@ const searchHeadquarter = async(req, res) => {
                     if(result.length === 1){
                         res.json(result)
                     }else{
-                        res.json({message: "La sede que busca no existe"})
+                        res.json({message: "1"})
                     }
                 }else{
-                    res.json({message: "Ha ocurrido un error al buscar la sede"})
+                    res.json({message: "1"})
                 }
             })
         }else{
-            res.json({message: "No tiene autorización para ingresar"})
+            res.json({message: "1"})
         }
     })
 }
