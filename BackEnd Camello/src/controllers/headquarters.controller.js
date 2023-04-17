@@ -273,11 +273,11 @@ const getHeadquarterList = async(req, res) =>{
                         res.json({message: "1"})
                     }
                 }else{
-                    res.json({message: "1"})
+                    res.json({message: "2"})
                 }
             })
         }else{
-            res.json({message: "1"})
+            res.json({message: "3"})
         }
     })
 }
