@@ -113,28 +113,33 @@ export class NewcampusComponent {
   createCampus(){
     const decode_token: object = jwt_decode(JSON.stringify(localStorage.getItem('token')));
     if('infoUser' in decode_token){
-      const data = {
-        headquater_name: this.campusName,
-        description: this.description,
-        city: this.city,
-        address: this.direction,
-      };
-      const url = 'http://localhost:3005/api/user/changepass';
-      const headers = new HttpHeaders({
-        Authorization: 'Bearer ' + localStorage.getItem('token'),
-      });
-      this.http.put(url, data, {headers}).subscribe(response => {
-        if('message' in response){
-          if(response.message === '0'){
-            const modalTwo = document.querySelector('#infoModal') as HTMLElement;
-            const bootstrapModalInfo = new bootstrap.Modal(modalTwo);
-            bootstrapModalInfo.show();
-          }else if(response.message === '1'){}
-          else{
-            alert("No tiene permisos")
+      const infoUser = decode_token.infoUser as Array<object>;
+      if('rol' in infoUser[0] && 'id_usuario' in infoUser[0]){
+        const data = {
+          headquater_name: this.campusName,
+          description: this.description,
+          city: this.city,
+          address: this.direction,
+          rol: infoUser[0].rol,
+          id_user: infoUser[0].id_usuario
+        };
+        const url = 'http://localhost:3005/api/headquearters/create';
+        const headers = new HttpHeaders({
+          Authorization: 'Bearer ' + localStorage.getItem('token'),
+        });
+        this.http.post(url, data, {headers}).subscribe(response => {
+          if('message' in response){
+            if(response.message === '0'){
+              alert('entro')
+            }else if(response.message === '1'){
+              alert('no entro')
+            }
+            else{
+              alert("No tiene permisos")
+            }
           }
-        }
-      });
+        });
+      }
     }
   }
 
