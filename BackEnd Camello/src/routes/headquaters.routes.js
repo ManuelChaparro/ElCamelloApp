@@ -4,6 +4,7 @@ const router = require('express').Router();
 const {modifySchedule, deleteSchedule, getSchedules, searchSchedule, createHeadquarter, modifyHeadquarter, deleteHeadquarter, getHeadquarterList, searchHeadquarter} = require('../controllers/headquarters.controller');
 const { verifyToken } = require('../controllers/users.controller');
 
+router.post('/schedules/createSchedule', verifyToken, createHeadquarter)
 router.put('/schedules/modifySchedule', verifyToken, modifySchedule)
 router.delete('/schedules/deleteSchedule', verifyToken, deleteSchedule)
 router.get('/schedules/showSchedules', verifyToken, getSchedules)

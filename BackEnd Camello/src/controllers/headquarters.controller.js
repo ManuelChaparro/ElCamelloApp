@@ -4,6 +4,33 @@ const {json} = require('express');
 const jwt = require('jsonwebtoken');
 const connection = require('../../config/connections.js');
 
+const createSchedule = async(req, res) =>{
+    const {schedule_name, start_date, end_date, rol, id_user} = req.body
+    jwt.verify(req.token, 'secretkey', async(error)=>{
+        if(!error){
+            if(rol === "A" || rol === "a"){
+                await connection.query(`Insert into horarios (nombre, fecha_inicio, fecha_final) values (${connection.escape(schedule_name)}, ${connection.escape(start_date)}, ${connection.escape(end_date)})`, async(err, result, fields) =>{
+                    if(!err){
+                        await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripción) values (${id_user}, NOW(), "Agregacion", 'Se agregó el horario ${connection.escape(schedule_name)} a la tabla de horarios')`, async(error, info, fields) =>{
+                            if(!error){
+                                res.json({message: "Se ha ingresado correctamente el horario"})
+                            }else{
+                                res.json({message: "Error log"})
+                            }
+                        })
+                    }else{
+                        res.json({message: "Ha ocurrido un error al ingresar un nuevo horario"})
+                    }
+                })
+            }else{
+                res.json({message: "No tiene los permisos para realizar esta acción"})
+            }
+        }else{
+            res.json({message: "No tiene autorización para ingresar"})
+        }
+    })
+}
+
 const modifySchedule = async(req, res) =>{
     const {id_schedule, new_day, new_opening_time, new_closing_time, rol, id_user} = req.body
     jwt.verify(req.token, 'secretkey', async(error)=>{
@@ -289,4 +316,4 @@ const searchHeadquarter = async(req, res) => {
     })
 }
 
-module.exports ={modifySchedule, deleteSchedule, getSchedules, searchSchedule, createHeadquarter, modifyHeadquarter, deleteHeadquarter, getHeadquarterList, searchHeadquarter}
+module.exports ={createSchedule, modifySchedule, deleteSchedule, getSchedules, searchSchedule, createHeadquarter, modifyHeadquarter, deleteHeadquarter, getHeadquarterList, searchHeadquarter}
