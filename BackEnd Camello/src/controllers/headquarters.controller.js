@@ -230,7 +230,7 @@ const deleteHeadquarter = async(req, res) =>{
     jwt.verify(req.token, 'secretkey', async(error) =>{
         if(!error){
             if(rol === "A" || rol === "a"){
-                await connection.query(`select * from sedes id_sede = ${connection.escape(headquarter_id)}`, async(err, result, fields) =>{
+                await connection.query(`select * from sedes where id_sede = ${connection.escape(headquarter_id)}`, async(err, result, fields) =>{
                     if(!err){
                         if(result.length === 1){
                             await connection.query(`Delete from sedes where id_sede = ${connection.escape(headquarter_id)}`, async(error, finalResult, fields) =>{
@@ -265,7 +265,7 @@ const deleteHeadquarter = async(req, res) =>{
 const getHeadquarterList = async(req, res) =>{
     jwt.verify(req.token, 'secretkey', async(error) =>{
         if(!error){
-            await connection.query(`select s.nombre as nombre_sede, s.descripcion, cs.direccion from sedes s, ciudades_sedes cs where s.id_sede = cs.id_sede`, async(err, list, fields) =>{
+            await connection.query(`select s.id_sede, s.nombre as nombre_sede, s.descripcion, cs.direccion from sedes s, ciudades_sedes cs where s.id_sede = cs.id_sede`, async(err, list, fields) =>{
                 if(!err){
                     if(list.length >= 1){
                         res.json(list)
