@@ -156,7 +156,7 @@ const createHeadquarter = async(req, res) =>{
                                             if(!err){
                                                 await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripción) values (${id_user}, NOW(), "Agregacion", "Se agrego la sede ${connection.escape(headquater_name)} a la tabla de sedes")`, async(error, info, fields) =>{
                                                     if(!error){
-                                                        res.json({message: "0"})
+                                                        res.json({message: idHeadquearter})
                                                     }else{
                                                         res.json({message: "1"})
                                                     }

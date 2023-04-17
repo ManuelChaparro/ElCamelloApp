@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import * as bootstrap from 'bootstrap';
+import jwt_decode from 'jwt-decode';
+import { HttpClient, HttpHeaders} from '@angular/common/http';
 
 interface stockObject{
   id: number,
@@ -41,7 +43,7 @@ export class NewcampusComponent {
 
   public stock: Array<stockObject>;
 
-  constructor(){
+  constructor(private http: HttpClient){
     this.campusName = '';
     this.direction = '';
     this.city = '';
@@ -95,7 +97,7 @@ export class NewcampusComponent {
     }else{
       if(info){
         if(space){
-
+          this.createCampus();
         }else{
           body.innerHTML = 'Es necesario completar toda la información requerida en "Espacios"';
           bootstrapModal.show();
@@ -106,6 +108,34 @@ export class NewcampusComponent {
       }
     }
 
+  }
+
+  createCampus(){
+    const decode_token: object = jwt_decode(JSON.stringify(localStorage.getItem('token')));
+    if('infoUser' in decode_token){
+      const data = {
+        headquater_name: this.campusName,
+        description: this.description,
+        city: this.city,
+        address: this.direction,
+      };
+      const url = 'http://localhost:3005/api/user/changepass';
+      const headers = new HttpHeaders({
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
+      });
+      this.http.put(url, data, {headers}).subscribe(response => {
+        if('message' in response){
+          if(response.message === '0'){
+            const modalTwo = document.querySelector('#infoModal') as HTMLElement;
+            const bootstrapModalInfo = new bootstrap.Modal(modalTwo);
+            bootstrapModalInfo.show();
+          }else if(response.message === '1'){}
+          else{
+            alert("No tiene permisos")
+          }
+        }
+      });
+    }
   }
 
   validationCampusInfo(): boolean{
