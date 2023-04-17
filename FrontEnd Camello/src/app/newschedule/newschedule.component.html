@@ -1,1 +1,38 @@
-<p>newschedule works!</p>
+<div class="container">
+  <div class="input-containers gap-2 d-flex flex-column">
+    <label for="">Horario <span style="display: none; color: red;" id="warn-schedule">*</span></label>
+    <select class="form-select" #schedule>
+      <option selected>Lunes</option>
+      <option>Martes</option>
+      <option>Miércoles</option>
+      <option>Jueves</option>
+      <option>Viernes</option>
+      <option>Sábado</option>
+      <option>Domingo</option>
+    </select>
+    <div id="schedule-time" class="gap-2 d-flex flex-row">
+      <div class="card p-3" style="flex-basis: 50%;">
+        <label class="h6 text-center" for="">Mañana</label>
+        <div class="input-schedule">
+          <label for="">Apertura</label>
+          <input class="form-control" #firstOpen type="time" id="firstOpen" name="firstOpen" required>
+          <label for="">Cierre</label>
+          <input  class="form-control" #firstClose type="time" id="firstClose" name="firstClose" required>
+        </div>
+      </div>
+      <div class="card p-3" style="flex-basis: 50%;">
+        <label class="h6 text-center" for="">Tarde</label>
+        <div class="input-schedule">
+          <label for="">Apertura</label>
+          <input class="form-control" #secondOpen type="time" id="secondOpen" name="secondOpen" required>
+          <label for="">Cierre</label>
+          <input class="form-control" #secondClose type="time" id="secondClose" name="secondClose" required>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex">
+      <button class="btn btn-outline-success" style="flex-basis: 100%;" (click)="saveSchedule(schedule.value, firstOpen.value, firstClose.value, secondOpen.value, secondClose.value)">Crear horario</button>
+    </div>
+  </div>
+</div>
