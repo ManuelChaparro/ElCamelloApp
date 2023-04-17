@@ -265,7 +265,7 @@ const deleteHeadquarter = async(req, res) =>{
 const getHeadquarterList = async(req, res) =>{
     jwt.verify(req.token, 'secretkey', async(error) =>{
         if(!error){
-            await connection.query(`select s.nombre as nombre_sede, cs.direccion, hs.nombre as horario, h.fecha_inicio as apertura, h.fecha_final as cierre from sedes s, horarios h where s.id_horario = h.id_horario`, async(err, list, fields) =>{
+            await connection.query(`select s.nombre as nombre_sede, s.descripcion, cs.direccion from sedes s, ciudades_sedes cs where s.id_sede = cs.id_sede`, async(err, list, fields) =>{
                 if(!err){
                     if(list.length >= 1){
                         res.json(list)

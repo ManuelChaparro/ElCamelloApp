@@ -14,7 +14,7 @@ router.put('/headquarters/modify', verifyToken, modifyHeadquarter)
 router.delete('/headquarters/delete', verifyToken, deleteHeadquarter)
 router.get('/headquarters/list', verifyToken, getHeadquarterList)
 router.get('/headquarters/search', verifyToken, searchHeadquarter)
-router.post('/headquarters/departments/list', verifyToken, getDepartments)
-router.get('/headquearters/cities/search', verifyToken, getCities)
+router.get('/headquearters/departments/list', verifyToken, getDepartments)
+router.post('/headquearters/cities/search', verifyToken, getCities)
 
 module.exports = router
