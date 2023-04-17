@@ -32,38 +32,7 @@
             <textarea id="campusDescription" class="form-control flex-grow-1" style="resize: none" [(ngModel)]="description" type="text" name="name" placeholder="Ingrese la Descripción del campus" name="" id="" cols="30" rows="3"></textarea>
           </div>
         </div>
-        <div class="input-containers gap-2" style="flex-basis: 50%;">
-          <label for="">Horario <span style="display: none; color: red;" id="warn-schedule">*</span></label>
-          <select class="form-select" #schedule (change)="changeDay(schedule.value)">
-            <option selected>Lunes</option>
-            <option>Martes</option>
-            <option>Miércoles</option>
-            <option>Jueves</option>
-            <option>Viernes</option>
-            <option>Sábado</option>
-            <option>Domingo</option>
-          </select>
-          <div id="schedule-time" class="gap-2">
-            <div class="card p-3">
-              <label class="h6 text-center" for="">Mañana</label>
-              <div class="input-schedule">
-                <label for="">Apertura</label>
-                <input class="form-control" #firstOpen (change)="changeFirstSchedule(firstOpen.value, firstClose.value)" type="time" id="firstOpen" name="firstOpen" required>
-                <label for="">Cierre</label>
-                <input  class="form-control" #firstClose (change)="changeFirstSchedule(firstOpen.value, firstClose.value)" type="time" id="firstClose" name="firstClose" required>
-              </div>
-            </div>
-            <div class="card p-3">
-              <label class="h6 text-center" for="">Tarde</label>
-              <div class="input-schedule">
-                <label for="">Apertura</label>
-                <input class="form-control" #secondOpen (change)="changeSecondSchedule(secondOpen.value, secondClose.value)" type="time" id="secondOpen" name="secondOpen" required>
-                <label for="">Cierre</label>
-                <input class="form-control" #secondClose (change)="changeSecondSchedule(secondOpen.value, secondClose.value)" type="time" id="secondClose" name="secondClose" required>
-              </div>
-            </div>
-          </div>
-        </div>
+
       </div>
     </div>
     <div id="space">

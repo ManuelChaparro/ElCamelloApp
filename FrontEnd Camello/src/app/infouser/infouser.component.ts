@@ -124,10 +124,11 @@ export class InfouserComponent {
       this.http.put(url, data, {headers}).subscribe(response => {
         if('message' in response){
           if(response.message === '0'){
-
-          }else if(response.message === '1'){
-
-          }else{
+            const modalTwo = document.querySelector('#infoModal') as HTMLElement;
+            const bootstrapModalInfo = new bootstrap.Modal(modalTwo);
+            bootstrapModalInfo.show();
+          }else if(response.message === '1'){}
+          else{
             alert("No tiene permisos")
           }
         }

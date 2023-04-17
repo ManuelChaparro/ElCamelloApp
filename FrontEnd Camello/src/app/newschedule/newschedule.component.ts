@@ -7,4 +7,11 @@ import { Component } from '@angular/core';
 })
 export class NewscheduleComponent {
 
+  constructor(){
+    
+  }
+
+  saveSchedule(day: string, firstOpen: string, firstClose:string, secondOpen:string, secondClose:string){
+
+  }
 }

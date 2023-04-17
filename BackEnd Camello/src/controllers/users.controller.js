@@ -197,9 +197,9 @@ const changePassword = async(req, res) =>{
                                 if(validation.length === 1){
                                     await connection.query(`update passwords set password = ${connection.escape(newPassword)} where indicador = ${connection.escape(email_binary)}`, async (error, result, fields) =>{
                                         if(!error){
-                                            res.json({message: "1"})
-                                        }else{
                                             res.json({message: "0"})
+                                        }else{
+                                            res.json({message: "1"})
                                         }
                                     })
                                 }else{
