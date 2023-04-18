@@ -12,22 +12,32 @@ const createSchedule = async(req, res) =>{
                 await connection.query(`select * from sedes where id_sede = ${connection.escape(headquarter_id)}`, async(error, result, fields) =>{
                     if(!error){
                         if(result.length === 1){
-                            await connection.query(`Insert into horarios (dia, hora_apertura_am, hora_cierre_am, hora_apertura_pm, hora_cierre_pm) values (${connection.escape(working_day)}, ${connection.escape(opening_time_am)}, ${connection.escape(closing_time_am)}, ${connection.escape(opening_time_pm)}, ${connection.escape(closing_time_pm)})`, async(err, result, fields) =>{
-                                const scheduleId = result.insertId
-                                if(!err){
-                                    await connection.query(`Insert into horarios_sedes (id_sede, id_horario) values (${connection.escape(headquarter_id)}, ${connection.escape(scheduleId)})`, async(error, result, fields) =>{
-                                        if(!error){
-                                            await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripcion) values (${id_user}, NOW(), "Agregacion", "Se agregó el horario ${connection.escape(scheduleId)} a la sede ${connection.escape(headquarter_id)}")`, async(error, info, fields) =>{
-                                                if(!error){
-                                                    res.json({message: "0"})
-                                                }else{
-                                                    res.json({message: error})
-                                                }
-                                            })
-                                        }else{
-                                            res.json({message: "2"})
-                                        }
-                                    })
+                            await connection.query(`select * from horarios h, horarios_sedes hs, sedes s where h.id_horario = hs.id_horario and hs.id_sede = s.id_sede and s.id_sede = ${connection.escape(headquarter_id)} and h.dia = ${connection.escape(working_day)}`, async(error, result, fields) =>{
+                                if(!error){
+                                    if(result.length === 0){
+                                        await connection.query(`Insert into horarios (dia, hora_apertura_am, hora_cierre_am, hora_apertura_pm, hora_cierre_pm) values (${connection.escape(working_day)}, ${connection.escape(opening_time_am)}, ${connection.escape(closing_time_am)}, ${connection.escape(opening_time_pm)}, ${connection.escape(closing_time_pm)})`, async(err, result, fields) =>{
+                                            const scheduleId = result.insertId
+                                            if(!err){
+                                                await connection.query(`Insert into horarios_sedes (id_sede, id_horario) values (${connection.escape(headquarter_id)}, ${connection.escape(scheduleId)})`, async(error, result, fields) =>{
+                                                    if(!error){
+                                                        await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripcion) values (${id_user}, NOW(), "Agregacion", "Se agregó el horario ${connection.escape(scheduleId)} a la sede ${connection.escape(headquarter_id)}")`, async(error, info, fields) =>{
+                                                            if(!error){
+                                                                res.json({message: "0"})
+                                                            }else{
+                                                                res.json({message: "1"})
+                                                            }
+                                                        })
+                                                    }else{
+                                                        res.json({message: "1"})
+                                                    }
+                                                })
+                                            }else{
+                                                res.json({message: "1"})
+                                            }
+                                        })
+                                    }else{
+                                        res.json({message: "1"})
+                                    }
                                 }else{
                                     res.json({message: "3"})
                                 }
