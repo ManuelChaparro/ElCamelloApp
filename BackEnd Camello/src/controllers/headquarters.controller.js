@@ -5,13 +5,13 @@ const jwt = require('jsonwebtoken');
 const connection = require('../../config/connections.js');
 
 const createSchedule = async(req, res) =>{
-    const {working_day, opening_time, closing_time, rol, id_user} = req.body
+    const {working_day, opening_time_am, closing_time_am, opening_time_pm, closing_time_pm, rol, id_user} = req.body
     jwt.verify(req.token, 'secretkey', async(error)=>{
         if(!error){
             if(rol === "A" || rol === "a"){
-                await connection.query(`Insert into horarios (jornada, hora_apertura, hora_cierre) values (${connection.escape(working_day)}, ${connection.escape(opening_time)}, ${connection.escape(closing_time)})`, async(err, result, fields) =>{
+                await connection.query(`Insert into horarios (dia, hora_apertura_am, hora_cierre_am, hora_apertura_pm, hora_cierre_pm) values (${connection.escape(working_day)}, ${connection.escape(opening_time_am)}, ${connection.escape(closing_time_am)}, ${connection.escape(opening_time_pm)}, ${connection.escape(closing_time_pm)})`, async(err, result, fields) =>{
                     if(!err){
-                        await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripción) values (${id_user}, NOW(), "Agregacion", 'Se agregó el horario ${connection.escape(working_day)} a la tabla de horarios')`, async(error, info, fields) =>{
+                        await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripcion) values (${id_user}, NOW(), "Agregacion", 'Se agregó el horario ${connection.escape(working_day)} a la tabla de horarios')`, async(error, info, fields) =>{
                             if(!error){
                                 res.json({message: "0"})
                             }else{
@@ -32,16 +32,16 @@ const createSchedule = async(req, res) =>{
 }
 
 const modifySchedule = async(req, res) =>{
-    const {id_schedule, new_day, new_opening_time, new_closing_time, rol, id_user} = req.body
+    const {id_schedule, new_day, new_opening_time_am, new_closing_time_am, new_opening_time_pm, new_closing_time_pm, rol, id_user} = req.body
     jwt.verify(req.token, 'secretkey', async(error)=>{
         if(!error){
             if(rol === "A" || rol === "a"){
                 await connection.query(`select * from horarios where id_horario = ${connection.escape(id_schedule)}`, async(err, result, fields) =>{
                     if(!err){
                         if(result.length === 1){
-                            await connection.query(`update horarios set jornada = ${connection.escape(new_day)}, hora_apertura = ${connection.escape(new_opening_time)}, hora_cierre = ${connection.escape(new_closing_time)}`, async(err, result, fields) =>{
+                            await connection.query(`update horarios set dia = ${connection.escape(new_day)}, hora_apertura_am = ${connection.escape(new_opening_time_am)}, hora_cierre_am = ${connection.escape(new_closing_time_am)}, hora_apertura_pm = ${connection.escape(new_opening_time_pm)}, hora_cierre_pm = ${connection.escape(new_closing_time_pm)}`, async(err, result, fields) =>{
                                 if(!err){
-                                    await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripción) values (${id_user}, NOW(), "Modificacion", "Se modifico el horario ${connection.escape(day)} en la tabla de horarios")`, async(error, info, fields) =>{
+                                    await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripcion) values (${id_user}, NOW(), "Modificacion", "Se modifico el horario ${connection.escape(id_schedule)} en la tabla de horarios")`, async(error, info, fields) =>{
                                         if(!error){
                                             res.json({message: "0"})
                                         }else{
@@ -69,16 +69,16 @@ const modifySchedule = async(req, res) =>{
 }
 
 const deleteSchedule = async(req, res) =>{
-    const {day, schedule_id, rol, id_user} = req.body
+    const {schedule_id, rol, id_user} = req.body
     jwt.verify(req.token, 'secretkey', async(error) =>{
         if(!error){
             if(rol === "A" || rol === "a"){
-                await connection.query(`select * from horarios where jornada = ${connection.escape(day)}`, async(error, result, fields) =>{
+                await connection.query(`select * from horarios where id_horario = ${connection.escape(schedule_id)}`, async(error, result, fields) =>{
                     if(!error){
                         if(result.length === 1){
                             await connection.query(`delete from horarios where id_horario = ${connection.escape(schedule_id)}`, async(err, info, fields) =>{
                                 if(!err){
-                                    await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripción) values (${id_user}, NOW(), "Eliminacion", "Se elimino el horario ${connection.escape(schedule_id)} de la tabla de horarios")`, async(error, info, fields) =>{
+                                    await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripcion) values (${id_user}, NOW(), "Eliminacion", "Se elimino el horario ${connection.escape(schedule_id)} de la tabla de horarios")`, async(error, info, fields) =>{
                                         if(!error){
                                             res.json({message: "0"})
                                         }else{
@@ -125,7 +125,7 @@ const searchSchedule = async(req, res) =>{
     const {day} = req.body
     jwt.verify(req.token, 'secretkey', async(error) =>{
         if(!error){
-            await connection.query(`Select * from horarios where jornada = ${connection.escape(day)}`, async(error, result, fields) =>{
+            await connection.query(`Select * from horarios where dia = ${connection.escape(day)}`, async(error, result, fields) =>{
                 if(!error){
                     if(result.length === 1){
                         res.json(result)
