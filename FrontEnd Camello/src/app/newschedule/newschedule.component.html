@@ -60,59 +60,36 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <th>Lunes</th>
-            <td>8:00 AM</td>
-            <td>12:00 PM</td>
-            <td>1:00 PM</td>
-            <td>5:00 PM</td>
-          </tr>
-          <tr>
-            <th>Martes</th>
-            <td>8:00 AM</td>
-            <td>12:00 PM</td>
-            <td>1:00 PM</td>
-            <td>5:00 PM</td>
-          </tr>
-          <tr>
-            <th>Miércoles</th>
-            <td>8:00 AM</td>
-            <td>12:00 PM</td>
-            <td>1:00 PM</td>
-            <td>5:00 PM</td>
-          </tr>
-          <tr>
-            <th>Jueves</th>
-            <td>8:00 AM</td>
-            <td>12:00 PM</td>
-            <td>1:00 PM</td>
-            <td>5:00 PM</td>
-          </tr>
-          <tr>
-            <th>Viernes</th>
-            <td>8:00 AM</td>
-            <td>12:00 PM</td>
-            <td>1:00 PM</td>
-            <td>5:00 PM</td>
-          </tr>
-          <tr>
-            <th>Sábado</th>
-            <td>8:00 AM</td>
-            <td>12:00 PM</td>
-            <td>1:00 PM</td>
-            <td>5:00 PM</td>
-          </tr>
-          <tr>
-            <th>Domingo</th>
-            <td>8:00 AM</td>
-            <td>12:00 PM</td>
-            <td>1:00 PM</td>
-            <td>5:00 PM</td>
+          <tr *ngFor="let schedule of campus_schedule">
+            <th>{{schedule.dia}}</th>
+            <td>{{schedule.hora_apertura_am}}</td>
+            <td>{{schedule.hora_apertura_pm}}</td>
+            <td>{{schedule.hora_cierre_am}}</td>
+            <td>{{schedule.hora_cierre_pm}}</td>
           </tr>
         </tbody>
       </table>
 
     </div>
 
+  </div>
+</div>
+
+<div class="container mt-3">
+  <div class="modal fade" id=infoModal>
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Sede sin horarios</h5>
+          <button class="btn btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body" id="modal-body">
+          La sede "{{campus_selected}}" no cuenta con ningun horario, se aconseja agregar
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-warning" data-bs-dismiss="modal">Entendido!</button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

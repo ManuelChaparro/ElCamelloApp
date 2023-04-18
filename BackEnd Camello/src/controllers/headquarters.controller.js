@@ -17,33 +17,33 @@ const createSchedule = async(req, res) =>{
                                 if(!err){
                                     await connection.query(`Insert into horarios_sedes (id_sede, id_horario) values (${connection.escape(headquarter_id)}, ${connection.escape(scheduleId)})`, async(error, result, fields) =>{
                                         if(!error){
-                                            await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripcion) values (${id_user}, NOW(), "Agregacion", 'Se agregó el horario ${connection.escape(scheduleId)} a la sede ${connection.escape(headquarter_id)}')`, async(error, info, fields) =>{
+                                            await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripcion) values (${id_user}, NOW(), "Agregacion", "Se agregó el horario ${connection.escape(scheduleId)} a la sede ${connection.escape(headquarter_id)}")`, async(error, info, fields) =>{
                                                 if(!error){
                                                     res.json({message: "0"})
                                                 }else{
-                                                    res.json({message: "1"})
+                                                    res.json({message: error})
                                                 }
                                             })
                                         }else{
-                                            res.json({message: "1"})
+                                            res.json({message: "2"})
                                         }
                                     })
                                 }else{
-                                    res.json({message: "1"})
+                                    res.json({message: "3"})
                                 }
                             })
                         }else{
-                            res.json({message: "1"})  
+                            res.json({message: "4"})  
                         }
                     }else{
-                        res.json({message: "1"})
+                        res.json({message: "5"})
                     }
                 })
             }else{
-                res.json({message: "1"})
+                res.json({message: "6"})
             }
         }else{
-            res.json({message: "1"})
+            res.json({message: "7"})
         }
     })
 }
