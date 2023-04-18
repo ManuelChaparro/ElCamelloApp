@@ -5,19 +5,36 @@ const jwt = require('jsonwebtoken');
 const connection = require('../../config/connections.js');
 
 const createSchedule = async(req, res) =>{
-    const {working_day, opening_time_am, closing_time_am, opening_time_pm, closing_time_pm, rol, id_user} = req.body
+    const {headquarter_id, working_day, opening_time_am, closing_time_am, opening_time_pm, closing_time_pm, rol, id_user} = req.body
     jwt.verify(req.token, 'secretkey', async(error)=>{
         if(!error){
             if(rol === "A" || rol === "a"){
-                await connection.query(`Insert into horarios (dia, hora_apertura_am, hora_cierre_am, hora_apertura_pm, hora_cierre_pm) values (${connection.escape(working_day)}, ${connection.escape(opening_time_am)}, ${connection.escape(closing_time_am)}, ${connection.escape(opening_time_pm)}, ${connection.escape(closing_time_pm)})`, async(err, result, fields) =>{
-                    if(!err){
-                        await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripcion) values (${id_user}, NOW(), "Agregacion", 'Se agregó el horario ${connection.escape(working_day)} a la tabla de horarios')`, async(error, info, fields) =>{
-                            if(!error){
-                                res.json({message: "0"})
-                            }else{
-                                res.json({message: "1"})
-                            }
-                        })
+                await connection.query(`select * from sedes where id_sede = ${connection.escape(headquarter_id)}`, async(error, result, fields) =>{
+                    if(!error){
+                        if(result.length === 1){
+                            await connection.query(`Insert into horarios (dia, hora_apertura_am, hora_cierre_am, hora_apertura_pm, hora_cierre_pm) values (${connection.escape(working_day)}, ${connection.escape(opening_time_am)}, ${connection.escape(closing_time_am)}, ${connection.escape(opening_time_pm)}, ${connection.escape(closing_time_pm)})`, async(err, result, fields) =>{
+                                const scheduleId = result.insertId
+                                if(!err){
+                                    await connection.query(`Insert into horarios_sedes (id_sede, id_horario) values (${connection.escape(headquarter_id)}, ${connection.escape(scheduleId)})`, async(error, result, fields) =>{
+                                        if(!error){
+                                            await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripcion) values (${id_user}, NOW(), "Agregacion", 'Se agregó el horario ${connection.escape(scheduleId)} a la sede ${connection.escape(headquarter_id)}')`, async(error, info, fields) =>{
+                                                if(!error){
+                                                    res.json({message: "0"})
+                                                }else{
+                                                    res.json({message: "1"})
+                                                }
+                                            })
+                                        }else{
+                                            res.json({message: "1"})
+                                        }
+                                    })
+                                }else{
+                                    res.json({message: "1"})
+                                }
+                            })
+                        }else{
+                            res.json({message: "1"})  
+                        }
                     }else{
                         res.json({message: "1"})
                     }
@@ -120,6 +137,24 @@ const getSchedules = async(req, res) =>{
         }
     })
 }
+
+const getSchedulesPerHeadquarter = async(req, res) =>{
+    const {id_headquarter} = req.body
+    jwt.verify(req.token, 'secretkey', async(error) =>{
+        if(!error){
+            await connection.query(`select h.id_horario, h.dia, h.hora_apertura_am, h.hora_cierre_am, h.hora_apertura_pm, h.hora_cierre_pm from horarios h, horarios_sedes hs, sedes s where h.id_horario = hs.id_horario and hs.id_sede = s.id_sede and s.id_sede = ${connection.escape(id_headquarter)}`, async(err, result, fields) =>{
+                if(!err){
+                    res.json(result)
+                }else{
+                    res.json({message: "1"})
+                }
+            })
+        }else{
+            res.json({message: "1"})
+        }
+    })
+}
+
 
 const searchSchedule = async(req, res) =>{
     const {day} = req.body
@@ -366,4 +401,4 @@ const getCities = async(req, res) =>{
     })
 }
 
-module.exports ={createSchedule, modifySchedule, deleteSchedule, getSchedules, searchSchedule, createHeadquarter, modifyHeadquarter, deleteHeadquarter, getHeadquarterList, searchHeadquarter, getQuantitySpaces, getDepartments, getCities}
+module.exports ={createSchedule, modifySchedule, deleteSchedule, getSchedules, searchSchedule, createHeadquarter, modifyHeadquarter, deleteHeadquarter, getHeadquarterList, searchHeadquarter, getSchedulesPerHeadquarter, getQuantitySpaces, getDepartments, getCities}
