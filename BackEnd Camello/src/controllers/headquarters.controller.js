@@ -308,7 +308,7 @@ const getQuantitySpaces = async(req, res) =>{
     jwt.verify(req.token, 'secretkey', async(error) =>{
         if(!error){
             if(rol === "A" || rol == "a"){
-                await connection.query(`SELECT s.nombre, COUNT(s.id_sede) FROM espacios es, sedes s WHERE es.id_sede = s.id_sede AND s.id_sede = ${connection.escape(headquarter_id)}`, async(error, result, fields)=>{
+                await connection.query(`SELECT COUNT(s.id_sede) as quantity FROM espacios es, sedes s WHERE es.id_sede = s.id_sede AND s.id_sede = ${connection.escape(headquarter_id)}`, async(error, result, fields)=>{
                     if(!error){
                         res.json(result)
                     }else{

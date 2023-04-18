@@ -230,9 +230,16 @@ export class NewcampusComponent {
             Authorization: 'Bearer ' + localStorage.getItem('token'),
           });
           this.http.post(url, data, {headers}).subscribe(response => {});
+          const modal = document.querySelector('#successModal') as HTMLElement;
+          const bootstrapModal = new bootstrap.Modal(modal);
+          bootstrapModal.show();
         });
       }
     }
+  }
+
+  finishNewCampus(){
+    location.reload();
   }
 
   validationCampusInfo(): boolean{

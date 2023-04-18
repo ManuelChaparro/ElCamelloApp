@@ -84,10 +84,11 @@ export class AdminusersComponent {
       const decode_token: object = jwt_decode(JSON.stringify(localStorage.getItem('token')));
       if('infoUser' in decode_token){
         const infoUser =  decode_token.infoUser as Array<object>;
-        if('rol' in infoUser[0]){
+        if('rol' in infoUser[0] && 'id_usuario' in infoUser[0]){
           const data = {
             email: this.emailToDelete,
-            rol: infoUser[0].rol
+            rol: infoUser[0].rol,
+            id_user: infoUser[0].id_usuario
           };
           const url = 'http://localhost:3005/api/user/ad/delete';
           const headers = new HttpHeaders({
@@ -96,7 +97,6 @@ export class AdminusersComponent {
           this.http.post(url, data, {headers}).subscribe(response => {
             if('message' in response){
               if(response.message == '0'){
-                alert("Eliminado existosamente")
                 location.reload();
               }else{
                 alert("No se pudo eliminar")
