@@ -36,7 +36,7 @@ export class InfouserComponent {
     this.document_type = 'Cédula de Ciudadanía';
     this.document = undefined;
     this.birthdate = '';
-    this.rol = 'Cliente';
+    this.rol = '';
     this.usuarios = undefined;
     this.emailToDelete = '';
   }
@@ -75,9 +75,9 @@ export class InfouserComponent {
             const getDate = new Date(data[0].fecha_nacimiento as string);
             this.birthdate = getDate.toLocaleDateString(); // formatear la fecha como una cadena legible para los usuarios
             if(data[0].rol as string === 'A'){
-              rol.selectedIndex = 1;
+              this.rol = 'Administrador';
             }else{
-              rol.selectedIndex = 0;
+              this.rol = 'Cliente';
             }
             if(data[0].genero as string === 'Masculino'){
               gender.selectedIndex = 0;

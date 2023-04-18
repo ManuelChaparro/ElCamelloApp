@@ -6,6 +6,7 @@ import * as bootstrap from 'bootstrap';
 interface campus{
   name: string,
   description: string,
+  quantity_spaces: number,
   address: string,
   id_sede: number
 }
@@ -34,22 +35,43 @@ export class CampuslistComponent {
       Authorization: 'Bearer ' + localStorage.getItem('token'),
     });
 
-    this.http.get(url, {headers}).subscribe(response => {
-      const campus = response as Array<string>;
-      campus.forEach(n => {
-        const info_campus = n as Object;
-        if('nombre_sede' in info_campus && 'descripcion' in info_campus && 'direccion' in info_campus
-        && 'id_sede' in info_campus){
-          const campus_obj = {
-            name: info_campus.nombre_sede as string,
-            description: info_campus.descripcion as string,
-            address: info_campus.direccion as string,
-            id_sede: info_campus.id_sede as number,
-          }
-          this.campus_list.push(campus_obj as campus);
-        }
-      });
-    });
+    const decode_token: object = jwt_decode(JSON.stringify(localStorage.getItem('token')));
+    if('infoUser' in decode_token){
+      const infoUser =  decode_token.infoUser as Array<object>;
+      if('rol' in infoUser[0]){
+        const rol = infoUser[0].rol;
+        this.http.get(url, {headers}).subscribe(response => {
+          const campus = response as Array<string>;
+          campus.forEach(n => {
+              const info_campus = n as Object;
+              if('nombre_sede' in info_campus && 'descripcion' in info_campus && 'direccion' in info_campus
+              && 'id_sede' in info_campus){
+                const url = 'http://localhost:3005/api/headquarters/spaces/quantity';
+                const data = {
+                  headquarter_id: info_campus.id_sede,
+                  rol: rol
+                }
+                this.http.post(url, data, {headers}).subscribe(res => {
+                  const xd = res as Array<string>;
+                  xd.forEach(j => {
+                    const xdd = j as Object;
+                    if('quantity' in xdd){
+                      const newCampus = {
+                        name: info_campus.nombre_sede,
+                        description: info_campus.descripcion,
+                        quantity_spaces: xdd.quantity,
+                        address: info_campus.direccion,
+                        id_sede: info_campus.id_sede
+                      }
+                      this.campus_list.push(newCampus as campus);
+                    }
+                  });
+                });
+              }
+          });
+        });
+      }
+    }
   }
 
   showDeleteModal(){

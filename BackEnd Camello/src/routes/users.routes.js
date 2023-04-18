@@ -8,7 +8,7 @@ router.post('/user/login', loginUser);
 router.put('/user/modify', verifyToken, modifyUser);
 router.post('/user/delete', verifyToken, deleteUser);
 router.get('/user/list', verifyToken, getUsersList);
-router.delete('/user/ad/delete', verifyToken, deleteUserAdmin);
+router.post('/user/ad/delete', verifyToken, deleteUserAdmin);
 router.post('/user/recovery', recoverPassword);
 router.post('/user/search', verifyToken, getUser);
 router.put('/user/changepass', verifyToken, changePassword)

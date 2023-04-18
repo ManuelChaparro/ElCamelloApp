@@ -2,7 +2,7 @@
   <div *ngFor="let headquarter of campus_list" class="card flex-grow-1">
     <div class="card-body">
       <h5 class="card-title">{{headquarter.name}} - {{headquarter.id_sede}}</h5>
-      <h6 class="card-subtitle mb-2 text-muted">Cantidad de espacios:</h6>
+      <h6 class="card-subtitle mb-2 text-muted">Cantidad de espacios: {{headquarter.quantity_spaces}}</h6>
       <h6 class="card-subtitle mb-2 text-muted">{{headquarter.address}}</h6>
       <table id="table-user" class="table">
         <thead>

@@ -23,6 +23,8 @@ export class AdminhomeComponent {
   public surname: string;
 
   ngOnInit(){
+    console.log(1);
+
     const interval = setInterval(() => {
       const url = 'http://localhost:3005/api/user/validUser';
       const headers = new HttpHeaders({
@@ -42,7 +44,7 @@ export class AdminhomeComponent {
             }, 5000);
           }
       });
-      }, 30000);
+      }, 5000);
   }
 
   constructor(private http: HttpClient, private router: Router, private serviceInfoUser: ServiceUserInfoService){
@@ -60,13 +62,18 @@ export class AdminhomeComponent {
         });
         this.http.post(url, data, {headers}).subscribe(response => {
           const data = response as Array<object>;
-          if('nombres' in data[0] && 'apellidos' in data[0]){
-            const names = data[0].nombres as string
-            const surnames = data[0].apellidos as string
-            serviceInfoUser.setName(data[0].nombres as string);
-            serviceInfoUser.setSurname(data[0].apellidos as string);
-            this.name = serviceInfoUser.getName() as string;
-            this.surname = serviceInfoUser.getSurname() as string;
+          try{
+            if('nombres' in data[0] && 'apellidos' in data[0]){
+              const names = data[0].nombres as string
+              const surnames = data[0].apellidos as string
+              serviceInfoUser.setName(data[0].nombres as string);
+              serviceInfoUser.setSurname(data[0].apellidos as string);
+              this.name = serviceInfoUser.getName() as string;
+              this.surname = serviceInfoUser.getSurname() as string;
+            }
+          }catch(error){
+            localStorage.removeItem('token');
+            this.router.navigate(['/login']);
           }
         });
       }

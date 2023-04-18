@@ -1,5 +1,9 @@
-<div class="container">
-  <div class="input-containers gap-2 d-flex flex-column">
+<div class="container d-flex gap-4 my-2">
+  <div style="flex-basis: 35%;" class="input-containers gap-2 d-flex flex-column">
+    <label for="">Sede<span style="display: none; color: red;" id="warn-schedule">*</span></label>
+    <select (change)="updateByCampus()" class="form-select" id="select_campus">
+      <option *ngFor="let campus of campus_list" selected>{{campus.id_sede}} - {{campus.nombre_sede}}</option>
+    </select>
     <label for="">Horario <span style="display: none; color: red;" id="warn-schedule">*</span></label>
     <select class="form-select" #schedule>
       <option selected>Lunes</option>
@@ -34,5 +38,81 @@
     <div class="d-flex">
       <button class="btn btn-outline-success" style="flex-basis: 100%;" (click)="saveSchedule(schedule.value, firstOpen.value, firstClose.value, secondOpen.value, secondClose.value)">Crear horario</button>
     </div>
+  </div>
+  <div style="flex-basis: 65%;" class="card">
+    <div class="card-header">
+      <h6>Horario de: {{campus_selected}}</h6>
+    </div>
+    <div class="card-body">
+      <table class="table">
+        <thead>
+          <tr>
+            <th></th>
+            <th colspan="2">AM</th>
+            <th colspan="2">PM</th>
+          </tr>
+          <tr>
+            <th></th>
+            <th>Entrada</th>
+            <th>Salida</th>
+            <th>Entrada</th>
+            <th>Salida</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>Lunes</th>
+            <td>8:00 AM</td>
+            <td>12:00 PM</td>
+            <td>1:00 PM</td>
+            <td>5:00 PM</td>
+          </tr>
+          <tr>
+            <th>Martes</th>
+            <td>8:00 AM</td>
+            <td>12:00 PM</td>
+            <td>1:00 PM</td>
+            <td>5:00 PM</td>
+          </tr>
+          <tr>
+            <th>Miércoles</th>
+            <td>8:00 AM</td>
+            <td>12:00 PM</td>
+            <td>1:00 PM</td>
+            <td>5:00 PM</td>
+          </tr>
+          <tr>
+            <th>Jueves</th>
+            <td>8:00 AM</td>
+            <td>12:00 PM</td>
+            <td>1:00 PM</td>
+            <td>5:00 PM</td>
+          </tr>
+          <tr>
+            <th>Viernes</th>
+            <td>8:00 AM</td>
+            <td>12:00 PM</td>
+            <td>1:00 PM</td>
+            <td>5:00 PM</td>
+          </tr>
+          <tr>
+            <th>Sábado</th>
+            <td>8:00 AM</td>
+            <td>12:00 PM</td>
+            <td>1:00 PM</td>
+            <td>5:00 PM</td>
+          </tr>
+          <tr>
+            <th>Domingo</th>
+            <td>8:00 AM</td>
+            <td>12:00 PM</td>
+            <td>1:00 PM</td>
+            <td>5:00 PM</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+
   </div>
 </div>
