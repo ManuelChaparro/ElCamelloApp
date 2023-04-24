@@ -1,11 +1,27 @@
 <div class="container" style="margin-top: 1rem;">
   <div class="d-flex flex-column gap-3">
-    <div class="card" style="flex-basis: 100%;">
+    <div *ngFor="let stock of stockList" class="card" style="flex-basis: 100%;">
       <div class="card-header">
-        Inventario de la sede:
+        <h5>Inventario de la sede: {{stock.nombre_sede}}</h5>
       </div>
-      <div class="card-body">
-        
+      <div class="card-body d-flex flex-column overflow-auto h-100" style="max-height: 400px;">
+        <h6>Lista de productos</h6>
+        <table class="table">
+          <tr>
+            <th>Nombre</th>
+            <th>Marca</th>
+            <th>Tipo</th>
+            <th>Precio</th>
+          </tr>
+          <tbody>
+            <tr>
+              <td>Nombre</td>
+              <td>Nombre</td>
+              <td>Nombre</td>
+              <td>Nombre</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
       <div class="card-footer d-flex gap-3">
         <button class="btn btn-outline-primary">Modificar</button>
