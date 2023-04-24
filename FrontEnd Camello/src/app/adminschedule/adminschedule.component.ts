@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { SchedulelistComponent } from '../schedulelist/schedulelist.component';
 import { NewscheduleComponent } from '../newschedule/newschedule.component';
 
 @Component({
@@ -9,8 +8,7 @@ import { NewscheduleComponent } from '../newschedule/newschedule.component';
 })
 export class AdminscheduleComponent {
   componentes = [
-    { nombre: 'Componente 1', componente: SchedulelistComponent},
-    { nombre: 'Componente 2', componente: NewscheduleComponent}
+    { nombre: 'Componente 1', componente: NewscheduleComponent}
   ];
   indiceComponenteActual = 0;
   cambiarComponente(indice: number) {

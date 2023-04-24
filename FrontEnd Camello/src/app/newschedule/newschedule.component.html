@@ -1,7 +1,7 @@
 <div class="container d-flex gap-4 my-2">
   <div style="flex-basis: 35%;" class="input-containers gap-2 d-flex flex-column">
     <label for="">Sede<span style="display: none; color: red;" id="warn-schedule">*</span></label>
-    <select (change)="updateByCampus()" class="form-select" id="select_campus">
+    <select (change)="updateByCampus(false)" class="form-select" id="select_campus">
       <option *ngFor="let campus of campus_list" selected>{{campus.id_sede}} - {{campus.nombre_sede}}</option>
     </select>
     <label for="">Horario <span style="display: none; color: red;" id="warn-schedule">*</span></label>
@@ -66,6 +66,7 @@
             <td>{{schedule.hora_apertura_pm}}</td>
             <td>{{schedule.hora_cierre_am}}</td>
             <td>{{schedule.hora_cierre_pm}}</td>
+            <td><button (click)="showDeleteSchedule(schedule.id_horario)" class="btn btn-close"></button></td>
           </tr>
         </tbody>
       </table>
@@ -88,6 +89,45 @@
         </div>
         <div class="modal-footer">
           <button class="btn btn-warning" data-bs-dismiss="modal">Entendido!</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container mt-3">
+  <div class="modal fade" id=errorScheduleModal>
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Horario repetido</h5>
+          <button class="btn btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body" id="modal-body">
+          La sede "{{campus_selected}}" ya cuenta con un horario para el día que intenta asignar
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-warning" data-bs-dismiss="modal">Entendido!</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container mt-3">
+  <div class="modal fade" id=deleteScheduleModal>
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Eliminar horario</h5>
+          <button class="btn btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body" id="modal-body">
+          ¿Está seguro que desea eliminar el horario?
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline-dark" data-bs-dismiss="modal">Cancelar</button>
+          <button (click)="deleteSchedule()" class="btn btn-outline-danger" data-bs-dismiss="modal">Confirmar</button>
         </div>
       </div>
     </div>

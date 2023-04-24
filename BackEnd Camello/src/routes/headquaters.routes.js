@@ -6,7 +6,7 @@ const { verifyToken } = require('../controllers/users.controller');
 
 router.post('/schedules/createSchedule', verifyToken, createSchedule)
 router.put('/schedules/modifySchedule', verifyToken, modifySchedule)
-router.delete('/schedules/deleteSchedule', verifyToken, deleteSchedule)
+router.post('/schedules/deleteSchedule', verifyToken, deleteSchedule)
 router.get('/schedules/showSchedules', verifyToken, getSchedules)
 router.get('/schedules/searchSchedule', verifyToken, searchSchedule)
 router.post('/headquearters/create', verifyToken, createHeadquarter)
