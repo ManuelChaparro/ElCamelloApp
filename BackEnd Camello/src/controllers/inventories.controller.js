@@ -217,7 +217,7 @@ const getProductPerType = async(req, res) =>{
 
 const getProductsPerInventary = async(req, res) =>{
     jwt.verify(req.token, 'secretkey', async(error) =>{
-        const {inventary_id} = req.body
+        const {inventary_id, rol} = req.body
         if(rol === "A" || rol === "a"){
             if(!error){
                 await connection.query(`Select * from productos where id_inventario = ${connection.escape(inventary_id)}`, async(error, result, fields) =>{
