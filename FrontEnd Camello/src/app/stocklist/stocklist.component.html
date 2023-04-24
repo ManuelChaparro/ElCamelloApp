@@ -2,30 +2,27 @@
   <div class="d-flex flex-column gap-3">
     <div *ngFor="let stock of stockList" class="card" style="flex-basis: 100%;">
       <div class="card-header">
-        <h5>Inventario de la sede: {{stock.nombre_sede}}</h5>
+        <h5>Inventario de la sede: {{stock.name}}</h5>
       </div>
       <div class="card-body d-flex flex-column overflow-auto h-100" style="max-height: 400px;">
-        <h6>Lista de productos</h6>
         <table class="table">
-          <tr>
-            <th>Nombre</th>
-            <th>Marca</th>
-            <th>Tipo</th>
-            <th>Precio</th>
-          </tr>
           <tbody>
             <tr>
-              <td>Nombre</td>
-              <td>Nombre</td>
-              <td>Nombre</td>
-              <td>Nombre</td>
+              <th>Nombre</th>
+              <th>Marca</th>
+              <th>Tipo</th>
+              <th>Precio</th>
+              <th>Eliminar</th>
+            </tr>
+            <tr *ngFor="let product of stock.listProducts">
+              <td>{{product.name}}</td>
+              <td>{{product.brand}}</td>
+              <td>{{product.type}}</td>
+              <td>{{product.price}}</td>
+              <td><button #deleteProductBtn [id]="product.id" (click)="confirmDeleteProduct(deleteProductBtn.id)" class="btn btn-close"></button></td>
             </tr>
           </tbody>
         </table>
-      </div>
-      <div class="card-footer d-flex gap-3">
-        <button class="btn btn-outline-primary">Modificar</button>
-        <button class="btn btn-outline-danger">Eliminar</button>
       </div>
     </div>
   </div>
