@@ -29,7 +29,9 @@ export class AdminhomeComponent {
       const headers = new HttpHeaders({
         Authorization: 'Bearer ' + localStorage.getItem('token'),
       });
+      console.log(2);
       this.http.post(url, {headers}).subscribe(response => {
+        console.log(3);
           if(!response){
             const modal = document.querySelector('#infoModal') as HTMLElement;
             const bootstrapModal = new bootstrap.Modal(modal);
@@ -41,6 +43,7 @@ export class AdminhomeComponent {
               bootstrapModal.hide();
               this.router.navigate(['/login']);
             }, 5000);
+
           }
       });
       }, 5000);
