@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
 import * as bootstrap from 'bootstrap';
 import { HttpClient, HttpHeaders} from '@angular/common/http';
+import jwt_decode from 'jwt-decode';
 
 interface stockObject{
   id: number,
   name: string,
+  brand: string,
   type: string,
   description: string,
   price: number
@@ -45,13 +47,48 @@ export class NewstockComponent {
 
   addObjToStock(){
     if(this.validations()){
-      this.listStock?.push({ id: this.countObjs,name: this.stockName, type: this.stockType, description: this.stockDescription, price: this.stockPrice as number});
+      this.createProduct();
+      this.listStock?.push({ id: this.countObjs,name: this.stockName, brand: this.stockBrand, type: this.stockType, description: this.stockDescription, price: this.stockPrice as number});
       this.countObjs++;
       this.clearInputs();
     }else{
       const modal = document.querySelector('#myModal') as HTMLElement;
       const bootstrapModal = new bootstrap.Modal(modal);
       bootstrapModal.show();
+    }
+  }
+
+  private createProduct(): void{
+    const decode_token: object = jwt_decode(JSON.stringify(localStorage.getItem('token')));
+    if('infoUser' in decode_token){
+      const infoUser = decode_token.infoUser as Array<object>;
+      if('rol' in infoUser[0] && 'id_usuario' in infoUser[0]){
+        const rol = infoUser[0].rol;
+        const id_usuario = infoUser[0].id_usuario;
+        const url = 'http://localhost:3005/api/inventary/product/add';
+        const data = {
+          product_name: this.stockName,
+          product_type: this.stockType,
+          product_brand: this.stockBrand,
+          product_description: this.stockDescription,
+          product_value: this.stockPrice,
+          inventary_id: '',
+          space_id: null,
+          id_user: id_usuario,
+          rol: rol
+        }
+        const headers = new HttpHeaders({
+          Authorization: 'Bearer ' + localStorage.getItem('token'),
+        });
+        this.http.post(url, { headers }).subscribe((data) => {
+          this.campus_list = data as Iterable<any>;
+          const campus_array = Array.from(this.campus_list);
+          const ultimoElemento = campus_array.pop();
+          if('nombre_sede' in ultimoElemento){
+            this.campus_selected = ultimoElemento.nombre_sede;
+          }
+        });
+      }
     }
   }
 
