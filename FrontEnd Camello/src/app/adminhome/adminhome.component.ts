@@ -23,9 +23,8 @@ export class AdminhomeComponent {
   public surname: string;
 
   ngOnInit(){
-    console.log(1);
-
     const interval = setInterval(() => {
+      console.log(1);
       const url = 'http://localhost:3005/api/user/validUser';
       const headers = new HttpHeaders({
         Authorization: 'Bearer ' + localStorage.getItem('token'),

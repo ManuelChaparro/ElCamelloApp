@@ -2,6 +2,11 @@
   <div id="stock-info" class="col h-100 align-items-strech">
     <div class="row gap-2 justify-content-center h-100">
       <div class="d-flex flex-column gap-1">
+        <label for="stock-name">Sede <span style="display: none; color: red;" id="warn-name">*</span></label>
+        <select class="form-select" id="select_campus">
+          <option *ngFor="let campus of campus_list" selected>{{campus.id_sede}} - {{campus.nombre_sede}}</option>
+        </select></div>
+      <div class="d-flex flex-column gap-1">
         <label for="stock-name">Nombre <span style="display: none; color: red;" id="warn-name">*</span></label>
         <input id="stock-name" (change)="verifyInput(0)" class="form-control" [(ngModel)]="stockName" type="text"  placeholder="Ingrese el nombre del producto">
       </div>
@@ -14,6 +19,10 @@
           <option>Artículo de Oficina</option>
           <option>Otro</option>
         </select>
+      </div>
+      <div class="d-flex flex-column gap-1">
+        <label for="stock-brand">Marca <span style="display: none; color: red;" id="warn-brand">*</span></label>
+        <input (change)="verifyInput(3)"style="resize: none;" [(ngModel)]="stockBrand" class="form-control" id="stock-brand" cols="30" rows="4" placeholder="Ingrese la Marca">
       </div>
       <div class="d-flex flex-column gap-1">
         <label for="stock-description">Descripción <span style="display: none; color: red;" id="warn-description">*</span></label>

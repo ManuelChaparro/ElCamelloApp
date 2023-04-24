@@ -233,16 +233,31 @@ export class NewcampusComponent {
           const modal = document.querySelector('#successModal') as HTMLElement;
           const bootstrapModal = new bootstrap.Modal(modal);
           bootstrapModal.show();
+          this.createInventory(idCampus);
         });
       }
     }
+  }
+
+  private createInventory(idCampus: number): void{
+    const data = {
+      headquarter_id: idCampus,
+
+    };
+    const url = 'http://localhost:3005/api/spaces/add';
+    const headers = new HttpHeaders({
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+    });
+    this.http.post(url, data, {headers}).subscribe(response => {
+      
+    });
   }
 
   finishNewCampus(){
     location.reload();
   }
 
-  validationCampusInfo(): boolean{
+  private validationCampusInfo(): boolean{
     let toReturn: boolean = true;
     const name = document.querySelector('#warn-name') as HTMLInputElement;
     const direction = document.querySelector('#warn-direction') as HTMLInputElement;
@@ -289,7 +304,7 @@ export class NewcampusComponent {
     return toReturn;
   }
 
-  validationSpaceInfo(): boolean{
+  private validationSpaceInfo(): boolean{
     let toReturn: boolean = true;
     const name = document.querySelector('#warn-space-name') as HTMLInputElement;
     const description = document.querySelector('#warn-space-desc') as HTMLInputElement;
