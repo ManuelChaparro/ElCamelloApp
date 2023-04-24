@@ -233,18 +233,20 @@ export class NewcampusComponent {
           const modal = document.querySelector('#successModal') as HTMLElement;
           const bootstrapModal = new bootstrap.Modal(modal);
           bootstrapModal.show();
-          this.createInventory(idCampus);
+          this.createInventory(idCampus, id_usuario as number, rol as string);
         });
       }
     }
   }
 
-  private createInventory(idCampus: number): void{
+  private createInventory(idCampus: number, id_user: number, rol: string): void{
     const data = {
       headquarter_id: idCampus,
-
+      description_inventary: 'Inventario de la sede ' + this.campusName,
+      id_user: id_user,
+      rol: rol
     };
-    const url = 'http://localhost:3005/api/spaces/add';
+    const url = 'http://localhost:3005/api/inventary/create';
     const headers = new HttpHeaders({
       Authorization: 'Bearer ' + localStorage.getItem('token'),
     });
