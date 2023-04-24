@@ -8,6 +8,7 @@ const userRoutes = require('../src/routes/users.routes.js');
 const headquarterRoutes = require('../src/routes/headquaters.routes.js')
 const spacesRoutes = require('../src/routes/spaces.routes.js')
 const facebookAuthRoutes = require('../src/routes/facebook-auth.routes')
+const inventoriesRoutes = require('../src/routes/inventories.routes.js')
 
 //initialization
 const app = express();
@@ -25,5 +26,6 @@ app.use(cors());
 app.use('/api', userRoutes);
 app.use('/api', headquarterRoutes);
 app.use('/api', spacesRoutes);
-app.use('/api', facebookAuthRoutes)
+app.use('/api', facebookAuthRoutes);
+app.use('/api', inventoriesRoutes);
 module.exports = app;
