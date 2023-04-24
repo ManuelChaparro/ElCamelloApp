@@ -24,14 +24,11 @@ export class AdminhomeComponent {
 
   ngOnInit(){
     const interval = setInterval(() => {
-      console.log(1);
       const url = 'http://localhost:3005/api/user/validUser';
       const headers = new HttpHeaders({
         Authorization: 'Bearer ' + localStorage.getItem('token'),
       });
-      console.log(2);
       this.http.post(url, {headers}).subscribe(response => {
-        console.log(3);
           if(!response){
             const modal = document.querySelector('#infoModal') as HTMLElement;
             const bootstrapModal = new bootstrap.Modal(modal);

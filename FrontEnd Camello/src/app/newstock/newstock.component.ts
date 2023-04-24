@@ -28,6 +28,7 @@ export class NewstockComponent {
   public stockPrice: number | undefined;
   public listStock: Array<stockObject>;
   public campus_selected: string | null | undefined;
+  public campus_selected_id: number | null | undefined;
 
   constructor(private http: HttpClient){
     this.countObjs = 1;
@@ -72,7 +73,7 @@ export class NewstockComponent {
           product_brand: this.stockBrand,
           product_description: this.stockDescription,
           product_value: this.stockPrice,
-          inventary_id: '',
+          inventary_id: this.campus_selected_id,
           space_id: null,
           id_user: id_usuario,
           rol: rol
@@ -80,16 +81,26 @@ export class NewstockComponent {
         const headers = new HttpHeaders({
           Authorization: 'Bearer ' + localStorage.getItem('token'),
         });
-        this.http.post(url, { headers }).subscribe((data) => {
-          this.campus_list = data as Iterable<any>;
-          const campus_array = Array.from(this.campus_list);
-          const ultimoElemento = campus_array.pop();
-          if('nombre_sede' in ultimoElemento){
-            this.campus_selected = ultimoElemento.nombre_sede;
-          }
-        });
+        this.http.post(url, data, { headers }).subscribe((data) => {});
       }
     }
+  }
+
+  private getInventoryId(){
+    const url = 'http://localhost:3005/api/inventary/search';
+    const data = {
+      headquarter_id: this.campus_selected
+    }
+    const headers = new HttpHeaders({
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+    });
+    this.http.post(url, data, { headers }).subscribe((data) => {
+      const auxData = data as Array<string>;
+      const xd = auxData[0] as Object;
+      if('id_inventario' in xd){
+        this.campus_selected_id = xd.id_inventario as number;
+      }
+    });
   }
 
   clearInputs(){
@@ -110,10 +121,17 @@ export class NewstockComponent {
       this.campus_list = data as Iterable<any>;
       const campus_array = Array.from(this.campus_list);
       const ultimoElemento = campus_array.pop();
-      if('nombre_sede' in ultimoElemento){
-        this.campus_selected = ultimoElemento.nombre_sede;
+      if('id_sede' in ultimoElemento){
+        this.campus_selected = ultimoElemento.id_sede;
+        this.getInventoryId();
       }
     });
+  }
+
+  changeCampusSelect(){
+    const selectCampus = document.querySelector('#select_campus') as HTMLSelectElement;
+    this.campus_selected = selectCampus.value.split(' - ')[0];
+    this.getInventoryId();
   }
 
   validations(): boolean{

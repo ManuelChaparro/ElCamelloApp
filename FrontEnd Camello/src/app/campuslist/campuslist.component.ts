@@ -30,6 +30,7 @@ export class CampuslistComponent {
 
   public campus_list: Array<Campus>;
   public campus_id_list: Array<Iterable<any>> | undefined;
+  public idCampusToDelete: number | undefined;
 
   ngOnInit(){
     this.initComponents();
@@ -38,6 +39,7 @@ export class CampuslistComponent {
   constructor(private http: HttpClient){
     this.campus_list = [];
     this.campus_id_list = [];
+    this.idCampusToDelete = undefined;
   }
 
   async initComponents(){
@@ -126,13 +128,15 @@ export class CampuslistComponent {
 
   }
 
-  showDeleteModal(){
+  showDeleteModal(id_sede: string){
+    const num: number = parseInt(id_sede);
+    this.idCampusToDelete = num ;
     const modal = document.querySelector('#deleteModal') as HTMLElement;
     const bootstrapModal = new bootstrap.Modal(modal);
     bootstrapModal.show();
   }
 
-  deleteCampus(id_sede: number){
+  deleteCampus(){
     const decode_token: object = jwt_decode(JSON.stringify(localStorage.getItem('token')));
     if('infoUser' in decode_token){
       const infoUser =  decode_token.infoUser as Array<object>;
@@ -142,7 +146,7 @@ export class CampuslistComponent {
           Authorization: 'Bearer ' + localStorage.getItem('token'),
         });
         const data = {
-          headquarter_id: id_sede,
+          headquarter_id: this.idCampusToDelete,
           rol: infoUser[0].rol,
           id_user: infoUser[0].id_usuario
         };

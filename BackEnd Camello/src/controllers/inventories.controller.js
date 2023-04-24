@@ -18,12 +18,12 @@ const createProduct = async(req, res) =>{
                             }
                         })
                     }else{
-                        res.json({message: "1"})
+                        res.json({message: error})
                     }
                 })
             }
         }else{
-            res.json({message: "1"})
+            res.json({message: "3"})
         }
     })
 }
@@ -132,22 +132,22 @@ const createInventary = async(req, res) =>{
                                     if(!error){
                                         res.json({message: "0"})
                                     }else{
-                                        res.json({message: "1"})
+                                        res.json({message: error})
                                     }
                                 })
                             }else{
-                                res.json({message: "1"})
+                                res.json({message: error})
                             }
                         })
                     }else{
-                        res.json({message: "1"})
+                        res.json({message: error})
                     }
                 }else{
-                    res.json({message: "1"})
+                    res.json({message: error})
                 }
             })
         }else{
-            res.json({message: "1"})
+            res.json({message: error})
         }
     })
 }
@@ -156,15 +156,15 @@ const getInventary = async(req, res) =>{
     jwt.verify(req.token, 'secretkey', async(error) =>{
         const {headquarter_id} = req.body
         if(!error){
-            await connection.query(`Select id_inventario from inventarios where id_sede ${connection.escape(headquarter_id)}`, async(error, result, fields) =>{
+            await connection.query(`Select id_inventario from inventarios where id_sede = ${connection.escape(headquarter_id)}`, async(error, result, fields) =>{
                 if(!error){
                     res.json(result)
                 }else{
-                    res.json({message: "1"})
+                    res.json({message: error})
                 }
             })
         }else{
-            res.json({message: "1"})
+            res.json({message: error})
         }
     })
 }
