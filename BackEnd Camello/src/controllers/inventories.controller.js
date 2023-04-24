@@ -18,12 +18,12 @@ const createProduct = async(req, res) =>{
                             }
                         })
                     }else{
-                        res.json({message: "1"})
+                        res.json({message: error})
                     }
                 })
             }
         }else{
-            res.json({message: "1"})
+            res.json({message: "3"})
         }
     })
 }
@@ -132,22 +132,22 @@ const createInventary = async(req, res) =>{
                                     if(!error){
                                         res.json({message: "0"})
                                     }else{
-                                        res.json({message: "1"})
+                                        res.json({message: error})
                                     }
                                 })
                             }else{
-                                res.json({message: "1"})
+                                res.json({message: error})
                             }
                         })
                     }else{
-                        res.json({message: "1"})
+                        res.json({message: error})
                     }
                 }else{
-                    res.json({message: "1"})
+                    res.json({message: error})
                 }
             })
         }else{
-            res.json({message: "1"})
+            res.json({message: error})
         }
     })
 }
@@ -160,11 +160,11 @@ const getInventary = async(req, res) =>{
                 if(!error){
                     res.json(result)
                 }else{
-                    res.json({message: "1"})
+                    res.json({message: error})
                 }
             })
         }else{
-            res.json({message: "1"})
+            res.json({message: error})
         }
     })
 }

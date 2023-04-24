@@ -250,7 +250,9 @@ export class NewcampusComponent {
     const headers = new HttpHeaders({
       Authorization: 'Bearer ' + localStorage.getItem('token'),
     });
-    this.http.post(url, data, {headers}).subscribe(response => {});
+    this.http.post(url, data, {headers}).subscribe(response => {
+      console.log(response);
+    });
   }
 
   finishNewCampus(){
