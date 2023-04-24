@@ -169,4 +169,71 @@ const getInventary = async(req, res) =>{
     })
 }
 
-module.exports = {createProduct, modifyProduct, deleteProduct, getProductList, createInventary, getInventary}
+const getInventaryList = async(req, res) =>{
+    jwt.verify(req.token, 'secretkey', async(error) =>{
+        const {rol} = req.body
+        if(rol === "a" || rol === "A"){
+            if(!error){
+                await connection.query(`Select i.id_inventario, s.nombre as nombre_sede, i.descripcion from inventarios i, sedes s where s.id_sede = i.id_sede`, async(error, result, fields) =>{
+                    if(!error){
+                        res.json(result)
+                    }else{
+                        res.json({message: "1"})
+                    }
+                })
+            }else{
+                res.json({message: "1"})
+            }
+        }else{
+            res.json({message: "1"})
+        }
+    })
+}
+
+const getProductPerType = async(req, res) =>{
+    jwt.verify(req.token, 'secretkey', async(error) =>{
+        const {product_type, rol} = req.body
+        if(rol === "A" || rol === "a"){
+            if(!error){
+                await connection.query(`Select * from productos where tipo_producto = ${connection.escape(product_type)}`, async(error, result, fields) =>{
+                    if(!error){
+                        if(!error){
+                            res.json(result)
+                        }else{
+                            res.json({message: "1"})
+                        }
+                    }else{
+                        res.json({message: "1"})
+                    }
+                })
+            }else{
+                res.json({message: "1"})
+            }
+        }else{
+            res.json({message: "1"})
+        }
+    })
+}
+
+const getProductsPerInventary = async(req, res) =>{
+    jwt.verify(req.token, 'secretkey', async(error) =>{
+        const {inventary_id} = req.body
+        if(rol === "A" || rol === "a"){
+            if(!error){
+                await connection.query(`Select * from productos where id_inventario = ${connection.escape(inventary_id)}`, async(error, result, fields) =>{
+                    if(!error){
+                        res.json(result)
+                    }else{
+                        res.json({message: "1"})
+                    }
+                })
+            }else{
+                res.json({message: "1"})
+            }
+        }else{
+            res.json({message: "1"})
+        }
+    })
+}
+
+module.exports = {createProduct, modifyProduct, deleteProduct, getProductList, createInventary, getInventary, getProductPerType, getProductsPerInventary, getInventaryList}
