@@ -1,7 +1,7 @@
 'use strict'
 
 const connection = require('../../config/connections')
-const {jwt} = require('jsonwebtoken')
+const jwt = require('jsonwebtoken')
 
 const createProduct = async(req, res) =>{
     jwt.verify(req.token, 'secretkey', async(error) =>{
