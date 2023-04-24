@@ -152,4 +152,21 @@ const createInventary = async(req, res) =>{
     })
 }
 
-module.exports = {createProduct, modifyProduct, deleteProduct, getProductList, createInventary}
+const getInventary = async(req, res) =>{
+    jwt.verify(req.token, 'secretkey', async(error) =>{
+        const {headquarter_id} = req.body
+        if(!error){
+            await connection.query(`Select id_inventario from inventarios where id_sede ${connection.escape(headquarter_id)}`, async(error, result, fields) =>{
+                if(!error){
+                    res.json(result)
+                }else{
+                    res.json({message: "1"})
+                }
+            })
+        }else{
+            res.json({message: "1"})
+        }
+    })
+}
+
+module.exports = {createProduct, modifyProduct, deleteProduct, getProductList, createInventary, getInventary}
