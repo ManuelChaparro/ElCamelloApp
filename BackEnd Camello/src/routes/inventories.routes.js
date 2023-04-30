@@ -6,7 +6,7 @@ const {verifyToken} = require('../controllers/users.controller')
 
 router.post('/inventary/product/add', verifyToken, createProduct)
 router.put('/inventary/product/modify', verifyToken, modifyProduct)
-router.delete('/inventary/product/delete', verifyToken, deleteProduct)
+router.post('/inventary/product/delete', verifyToken, deleteProduct)
 router.get('/inventary/product/list', verifyToken, getProductList)
 router.post('/inventary/product/filter/type', verifyToken, getProductPerType)
 router.post('/inventary/create', verifyToken, createInventary)

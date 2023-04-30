@@ -154,12 +154,36 @@ export class NewstockComponent {
     return toReturn;
   }
 
-  deleteObjList(id: number){
-    let indice: number = this.listStock.findIndex(obj => obj.id == id);
-    if(indice != undefined){
-      this.listStock.splice(indice, 1);
+  deleteObjList(id: string){
+    const newId = parseInt(id);
+    const decode_token: object = jwt_decode(JSON.stringify(localStorage.getItem('token')));
+    if('infoUser' in decode_token){
+      const infoUser =  decode_token.infoUser as Array<object>;
+      if('rol' in infoUser[0] && 'id_usuario' in infoUser[0]){
+        const url = 'http://localhost:3005/api/inventary/product/delete';
+        const data = {
+          id_user: infoUser[0].id_usuario,
+          id_product: newId,
+          rol: infoUser[0].rol,
+        };
+        const headers = new HttpHeaders({
+          Authorization: 'Bearer ' + localStorage.getItem('token'),
+        });
+        this.http.post(url, data, {headers}).subscribe(response => {
+          console.log(response);
+
+          if('message' in response && response.message === '0'){
+            let indice: number = this.listStock.findIndex(obj => obj.id == newId);
+            if(indice != undefined){
+              this.listStock.splice(indice, 1);
+            }
+            this.sortListStock();
+          }else{
+            alert("Error en eliminación");
+          }
+        });
+      }
     }
-    this.sortListStock();
   }
 
   verifyInput(value: number){

@@ -27,3 +27,22 @@
     </div>
   </div>
 </div>
+
+<div class="container mt-3">
+  <div class="modal fade" id=deleteModal>
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Eliminación de producto</h5>
+          <button class="btn btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body" id="modal-body">
+          ¿ Está seguro que desea eliminar el producto ?
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-danger" data-bs-dismiss="modal" (click)="deleteProduct()">Eliminar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

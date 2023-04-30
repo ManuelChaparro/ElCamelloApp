@@ -65,10 +65,10 @@ const modifyProduct = async(req, res) =>{
 
 const deleteProduct = async(req, res) =>{
     jwt.verify(req.token, 'secretkey', async(error)=>{
-        const {id_product, rol} = req.body
+        const {id_product, rol, id_user} = req.body
         if(!error){
             if(rol === "A" || rol === "a"){
-                await connection.query(`Select * from productos where id_producto = ${connection.escape(product_id)}`, async(error, result, fields) =>{
+                await connection.query(`Select * from productos where id_producto = ${connection.escape(id_product)}`, async(error, result, fields) =>{
                     if(!error){
                         if(result.length === 1){
                             await connection.query(`delete from productos where id_producto = ${id_product}`, async(error, result, fields) =>{

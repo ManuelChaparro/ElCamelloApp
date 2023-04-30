@@ -57,7 +57,7 @@
             <td>{{ stockObj.id }}</td>
             <td>{{ stockObj.name }}</td>
             <td>{{ stockObj.price }}</td>
-            <td class="td-img"><button (click)="deleteObjList(stockObj.id)" class="btn-close "></button></td>
+            <td #deleteBtn class="td-img"><button (click)="deleteObjList(deleteBtn.id)" class="btn-close "></button></td>
           </tr>
         </tbody>
       </table>
