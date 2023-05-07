@@ -51,12 +51,24 @@ export class NewstockComponent {
       this.createProduct();
       this.listStock?.push({ id: this.countObjs,name: this.stockName, brand: this.stockBrand, type: this.stockType, description: this.stockDescription, price: this.stockPrice as number});
       this.countObjs++;
+      this.showNotification(this.stockName);
       this.clearInputs();
+
     }else{
       const modal = document.querySelector('#myModal') as HTMLElement;
       const bootstrapModal = new bootstrap.Modal(modal);
       bootstrapModal.show();
     }
+  }
+
+  private showNotification(stockName: string): void{
+    const notification = document.querySelector('#notification') as HTMLElement;
+    const notification_name = document.querySelector('#notification_name') as HTMLSpanElement;
+    notification_name.innerText = stockName;
+    notification.classList.add('show');
+    setTimeout(() => {
+      notification.classList.remove('show');
+    }, 5000);
   }
 
   private createProduct(): void{
@@ -155,6 +167,8 @@ export class NewstockComponent {
   }
 
   deleteObjList(id: string){
+    console.log(id);
+
     const newId = parseInt(id);
     const decode_token: object = jwt_decode(JSON.stringify(localStorage.getItem('token')));
     if('infoUser' in decode_token){

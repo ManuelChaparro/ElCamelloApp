@@ -101,19 +101,19 @@ const deleteProduct = async(req, res) =>{
 const getProductList = async(req, res) =>{
     jwt.verify(req.token, 'secretkey', async(error)=>{
         if(!error){
-            await connection.query(`select * from product`, async(error, result, fields) =>{
+            await connection.query(`select * from productos`, async(error, result, fields) =>{
                 if(!error){
                     if(result.length >=1 ){
                         res.json(result)
                     }else{
-                        res.json({message: "1"})
+                        res.json({message: error})
                     }
                 }else{
-                    res.json({message: "1"})
+                    res.json({message: error})
                 }
             })
         }else{
-            res.json({message: "1"})
+            res.json({message: error})
         }
     })
 }
@@ -176,6 +176,7 @@ const getInventaryList = async(req, res) =>{
             if(!error){
                 await connection.query(`Select i.id_inventario, s.nombre as nombre_sede, i.descripcion from inventarios i, sedes s where s.id_sede = i.id_sede`, async(error, result, fields) =>{
                     if(!error){
+                        console.log(result);
                         res.json(result)
                     }else{
                         res.json({message: "1"})

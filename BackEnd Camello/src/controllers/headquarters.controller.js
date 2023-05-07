@@ -234,38 +234,38 @@ const createHeadquarter = async(req, res) =>{
 }
 
 const modifyHeadquarter = async(req, res) =>{
-    const {headquarter_id, headquarter_schedule_id, headquater_new_name, new_adress, rol, id_user} = req.body
+    const {headquarter_id, headquater_new_name, new_adress, new_description, rol, id_user} = req.body
     jwt.verify(req.token, 'secretkey', async(error) =>{
         if(!error){
             if(rol === "A" || rol === "a"){
                 await connection.query(`Select * from sedes where id_sede = ${connection.escape(headquarter_id)}`, async(err, result, fields) =>{
                     if(!err){
                         if(result.length === 1){
-                            await connection.query(`Update sedes set id_horario = ${connection.escape(headquarter_schedule_id)}, direccion = ${connection.escape(new_adress)}, nombre = ${connection.escape(headquater_new_name)}`, async(err, results, fields) =>{
+                            await connection.query(`Update sedes set direccion = ${connection.escape(new_adress)}, nombre = ${connection.escape(headquater_new_name)}, descripcion = ${connection.escape(new_description)}`, async(err, results, fields) =>{
                                 if(!err){
                                     await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripcion) values (${id_user}, NOW(), "Modificacion", "Se modifico la sede ${connection.escape(headquater_new_name)} de la tabla de sedes")`, async(error, info, fields) =>{
                                         if(!error){
                                             res.json({message: "0"})
                                         }else{
-                                            res.json({message: "1"})
+                                            res.json({message: 1111})
                                         }
                                     })
                                 }else{
-                                    res.json({message: "1"})
+                                    res.json({message: 2})
                                 }
                             })
                         }else{
-                            res.json({message: "1"})
+                            res.json({message: 3})
                         }
                     }else{
-                        res.json({message: "1"})
+                        res.json({message: 4})
                     }
                 })
             }else{
-                res.json({message: "1"})
+                res.json({message: 5})
             }
         }else{
-            res.json({message: "1"})
+            res.json({message: 6})
         }
     })
 }
@@ -288,21 +288,21 @@ const deleteHeadquarter = async(req, res) =>{
                                         }
                                     })
                                 }else{
-                                    res.json({message: "1"})
+                                    res.json({message: error})
                                 }
                             })
                         }else{
-                            res.json({message: "1"})
+                            res.json({message: error})
                         }
                     }else{
-                        res.json({message: "1"})
+                        res.json({message: error})
                     }
                 })
             }else{
-                res.json({message: "1"})
+                res.json({message: error})
             }
         }else{
-            res.json({message: "1"})
+            res.json({message: error})
         }
     })
 }
@@ -352,17 +352,13 @@ const getQuantitySpaces = async(req, res) =>{
     const {headquarter_id, rol} = req.body
     jwt.verify(req.token, 'secretkey', async(error) =>{
         if(!error){
-            if(rol === "A" || rol == "a"){
-                await connection.query(`SELECT COUNT(s.id_sede) as quantity FROM espacios es, sedes s WHERE es.id_sede = s.id_sede AND s.id_sede = ${connection.escape(headquarter_id)}`, async(error, result, fields)=>{
-                    if(!error){
-                        res.json(result)
-                    }else{
-                        res.json({message: "0"})
-                    }
-                })
-            }else{
-                res.json({message: "0"})
-            }
+            await connection.query(`SELECT COUNT(s.id_sede) as quantity FROM espacios es, sedes s WHERE es.id_sede = s.id_sede AND s.id_sede = ${connection.escape(headquarter_id)}`, async(error, result, fields)=>{
+                if(!error){
+                    res.json(result)
+                }else{
+                    res.json({message: "0"})
+                }
+            })
         }else{
             res.json({message: "1"})
         }

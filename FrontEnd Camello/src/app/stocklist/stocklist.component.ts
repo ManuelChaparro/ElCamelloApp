@@ -53,10 +53,13 @@ export class StocklistComponent {
           Authorization: 'Bearer ' + localStorage.getItem('token'),
         });
         this.http.post(url, data, {headers}).subscribe(response => {
+          console.log(response);
+
           this.addListProducts(response as Array<any>);
         });
       }
     }
+
   }
 
   private addListProducts(stock: Array<any>): void{
@@ -72,8 +75,6 @@ export class StocklistComponent {
       });
       this.http.post(url, data, {headers}).subscribe(response => {
         const products = response as Array<any>;
-        console.log(products);
-
         products.forEach(product => {
           const newProduct: Product = {
             id: product.id_producto,

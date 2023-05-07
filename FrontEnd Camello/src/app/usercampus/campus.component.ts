@@ -18,85 +18,23 @@ interface Campus{
   }[];
 }
 
-
-
 @Component({
-  selector: 'app-campuslist',
-  templateUrl: './campuslist.component.html',
-  styleUrls: ['./campuslist.component.css']
+  selector: 'app-campus',
+  templateUrl: './campus.component.html',
+  styleUrls: ['./campus.component.css']
 })
-
-export class CampuslistComponent {
+export class CampusComponent {
 
   public campus_list: Array<Campus>;
   public campus_id_list: Array<Iterable<any>> | undefined;
-  public campusToModify: Campus;
-  public idCampusToDelete: number | undefined;
-  public idCampusToModify: number | undefined;
-  public listCampusPanel: boolean;
 
   ngOnInit(){
-    this.initComponents();
+    this.loadCampusOnDatabase();
   }
 
   constructor(private http: HttpClient){
     this.campus_list = [];
     this.campus_id_list = [];
-    this.idCampusToDelete = undefined;
-    this.idCampusToModify = undefined;
-    this.listCampusPanel = true;
-    this.campusToModify = {
-      name: "",
-      description: "",
-      quantity_spaces: 0,
-      address: "",
-      id_sede: 0,
-      schedules: [],
-    };
-  }
-
-  async initComponents(){
-    await this.loadCampusOnDatabase();
-  }
-
-  public changeToListCampusPanel(): void{
-    this.listCampusPanel = true;
-  }
-
-  public saveModifyCampus(): void{
-    const url = 'http://localhost:3005/api/headquarters/modify';
-    const headers = new HttpHeaders({
-      Authorization: 'Bearer ' + localStorage.getItem('token'),
-    });
-    const decode_token: object = jwt_decode(JSON.stringify(localStorage.getItem('token')));
-    if('infoUser' in decode_token){
-      const infoUser =  decode_token.infoUser as Array<object>;
-
-      if('rol' in infoUser[0] && 'id_usuario' in infoUser[0]){
-        const rol = infoUser[0].rol;
-        const data = {
-          headquarter_id: this.campusToModify.id_sede,
-          headquater_new_name: this.campusToModify.name,
-          new_adress: this.campusToModify.address,
-          new_description: this.campusToModify.description,
-          rol: rol,
-          id_user: infoUser[0].id_usuario
-        };
-
-        this.http.put(url, data, {headers}).subscribe(response => {
-          console.log(response);
-
-        });
-      }
-    }
-  }
-
-  public showModifyCampus(idCampus: string): void{
-    this.listCampusPanel = false;
-    const num: number = parseInt(idCampus);
-    this.idCampusToModify = num;
-    this.campusToModify = this.campus_list.find((campus) => campus.id_sede === this.idCampusToModify)!;
-
   }
 
   loadCampusOnDatabase(){
@@ -104,7 +42,6 @@ export class CampuslistComponent {
     const headers = new HttpHeaders({
       Authorization: 'Bearer ' + localStorage.getItem('token'),
     });
-
     const decode_token: object = jwt_decode(JSON.stringify(localStorage.getItem('token')));
     if('infoUser' in decode_token){
       const infoUser =  decode_token.infoUser as Array<object>;
@@ -179,39 +116,10 @@ export class CampuslistComponent {
     this.campus_list.push(newCampus as Campus);
   }
 
-  showDeleteModal(id_sede: string){
-    const num: number = parseInt(id_sede);
-    this.idCampusToDelete = num ;
-    const modal = document.querySelector('#deleteModal') as HTMLElement;
+  public showModal(): void{
+    const modal = document.querySelector('#infoModal') as HTMLElement;
     const bootstrapModal = new bootstrap.Modal(modal);
     bootstrapModal.show();
   }
 
-  deleteCampus(){
-    const decode_token: object = jwt_decode(JSON.stringify(localStorage.getItem('token')));
-    if('infoUser' in decode_token){
-      const infoUser =  decode_token.infoUser as Array<object>;
-      if('id_usuario' in infoUser[0] && 'rol' in infoUser[0]){
-        const url = 'http://localhost:3005/api/headquarters/delete';
-        const headers = new HttpHeaders({
-          Authorization: 'Bearer ' + localStorage.getItem('token'),
-        });
-        const data = {
-          headquarter_id: this.idCampusToDelete,
-          rol: infoUser[0].rol,
-          id_user: infoUser[0].id_usuario
-        };
-        this.http.post(url, data, {headers}).subscribe(response => {
-          if('message' in response){
-            if(response.message === '0'){
-              location.reload();
-            }else{
-              console.log(response);
-
-            }
-          }
-        });
-      }
-    }
-  }
 }

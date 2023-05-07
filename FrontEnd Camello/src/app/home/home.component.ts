@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import jwt_decode from 'jwt-decode';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { CampusComponent } from '../campus/campus.component';
+import { CampusComponent } from '../usercampus/campus.component';
 import { BookingsComponent } from '../bookings/bookings.component';
+import { Router } from '@angular/router';
+import { InfouserComponent } from '../infouser/infouser.component';
 
 @Component({
   selector: 'app-home',
@@ -15,7 +17,7 @@ export class HomeComponent {
   public number: number | undefined;
   public rol: string | unknown;
 
-  constructor(private http: HttpClient){
+  constructor(private http: HttpClient, private router: Router){
     const decode_token: object = jwt_decode(JSON.stringify(localStorage.getItem('token')));
     if('infoUser' in decode_token){
       const infoUser =  decode_token.infoUser as Array<object>;
@@ -43,9 +45,15 @@ export class HomeComponent {
     this.surname = '';
   }
 
+  public logout(): void{
+    localStorage.removeItem('token');
+    this.router.navigate(['/login']);
+  }
+
   componentes = [
     { nombre: 'Componente 1', componente: CampusComponent},
-    { nombre: 'Componente 2', componente: BookingsComponent}
+    { nombre: 'Componente 2', componente: BookingsComponent},
+    { nombre: 'Componente 3', componente: InfouserComponent}
   ];
   indiceComponenteActual = 0;
   cambiarComponente(indice: number) {

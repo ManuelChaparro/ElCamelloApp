@@ -39,85 +39,54 @@
       </div>
     </div>
     <div id="space">
-      <div class="card p-2 d-flex flex-column w-100 h-100 gap-1">
-        <div class="flex-basis:20%;">
-          <label for="">Nombre <span style="display: none; color: red;" id="warn-space-name">*</span></label>
-          <input class="form-control" [(ngModel)]="spaceName" type="text"  placeholder="Ingrese el nombre del producto">
+      <div style="flex-basis: 50%;" class="card d-flex flex-column p-2">
+        <div style="flex-basis: 90%;">
+          <div>
+            <label for="">Nombre <span style="display: none; color: red;" id="warn-space-name">*</span></label>
+            <input class="form-control" [(ngModel)]="spaceName" type="text"  placeholder="Ingrese el nombre del espacio">
+          </div>
+          <div>
+            <label for="">Tarifa <span style="display: none; color: red;" id="warn-space-fee">*</span></label>
+            <input [(ngModel)]="spaceFee" placeholder="Ingrese el valor de la tarifa" id="stock-price" type="text" class="form-control" min="0" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null" />
+          </div>
+          <div>
+            <label for="">Descripción <span style="display: none; color: red;" id="warn-space-desc">*</span></label>
+            <textarea class="form-control" id="description-space" style="resize: none" [(ngModel)]="spaceDescription" type="text" name="name" placeholder="Ingrese la Descripción del Espacio" name="" cols="30" rows="4"></textarea>
+          </div>
         </div>
-        <div class="flex-basis:20%;">
-          <label for="">Tarifa <span style="display: none; color: red;" id="warn-space-fee">*</span></label>
-          <input [(ngModel)]="spaceFee" placeholder="Ingrese el valor de la tarifa" id="stock-price" type="text" class="form-control" min="0" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null" />
-        </div>
-        <div class="flex-basis:60%;">
-          <label for="">Descripción <span style="display: none; color: red;" id="warn-space-desc">*</span></label>
-          <textarea class="form-control" id="description-space" style="resize: none" [(ngModel)]="spaceDescription" type="text" name="name" placeholder="Ingrese la Descripción del campus" name="" cols="30" rows="4"></textarea>
+        <div style="flex-basis: 10%;" class="d-flex w-100">
+          <button class="btn btn-outline-primary w-100" (click)="addSpace()">Agregar Espacio</button>
         </div>
       </div>
-      <div class="space-containers card p-2">
-        <div id="options-obj-space">
-          <div class="input-containers px-0">
-            <label for="">Qué incluye <span style="display: none; color: red;" id="warn-space-objs">*</span></label>
-            <select id="selectObjSpace" class="form-select" #stockOption (change)="setObjsInSpace(stockOption.value)">
-              <option selected>Mueble</option>
-              <option>Equipo Electrónico</option>
-              <option>Herramienta</option>
-              <option>Artículo de Oficina</option>
-              <option>Otro</option>
-            </select>
-          </div>
-          <div class="input-containers px-0">
-            <label for="">Objeto</label>
-            <select #selectObj id="objSpaceSelect" class="form-select"></select>
-          </div>
-          <div class="input-containers px-0">
-            <label for="">Añadir</label>
-            <button class="btn btn-info" (click)="addObjToSpace(selectObj.value, stockOption.value)"><img src="../../assets/img-stock/addIcon.svg" alt=""></button>
-          </div>
 
+
+      <div style="flex-basis: 50%;" class="space-containers card p-2 d-flex flex-column">
+        <div style="flex-basis: 90%;">
+          <div class="input-containers text-center">
+            <h3>Lista de Espacios <span style="display: none; color: red;" id="warn-space-list">*</span></h3>
+          </div>
+          <div class="input-containers table-objs">
+            <table class="table" id="table-list">
+              <thead>
+                <tr>
+                  <th>Id</th>
+                  <th>Nombre</th>
+                  <th>Eliminar</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let space of spaces">
+                  <td>{{ space.id }}</td>
+                  <td>{{ space.name }}</td>
+                  <td class="td-img"><button (click)="deleteSpace(space.id)" class="btn-table"><img class="btn-table-img" src="../../assets/img-stock/deleteIcon.svg" alt=""></button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-        <div class="input-containers table-objs">
-          <table class="table" id="table-list">
-            <thead>
-              <tr>
-                <th>Id</th>
-                <th>Nombre</th>
-                <th>Eliminar</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let objSpace of objsSpace">
-                <td>{{ objSpace.id }}</td>
-                <td>{{ objSpace.name }}</td>
-                <td class="td-img"><button (click)="deleteObjStock(objSpace.id, stockOption.value)" class="btn-table"><img class="btn-table-img" src="../../assets/img-stock/deleteIcon.svg" alt=""></button></td>
-              </tr>
-            </tbody>
-          </table>
+        <div style="flex-basis: 10%;" class="d-flex w-100">
+          <button (click)="validationInfo()" class="btn btn-success w-100">Crear Sede</button>
         </div>
-        <button class="btn btn-outline-primary" (click)="addSpace()">Agregar Espacio</button>
-      </div>
-      <div class="space-containers card p-2">
-        <div class="input-containers text-center">
-          <h3>Lista de Espacios <span style="display: none; color: red;" id="warn-space-list">*</span></h3>
-        </div>
-        <div class="input-containers table-objs">
-          <table class="table" id="table-list">
-            <thead>
-              <tr>
-                <th>Id</th>
-                <th>Nombre</th>
-                <th>Eliminar</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let space of spaces">
-                <td>{{ space.id }}</td>
-                <td>{{ space.name }}</td>
-                <td class="td-img"><button (click)="deleteSpace(space.id, stockOption.value)" class="btn-table"><img class="btn-table-img" src="../../assets/img-stock/deleteIcon.svg" alt=""></button></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <button (click)="validationInfo()" class="btn btn-success">Crear Sede</button>
       </div>
     </div>
   </div>
