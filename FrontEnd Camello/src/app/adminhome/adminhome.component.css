@@ -65,30 +65,6 @@ span{
   color: aliceblue;
 }
 
-#menu{
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  background-color: whitesmoke;
-}
-
-#menu nav{
-  width: 100%;
-}
-
-#menu nav ul{
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-items: flex-start;
-  margin: 0;
-  margin-top: 1rem;
-  padding: 0;
-  list-style: none;
-  gap: 1rem;
-}
-
 li{
   width: 100%;
   display: flex;
