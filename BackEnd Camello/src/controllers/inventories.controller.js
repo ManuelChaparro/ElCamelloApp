@@ -152,6 +152,28 @@ const createInventary = async(req, res) =>{
     })
 }
 
+// No se ha utilizado
+const deleteInventary = async(req, res) =>{
+    jwt.verify(req.token, 'secretkey', async(error) =>{
+        const {inventary_Id, rol, id_user} = req.body
+        if(rol === "A"|| rol === "a"){
+            if(!error){
+                await connection.query(`Delete from inventarios where id_inventario = ${connection.escape(inventary_Id)}`, async(error, result, fields) =>{
+                    if(!error){
+                        res.json({message: "0"})
+                    }else{
+                        res.json({message: "1"})
+                    }
+                })
+            }else{
+                res.json({message: "1"})
+            }
+        }else{
+            res.json({message: "1"})
+        }
+    })
+}
+
 const getInventary = async(req, res) =>{
     jwt.verify(req.token, 'secretkey', async(error) =>{
         const {headquarter_id} = req.body
