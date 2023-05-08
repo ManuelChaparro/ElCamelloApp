@@ -241,17 +241,23 @@ const modifyHeadquarter = async(req, res) =>{
                 await connection.query(`Select * from sedes where id_sede = ${connection.escape(headquarter_id)}`, async(err, result, fields) =>{
                     if(!err){
                         if(result.length === 1){
-                            await connection.query(`Update sedes set direccion = ${connection.escape(new_adress)}, nombre = ${connection.escape(headquater_new_name)}, descripcion = ${connection.escape(new_description)}`, async(err, results, fields) =>{
+                            await connection.query(`Update sedes set nombre = ${connection.escape(headquater_new_name)}, descripcion = ${connection.escape(new_description)}`, async(err, results, fields) =>{
                                 if(!err){
-                                    await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripcion) values (${id_user}, NOW(), "Modificacion", "Se modifico la sede ${connection.escape(headquater_new_name)} de la tabla de sedes")`, async(error, info, fields) =>{
-                                        if(!error){
-                                            res.json({message: "0"})
+                                    await connection.query(`update ciudades_sedes set direccion = ${connection.escape(new_adress)}`, async(err, results, field) =>{
+                                        if(!err){
+                                            await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripcion) values (${id_user}, NOW(), "Modificacion", "Se modifico la sede ${connection.escape(headquater_new_name)} de la tabla de sedes")`, async(error, info, fields) =>{
+                                                if(!error){
+                                                    res.json({message: "0"})
+                                                }else{
+                                                    res.json({message: 1111})
+                                                }
+                                            })
                                         }else{
-                                            res.json({message: 1111})
+                                            res.json({message: 11})
                                         }
                                     })
                                 }else{
-                                    res.json({message: 2})
+                                    res.json({message: err})
                                 }
                             })
                         }else{

@@ -146,5 +146,21 @@ const searchSpace = async(req, res) =>{
     })
 }
 
+const listSpacesPerHeadquarter = async(req, res) =>{
+    jwt.verify(req.token, 'secretkey', async(error) => {
+        const {headquarter_id} = req.body
+        if(!error){
+            await connection.query(`select id_espacio, nombre from espacios where id_sede = ${connection.escape(headquarter_id)}`, async(error, result, fields) =>{
+                if(!error){
+                    res.json(result)
+                }else{
+                    res.json({message: "2"})
+                }
+            })
+        }else{
+            res.json({message: "1"})
+        }
+    })
+}
 
-module.exports = {createSpace, modifySpace, deleteSpace, getSpacesList, searchSpace}
+module.exports = {createSpace, modifySpace, deleteSpace, getSpacesList, searchSpace, listSpacesPerHeadquarter}
