@@ -14,7 +14,7 @@ import { AdminusersComponent } from './adminusers/adminusers.component';
 import { AdmincampusComponent } from './admincampus/admincampus.component';
 import { AdminbookingsComponent } from './adminbookings/adminbookings.component';
 import { AdminreportsComponent } from './adminreports/adminreports.component';
-import { CampusComponent } from './campus/campus.component';
+import { CampusComponent } from './usercampus/campus.component';
 import { BookingsComponent } from './bookings/bookings.component';
 import { NewcampusComponent } from './newcampus/newcampus.component';
 import { CampuslistComponent } from './campuslist/campuslist.component';
@@ -26,6 +26,8 @@ import { InfouserComponent } from './infouser/infouser.component';
 import { AdminscheduleComponent } from './adminschedule/adminschedule.component';
 import { NewscheduleComponent } from './newschedule/newschedule.component';
 import { SchedulelistComponent } from './schedulelist/schedulelist.component';
+import { BookingslistComponent } from './bookingslist/bookingslist.component';
+import { NewbookingComponent } from './newbooking/newbooking.component';
 
 const appRoutes:Routes=[
   {path:'login', component:LoginComponent},
@@ -58,6 +60,8 @@ const appRoutes:Routes=[
     AdminscheduleComponent,
     NewscheduleComponent,
     SchedulelistComponent,
+    BookingslistComponent,
+    NewbookingComponent,
 
   ],
   imports: [

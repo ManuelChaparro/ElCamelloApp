@@ -65,10 +65,10 @@ const modifyProduct = async(req, res) =>{
 
 const deleteProduct = async(req, res) =>{
     jwt.verify(req.token, 'secretkey', async(error)=>{
-        const {id_product, rol} = req.body
+        const {id_product, rol, id_user} = req.body
         if(!error){
             if(rol === "A" || rol === "a"){
-                await connection.query(`Select * from productos where id_producto = ${connection.escape(product_id)}`, async(error, result, fields) =>{
+                await connection.query(`Select * from productos where id_producto = ${connection.escape(id_product)}`, async(error, result, fields) =>{
                     if(!error){
                         if(result.length === 1){
                             await connection.query(`delete from productos where id_producto = ${id_product}`, async(error, result, fields) =>{
@@ -101,19 +101,19 @@ const deleteProduct = async(req, res) =>{
 const getProductList = async(req, res) =>{
     jwt.verify(req.token, 'secretkey', async(error)=>{
         if(!error){
-            await connection.query(`select * from product`, async(error, result, fields) =>{
+            await connection.query(`select * from productos`, async(error, result, fields) =>{
                 if(!error){
                     if(result.length >=1 ){
                         res.json(result)
                     }else{
-                        res.json({message: "1"})
+                        res.json({message: error})
                     }
                 }else{
-                    res.json({message: "1"})
+                    res.json({message: error})
                 }
             })
         }else{
-            res.json({message: "1"})
+            res.json({message: error})
         }
     })
 }
@@ -198,6 +198,7 @@ const getInventaryList = async(req, res) =>{
             if(!error){
                 await connection.query(`Select i.id_inventario, s.nombre as nombre_sede, i.descripcion from inventarios i, sedes s where s.id_sede = i.id_sede`, async(error, result, fields) =>{
                     if(!error){
+                        console.log(result);
                         res.json(result)
                     }else{
                         res.json({message: "1"})

@@ -5,7 +5,8 @@
         <label for="stock-name">Sede <span style="display: none; color: red;" id="warn-name">*</span></label>
         <select (change)="changeCampusSelect()" class="form-select" id="select_campus">
           <option *ngFor="let campus of campus_list" selected>{{campus.id_sede}} - {{campus.nombre_sede}}</option>
-        </select></div>
+        </select>
+      </div>
       <div class="d-flex flex-column gap-1">
         <label for="stock-name">Nombre <span style="display: none; color: red;" id="warn-name">*</span></label>
         <input id="stock-name" (change)="verifyInput(0)" class="form-control" [(ngModel)]="stockName" type="text"  placeholder="Ingrese el nombre del producto">
@@ -35,34 +36,12 @@
       <div class="d-flex flex-column gap-1 justify-content-end align-items-center">
         <button (click)="addObjToStock()" class="stock-add btn btn-primary mt-2 w-50 btn-height">Agregar</button>
       </div>
+    </div>
+  </div>
+</div>
 
-    </div>
-  </div>
-  <div class="col d-flex flex-column gap-2">
-    <div class="border border-dark rounded h-100 p-2">
-      <div class="text-center">
-        <h5>Objetos Creados Exitosamente</h5>
-      </div>
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Id</th>
-            <th>Nombre</th>
-            <th>Precio</th>
-            <th>Eliminar</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let stockObj of listStock">
-            <td>{{ stockObj.id }}</td>
-            <td>{{ stockObj.name }}</td>
-            <td>{{ stockObj.price }}</td>
-            <td class="td-img"><button (click)="deleteObjList(stockObj.id)" class="btn-close "></button></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+<div id="notification" class="alert alert-primary" role="alert">
+  El objeto '<span id="notification_name"></span>' ha sido creado existosamente
 </div>
 
 <div class="container mt-3">

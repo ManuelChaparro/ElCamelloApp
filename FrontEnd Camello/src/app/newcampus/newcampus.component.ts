@@ -50,8 +50,6 @@ export class NewcampusComponent {
   public stock: Array<stockObject>;
 
   constructor(private http: HttpClient){
-
-
     this.campusName = '';
     this.direction = '';
     this.cities = [];
@@ -102,6 +100,17 @@ export class NewcampusComponent {
       });
     });
     this.setDefaultCity();
+    this.loadInventary();
+  }
+
+  private loadInventary(): void{
+    const url = 'http://localhost:3005/api/inventary/product/list';
+    const headers = new HttpHeaders({
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+    });
+    this.http.get(url, {headers}).subscribe(response => {
+      console.log(response);
+    });
   }
 
   setDefaultCity(){
@@ -230,11 +239,11 @@ export class NewcampusComponent {
             Authorization: 'Bearer ' + localStorage.getItem('token'),
           });
           this.http.post(url, data, {headers}).subscribe(response => {});
-          const modal = document.querySelector('#successModal') as HTMLElement;
-          const bootstrapModal = new bootstrap.Modal(modal);
-          bootstrapModal.show();
-          this.createInventory(idCampus, id_usuario as number, rol as string);
         });
+        const modal = document.querySelector('#successModal') as HTMLElement;
+        const bootstrapModal = new bootstrap.Modal(modal);
+        bootstrapModal.show();
+        this.createInventory(idCampus, id_usuario as number, rol as string);
       }
     }
   }
@@ -378,7 +387,6 @@ export class NewcampusComponent {
     }else if(option === 1){
       info.style.display = 'none';
       space.style.display = '';
-      this.setObjsInSpace('Mueble');
       miSelect.value = 'Mueble';
     }
   }
@@ -394,12 +402,10 @@ export class NewcampusComponent {
     if(indice != undefined){
       this.objsSpace.splice(indice, 1);
     }
-    this.setObjsInSpace(selectValue);
     this.sortListStock();
-    this.setObjsInSpace(selectValue);
   }
 
-  deleteSpace(id: number, selectValue: string){
+  deleteSpace(id: number){
     let indice: number | undefined = undefined;
     this.spaces.forEach(n => {
       if(n.id === id){
@@ -412,27 +418,11 @@ export class NewcampusComponent {
     if(indice != undefined){
       this.spaces.splice(indice, 1);
     }
-    this.setObjsInSpace(selectValue);
     this.sortListStock();
-    this.setObjsInSpace(selectValue);
   }
 
   sortListStock(){
     this.stock.sort((a, b) => a.id - b.id);
-  }
-
-  setObjsInSpace(value: string){
-    const miSelect = document.querySelector('#objSpaceSelect') as HTMLSelectElement;
-    miSelect.innerHTML = '';
-    this.stock.forEach(n => {
-      if(n.type === value){
-        const elementOption = document.createElement('option');
-        elementOption.textContent = n.id + " - " + n.name;
-        elementOption.id = n.id.toString();
-        miSelect.appendChild(elementOption);
-      }
-    });
-
   }
 
   addObjToSpace(value: string, selectValue: string){
@@ -447,7 +437,6 @@ export class NewcampusComponent {
     if(indice != undefined){
       this.stock.splice(indice, 1);
     }
-    this.setObjsInSpace(selectValue);
   }
 
   addSpace(){

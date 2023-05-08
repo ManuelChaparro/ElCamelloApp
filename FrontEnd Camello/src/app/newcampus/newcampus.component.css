@@ -154,22 +154,12 @@
 }
 
 #space{
-  height: 100%;
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  padding: 1rem 0;
-  border-radius: 10px;
-  column-gap: 1rem;
-  margin: 0;
+  display: flex;
+  gap: 1rem;
 }
 
 #space div{
   border: 1px white solid;
-}
-
-#description-space{
-  height: 100%;
 }
 
 .space-containers{

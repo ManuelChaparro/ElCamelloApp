@@ -1,0 +1,53 @@
+<div class="container m-2">
+  <div class="card">
+    <div class="card-header">
+      <h4>Creación de Reserva</h4>
+    </div>
+    <div class="card-body w-100 d-flex flex-column gap-3">
+      <div class="d-flex flex-column">
+        <label class="h6" for="user">Usuario</label>
+        <select class="form-control" name="" id="user">
+          <option value="" *ngFor="let user of usersList">{{user.nombres}} {{user.apellidos}}</option>
+        </select>
+      </div>
+      <div class="d-flex gap-2 w-100 justify-content-between">
+        <div style="flex-basis: 45%;" class="d-flex flex-column">
+          <label class="h6" for="campus">Sede</label>
+          <select class="form-control" name="" id="campus">
+            <option value="" *ngFor="let campus of campusList">{{campus.nombre_sede}}</option>
+          </select>
+        </div>
+        <div style="flex-basis: 45%;" class="d-flex flex-column">
+          <label class="h6" for="space">Espacio</label>
+          <select class="form-control" name="" id="space"></select>
+        </div>
+      </div>
+      <div class="d-flex gap-2 w-100 justify-content-between">
+        <div style="flex-basis: 45%;" class="d-flex flex-column">
+          <label class="h6" for="campus">Día</label>
+          <input [min]="actualDate" class="form-control" type="date">
+        </div>
+        <div style="flex-basis: 45%;" class="d-flex flex-column">
+          <div class="d-flex gap-2 w-100 justify-content-between">
+            <div style="flex-basis: 45%;" class="d-flex flex-column">
+              <label class="h6" for="open">Entrada</label>
+              <input class="form-control" #secondOpen type="time" id="open" name="secondOpen" required>
+            </div>
+            <div style="flex-basis: 45%;" class="d-flex flex-column">
+              <label class="h6" for="close">Salida</label>
+              <input class="form-control" #secondClose type="time" id="close" name="secondClose" required>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="d-flex flex-column">
+        <label for="" class="h6">Nota</label>
+        <textarea class="form-control" style="resize: none;" name="" id="" cols="30" rows="3"></textarea>
+      </div>
+    </div>
+    <div class="card-footer d-flex gap-2 justify-content-end">
+      <button style="flex-basis: 20%;" class="btn btn-danger">Cancelar</button>
+      <button style="flex-basis: 20%;" class="btn btn-success">Crear</button>
+    </div>
+  </div>
+</div>

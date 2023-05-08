@@ -38,7 +38,7 @@ html, body{
   justify-content: center;
 }
 
-#header button{
+.btn-header{
   background-color: transparent;
   border: none;
   color: white;
@@ -46,7 +46,7 @@ html, body{
   font-weight: 500;
 }
 
-#header button:hover{
+.btn-header:hover{
   border-radius: 10px;
   background-color: #4a6491;
   height: 50px;

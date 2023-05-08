@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpClient, HttpHeaders} from '@angular/common/http';
 import jwt_decode from 'jwt-decode';
+import * as bootstrap from 'bootstrap';
 
 interface Stock{
   name: string,
@@ -23,6 +24,8 @@ interface Product{
 export class StocklistComponent {
   public stockList: Array<Stock>;
   private idProductDelete: number;
+  private rol: string;
+  private id_user: number;
 
   ngOnInit(){
     this.loadStockList();
@@ -31,43 +34,47 @@ export class StocklistComponent {
   constructor(private http: HttpClient){
     this.stockList = [];
     this.idProductDelete = 0;
+    this.rol = '';
+    this.id_user = 0;
   }
 
   private loadStockList(): void{
     const decode_token: object = jwt_decode(JSON.stringify(localStorage.getItem('token')));
     if('infoUser' in decode_token){
       const infoUser =  decode_token.infoUser as Array<object>;
-      if('rol' in infoUser[0]){
+      if('rol' in infoUser[0] && 'id_usuario' in infoUser[0]){
         const url = 'http://localhost:3005/api/inventary/list';
-        const rol = infoUser[0].rol as string
+        this.rol = infoUser[0].rol as string
+        this.id_user = infoUser[0].id_usuario as number;
         const data = {
-          rol: rol,
+          rol: this.rol,
         };
         const headers = new HttpHeaders({
           Authorization: 'Bearer ' + localStorage.getItem('token'),
         });
         this.http.post(url, data, {headers}).subscribe(response => {
-          this.addListProducts(response as Array<any>, rol);
+          console.log(response);
+
+          this.addListProducts(response as Array<any>);
         });
       }
     }
+
   }
 
-  private addListProducts(stock: Array<any>, rol: string): void{
+  private addListProducts(stock: Array<any>): void{
       stock.forEach(stock => {
       const newStock: Stock = {name: stock.nombre_sede, listProducts: []};
       const url = 'http://localhost:3005/api/inventary/product/filter';
       const data = {
         inventary_id: stock.id_inventario,
-        rol: rol,
+        rol: this.rol,
       };
       const headers = new HttpHeaders({
         Authorization: 'Bearer ' + localStorage.getItem('token'),
       });
       this.http.post(url, data, {headers}).subscribe(response => {
         const products = response as Array<any>;
-        console.log(products);
-
         products.forEach(product => {
           const newProduct: Product = {
             id: product.id_producto,
@@ -84,6 +91,29 @@ export class StocklistComponent {
   }
 
   public confirmDeleteProduct(id_product: string): void{
+    const modal = document.querySelector('#deleteModal') as HTMLElement;
+    const bootstrapModal = new bootstrap.Modal(modal);
+    bootstrapModal.show();
+    this.idProductDelete = parseInt(id_product);
+  }
 
+  public deleteProduct(): void{
+    const url = 'http://localhost:3005/api/inventary/product/delete';
+    const data = {
+      id_user: this.id_user,
+      id_product: this.idProductDelete,
+      rol: this.rol,
+    };
+    const headers = new HttpHeaders({
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+    });
+    this.http.post(url, data, {headers}).subscribe(response => {
+      if('message' in response && response.message === '0'){
+        this.stockList = [];
+        this.loadStockList();
+      }else{
+        alert("Error en eliminación");
+      }
+    });
   }
 }

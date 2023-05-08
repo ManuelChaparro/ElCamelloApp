@@ -63,8 +63,8 @@
           <tr *ngFor="let schedule of campus_schedule">
             <th>{{schedule.dia}}</th>
             <td>{{schedule.hora_apertura_am}}</td>
-            <td>{{schedule.hora_apertura_pm}}</td>
             <td>{{schedule.hora_cierre_am}}</td>
+            <td>{{schedule.hora_apertura_pm}}</td>
             <td>{{schedule.hora_cierre_pm}}</td>
             <td><button (click)="showDeleteSchedule(schedule.id_horario)" class="btn btn-close"></button></td>
           </tr>

@@ -51,12 +51,24 @@ export class NewstockComponent {
       this.createProduct();
       this.listStock?.push({ id: this.countObjs,name: this.stockName, brand: this.stockBrand, type: this.stockType, description: this.stockDescription, price: this.stockPrice as number});
       this.countObjs++;
+      this.showNotification(this.stockName);
       this.clearInputs();
+
     }else{
       const modal = document.querySelector('#myModal') as HTMLElement;
       const bootstrapModal = new bootstrap.Modal(modal);
       bootstrapModal.show();
     }
+  }
+
+  private showNotification(stockName: string): void{
+    const notification = document.querySelector('#notification') as HTMLElement;
+    const notification_name = document.querySelector('#notification_name') as HTMLSpanElement;
+    notification_name.innerText = stockName;
+    notification.classList.add('show');
+    setTimeout(() => {
+      notification.classList.remove('show');
+    }, 5000);
   }
 
   private createProduct(): void{
@@ -154,12 +166,38 @@ export class NewstockComponent {
     return toReturn;
   }
 
-  deleteObjList(id: number){
-    let indice: number = this.listStock.findIndex(obj => obj.id == id);
-    if(indice != undefined){
-      this.listStock.splice(indice, 1);
+  deleteObjList(id: string){
+    console.log(id);
+
+    const newId = parseInt(id);
+    const decode_token: object = jwt_decode(JSON.stringify(localStorage.getItem('token')));
+    if('infoUser' in decode_token){
+      const infoUser =  decode_token.infoUser as Array<object>;
+      if('rol' in infoUser[0] && 'id_usuario' in infoUser[0]){
+        const url = 'http://localhost:3005/api/inventary/product/delete';
+        const data = {
+          id_user: infoUser[0].id_usuario,
+          id_product: newId,
+          rol: infoUser[0].rol,
+        };
+        const headers = new HttpHeaders({
+          Authorization: 'Bearer ' + localStorage.getItem('token'),
+        });
+        this.http.post(url, data, {headers}).subscribe(response => {
+          console.log(response);
+
+          if('message' in response && response.message === '0'){
+            let indice: number = this.listStock.findIndex(obj => obj.id == newId);
+            if(indice != undefined){
+              this.listStock.splice(indice, 1);
+            }
+            this.sortListStock();
+          }else{
+            alert("Error en eliminación");
+          }
+        });
+      }
     }
-    this.sortListStock();
   }
 
   verifyInput(value: number){
