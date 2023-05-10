@@ -9,6 +9,6 @@ router.put('/spaces/modify', verifyToken, modifySpace)
 router.delete('/spaces/delete', verifyToken, deleteSpace)
 router.get('/spaces/list', verifyToken, getSpacesList)
 router.get('/spaces/search', verifyToken, searchSpace)
-router.get('/spaces/list/headquarter',verifyToken, listSpacesPerHeadquarter)
+router.post('/spaces/list/headquarter',verifyToken, listSpacesPerHeadquarter)
 
 module.exports = router
