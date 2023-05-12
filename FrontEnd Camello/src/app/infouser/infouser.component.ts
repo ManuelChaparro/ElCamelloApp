@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders} from '@angular/common/http';
 import jwt_decode from 'jwt-decode';
 import * as bootstrap from 'bootstrap';
 import { ServiceUserInfoService } from '../service-user-info.service';
+import { RoutesListService } from '../routes-list.service';
 
 @Component({
   selector: 'app-infouser',
@@ -25,7 +26,8 @@ export class InfouserComponent {
   public usuarios: Iterable<any> | null | undefined;
   public emailToDelete: string;
 
-  constructor(private router: Router, private http: HttpClient, private serviceInfoUser: ServiceUserInfoService){
+  constructor(private router: Router, private http: HttpClient, private serviceInfoUser: ServiceUserInfoService,
+    private routesList: RoutesListService){
     this.name = '';
     this.surname = '';
     this.number = undefined;
@@ -46,7 +48,7 @@ export class InfouserComponent {
   }
 
   loadData(){
-    const url = 'http://localhost:3005/api/user/search';
+    const url = this.routesList.getSearchUser();
 
     const decode_token: object = jwt_decode(JSON.stringify(localStorage.getItem('token')));
     if('infoUser' in decode_token){
@@ -117,7 +119,7 @@ export class InfouserComponent {
         current_password: actualPass,
         new_password: newPass
       };
-      const url = 'http://localhost:3005/api/user/changepass';
+      const url = this.routesList.getChangePass();
       const headers = new HttpHeaders({
         Authorization: 'Bearer ' + localStorage.getItem('token'),
       });
@@ -137,7 +139,7 @@ export class InfouserComponent {
   }
 
   saveChanges(){
-    const url = 'http://localhost:3005/api/user/modify';
+    const url = this.routesList.getModifyUser();
     const headers = new HttpHeaders({
       Authorization: 'Bearer ' + localStorage.getItem('token'),
     });
@@ -189,7 +191,7 @@ export class InfouserComponent {
         email: email,
         password: password
       };
-      const url = 'http://localhost:3005/api/user/delete';
+      const url = this.routesList.getDeleteUser();
       const headers = new HttpHeaders({
         Authorization: 'Bearer ' + localStorage.getItem('token'),
       });

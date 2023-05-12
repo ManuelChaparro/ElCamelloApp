@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
 
 interface Booking{
-  idBooking: number,
-  idBill: number,
-  idSpace: number,
-  idUser: number,
-  initDate: string,
-  finalDate: string,
+  space_id: number,
+  client_id: number,
+  date_booking: string,
+  hour_start: string,
+  hour_end: string,
   note: string
 }
 
@@ -17,14 +16,14 @@ interface Booking{
 })
 export class BookingslistComponent {
 
-  public booking_list: Array<Booking>;
-  public booking_id_list: Array<Iterable<any>> | undefined;
-  public idBookingToDelete: number | undefined;
+  public booking_list: Array<Booking> | undefined;
 
   constructor(){
-    this.booking_list = [];
-    this.booking_id_list = [];
-    this.idBookingToDelete = undefined;
+    this.booking_list = this.getBookingList();
+  }
+
+  private getBookingList(): Array<Booking>{
+    return new Array<Booking>;
   }
 
 }

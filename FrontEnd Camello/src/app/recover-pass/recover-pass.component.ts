@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { timer } from 'rxjs';
 import { delay } from 'rxjs/operators';
+import { RoutesListService } from '../routes-list.service';
 
 @Component({
   selector: 'app-recover-pass',
@@ -13,14 +14,14 @@ export class RecoverPassComponent {
   public email: string;
   public document: number | undefined;
 
-  constructor(private http: HttpClient, private router: Router){
+  constructor(private http: HttpClient, private router: Router, private routesList: RoutesListService){
     this.email = '';
     this.document = undefined;
   }
 
   public sendRecovery(){
     if(this.validations()){
-      const url = 'http://localhost:3005/api/user/recovery';
+      const url = this.routesList.getRecoverPass();
       const data = {
         email: this.email,
         identificacion: this.document

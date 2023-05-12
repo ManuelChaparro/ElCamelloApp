@@ -3,6 +3,7 @@ import { formatDate } from '@angular/common';
 import { HttpClient, HttpHeaders} from '@angular/common/http';
 import jwt_decode from 'jwt-decode';
 import * as bootstrap from 'bootstrap';
+import { RoutesListService } from '../routes-list.service';
 
 interface Booking{
   space_id: number,
@@ -27,7 +28,7 @@ export class NewbookingComponent {
   public actualDate: string;
   public actualHour: string;
 
-  constructor(private http: HttpClient){
+  constructor(private http: HttpClient, private routesList: RoutesListService){
     this.actualDate = this.getMinDate();
     this.actualHour = this.getMinHour();
     this.bookingData = {
@@ -68,32 +69,63 @@ export class NewbookingComponent {
   }
 
   public async createBooking(): Promise<any>{
-    if(this.bookingData.date_booking != "" && this.bookingData.hour_start != "" && this.bookingData.hour_end != ""){
-      const url = 'http://localhost:3005/api/booking/make';
-      const headers = new HttpHeaders({
-        Authorization: 'Bearer ' + localStorage.getItem('token'),
-      });
-      const data = {
-        space_id: this.bookingData.space_id,
-        client_id: this.bookingData.client_id,
-        date_booking: this.bookingData.date_booking,
-        hour_start: this.bookingData.hour_start,
-        hour_end: this.bookingData.hour_end,
-        note: this.bookingData.note
-      }
-      this.http.post(url, data, { headers }).subscribe((data) => {
-        if("message" in data){
-          if(data.message === "3"){
-          }else if(data.message === "4"){
-            alert("Error al crear la reserva")
-          }else if(data.message === "0"){
-            this.showNotification();
-          }
+    if(this.bookingData.date_booking != "" && this.bookingData.hour_start != ""
+    && this.bookingData.hour_end != ""){
+      if(this.validateMinTime()){
+        const url = this.routesList.getCreateBooking();
+        const headers = new HttpHeaders({
+          Authorization: 'Bearer ' + localStorage.getItem('token'),
+        });
+        const data = {
+          space_id: this.bookingData.space_id,
+          client_id: this.bookingData.client_id,
+          date_booking: this.bookingData.date_booking,
+          hour_start: this.bookingData.hour_start,
+          hour_end: this.bookingData.hour_end,
+          note: this.bookingData.note
         }
-      });
+        this.http.post(url, data, { headers }).subscribe((data) => {
+          if("message" in data){
+            if(data.message === "3"){
+              this.showNotificationError();
+            }else if(data.message === "4"){
+              alert("Error al crear la reserva")
+            }else if(data.message === "0"){
+              this.showNotification();
+            }
+          }
+        });
+      }else{
+        this.showNotificationErrorTime();
+      }
     }else{
       alert("Faltan datos")
     }
+  }
+
+  private validateMinTime(): boolean{
+    const [horaInicio, minutoInicio] = this.bookingData.hour_start.split(':').map(Number);
+    const [horaFin, minutoFin] = this.bookingData.hour_end.split(':').map(Number);
+    const diferenciaMinutos = (horaFin - horaInicio) * 60 + (minutoFin - minutoInicio);
+    return diferenciaMinutos >= 30;
+  }
+
+  private showNotificationError(): void{
+    const notificationError = document.querySelector('#notification-error') as HTMLElement;
+    const notification = document.querySelector('#notification') as HTMLElement;
+    notification.classList.remove('show');
+    notificationError.classList.add('show');
+    setTimeout(() => {
+      notificationError.classList.remove('show');
+    }, 5000);
+  }
+
+  private showNotificationErrorTime(): void{
+    const notificationError = document.querySelector('#notification-error-time') as HTMLElement;
+    notificationError.classList.add('show');
+    setTimeout(() => {
+      notificationError.classList.remove('show');
+    }, 5000);
   }
 
   private getMinDate(): string {
@@ -117,7 +149,7 @@ export class NewbookingComponent {
 
   private async initSpaceList(id_campus: string): Promise<any>{
     return new Promise<any>((req, res) => {
-      const url = 'http://localhost:3005/api/spaces/list/headquarter';
+      const url = this.routesList.getSpacesPerCampusList();
       const headers = new HttpHeaders({
         Authorization: 'Bearer ' + localStorage.getItem('token'),
       });
@@ -141,7 +173,7 @@ export class NewbookingComponent {
   }
 
   private async initUsersList(): Promise<any>{
-    const url = 'http://localhost:3005/api/user/list';
+    const url = this.routesList.getUserList();
     const headers = new HttpHeaders({
       Authorization: 'Bearer ' + localStorage.getItem('token'),
     });
@@ -153,7 +185,7 @@ export class NewbookingComponent {
 
   private initCampusList(): Promise<any>{
     return new Promise<any>((res, rej) => {
-      const url = 'http://localhost:3005/api/headquarters/list';
+      const url = this.routesList.getCampusList();
       const headers = new HttpHeaders({
         Authorization: 'Bearer ' + localStorage.getItem('token'),
       });

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders} from '@angular/common/http';
 import jwt_decode from 'jwt-decode';
 import * as bootstrap from 'bootstrap';
+import { RoutesListService } from '../routes-list.service';
 
 @Component({
   selector: 'app-adminusers',
@@ -24,7 +25,7 @@ export class AdminusersComponent {
   public usuarios: Iterable<any> | null | undefined;
   public emailToDelete: string;
 
-  constructor(private router: Router, private http: HttpClient){
+  constructor(private router: Router, private http: HttpClient, private routesList: RoutesListService){
     this.name = '';
     this.surname = '';
     this.number = undefined;
@@ -45,7 +46,7 @@ export class AdminusersComponent {
   }
 
   public saveChanges(){
-    const url = 'http://localhost:3005/api/user/modify';
+    const url = this.routesList.getModifyUser();
     const headers = new HttpHeaders({
       Authorization: 'Bearer ' + localStorage.getItem('token'),
     });
@@ -69,7 +70,7 @@ export class AdminusersComponent {
   }
 
   public loadUserList(){
-    const url = 'http://localhost:3005/api/user/list';
+    const url = this.routesList.getUserList();
     const headers = new HttpHeaders({
       Authorization: 'Bearer ' + localStorage.getItem('token'),
     });
@@ -90,7 +91,7 @@ export class AdminusersComponent {
             rol: infoUser[0].rol,
             id_user: infoUser[0].id_usuario
           };
-          const url = 'http://localhost:3005/api/user/ad/delete';
+          const url = this.routesList.getDeleteUserAdmin();
           const headers = new HttpHeaders({
             Authorization: 'Bearer ' + localStorage.getItem('token'),
           });
@@ -148,7 +149,7 @@ export class AdminusersComponent {
 	}
 
   public httpPostRequest(){
-    const url = 'http://localhost:3005/api/user/register';
+    const url = this.routesList.getCreateUser();
     const data = {
       nombres: this.name,
       apellidos: this.surname,
@@ -203,7 +204,7 @@ export class AdminusersComponent {
   }
 
   public loadData(email: string){
-    const url = 'http://localhost:3005/api/user/search';
+    const url = this.routesList.getSearchUser();
     const data = {
       email: email,
     };

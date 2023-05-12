@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { HttpClient, HttpHeaders} from '@angular/common/http';
 import jwt_decode from 'jwt-decode';
 import * as bootstrap from 'bootstrap';
+import { RoutesListService } from '../routes-list.service';
 
 interface Stock{
   name: string,
@@ -31,7 +32,7 @@ export class StocklistComponent {
     this.loadStockList();
   }
 
-  constructor(private http: HttpClient){
+  constructor(private http: HttpClient, private routesList: RoutesListService){
     this.stockList = [];
     this.idProductDelete = 0;
     this.rol = '';
@@ -43,7 +44,7 @@ export class StocklistComponent {
     if('infoUser' in decode_token){
       const infoUser =  decode_token.infoUser as Array<object>;
       if('rol' in infoUser[0] && 'id_usuario' in infoUser[0]){
-        const url = 'http://localhost:3005/api/inventary/list';
+        const url = this.routesList.getInventaryList();
         this.rol = infoUser[0].rol as string
         this.id_user = infoUser[0].id_usuario as number;
         const data = {
@@ -65,7 +66,7 @@ export class StocklistComponent {
   private addListProducts(stock: Array<any>): void{
       stock.forEach(stock => {
       const newStock: Stock = {name: stock.nombre_sede, listProducts: []};
-      const url = 'http://localhost:3005/api/inventary/product/filter';
+      const url = this.routesList.getFilterProductByInventory();
       const data = {
         inventary_id: stock.id_inventario,
         rol: this.rol,
@@ -98,7 +99,7 @@ export class StocklistComponent {
   }
 
   public deleteProduct(): void{
-    const url = 'http://localhost:3005/api/inventary/product/delete';
+    const url = this.routesList.getDeleteProduct();
     const data = {
       id_user: this.id_user,
       id_product: this.idProductDelete,

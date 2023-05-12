@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { HttpClient, HttpHeaders} from '@angular/common/http';
 import jwt_decode from 'jwt-decode';
 import * as bootstrap from 'bootstrap';
+import { RoutesListService } from '../routes-list.service';
 
 interface Campus{
   name: string;
@@ -32,13 +33,13 @@ export class CampusComponent {
     this.loadCampusOnDatabase();
   }
 
-  constructor(private http: HttpClient){
+  constructor(private http: HttpClient, private routesList: RoutesListService){
     this.campus_list = [];
     this.campus_id_list = [];
   }
 
   loadCampusOnDatabase(){
-    const url = 'http://localhost:3005/api/headquarters/list';
+    const url = this.routesList.getCampusList();
     const headers = new HttpHeaders({
       Authorization: 'Bearer ' + localStorage.getItem('token'),
     });
@@ -53,7 +54,7 @@ export class CampusComponent {
               const info_campus = n as Object;
               if('nombre_sede' in info_campus && 'descripcion' in info_campus && 'direccion' in info_campus
               && 'id_sede' in info_campus){
-                const url = 'http://localhost:3005/api/headquarters/spaces/quantity';
+                const url = this.routesList.getQuantitySpacesPerCampus();
                 const data = {
                   headquarter_id: info_campus.id_sede,
                   rol: rol
@@ -83,7 +84,7 @@ export class CampusComponent {
   }
 
   loadIdCampus(newCampus: Campus){
-    const url = 'http://localhost:3005/api/headquarters/searchSchedules';
+    const url = this.routesList.getScheduleCampus();
     const headers = new HttpHeaders({
       Authorization: 'Bearer ' + localStorage.getItem('token'),
     });

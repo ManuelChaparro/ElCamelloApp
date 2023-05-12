@@ -12,6 +12,7 @@ import { InfouserComponent } from '../infouser/infouser.component';
 import { ServiceUserInfoService } from '../service-user-info.service';
 import { AdminscheduleComponent } from '../adminschedule/adminschedule.component';
 import * as bootstrap from 'bootstrap';
+import { RoutesListService } from '../routes-list.service';
 
 @Component({
   selector: 'app-adminhome',
@@ -24,7 +25,7 @@ export class AdminhomeComponent {
 
   ngOnInit(){
     const interval = setInterval(() => {
-      const url = 'http://localhost:3005/api/user/validUser';
+      const url = this.routesList.getValidUser();
       const headers = new HttpHeaders({
         Authorization: 'Bearer ' + localStorage.getItem('token'),
       });
@@ -46,12 +47,12 @@ export class AdminhomeComponent {
       }, 5000);
   }
 
-  constructor(private http: HttpClient, private router: Router, private serviceInfoUser: ServiceUserInfoService){
+  constructor(private http: HttpClient, private router: Router, private serviceInfoUser: ServiceUserInfoService, private routesList: RoutesListService){
     const decode_token: object = jwt_decode(JSON.stringify(localStorage.getItem('token')));
     if('infoUser' in decode_token){
       const infoUser =  decode_token.infoUser as Array<object>;
       if('email' in infoUser[0]){
-        const url = 'http://localhost:3005/api/user/search';
+        const url = routesList.getSearchUser();
         const token_email = infoUser[0].email;
         const data = {
           email: token_email as string,

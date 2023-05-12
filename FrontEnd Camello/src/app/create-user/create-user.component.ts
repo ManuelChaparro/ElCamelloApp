@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { timer } from 'rxjs';
 import { delay } from 'rxjs/operators';
+import { RoutesListService } from '../routes-list.service';
 
 @Component({
   selector: 'app-create-user',
@@ -22,7 +23,7 @@ export class CreateUserComponent {
   public document: number|undefined;
   public birthdate: string;
 
-  constructor(private router: Router, private http: HttpClient){
+  constructor(private router: Router, private http: HttpClient, private routesList: RoutesListService){
     this.name = '';
     this.surname = '';
     this.number = undefined;
@@ -99,7 +100,7 @@ export class CreateUserComponent {
   }
 
   public httpPostRequest(){
-    const url = 'http://localhost:3005/api/user/register';
+    const url = this.routesList.getCreateUser();
     const data = {
       nombres: this.name,
       apellidos: this.surname,

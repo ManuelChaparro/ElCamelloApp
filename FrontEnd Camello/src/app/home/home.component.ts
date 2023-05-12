@@ -5,6 +5,7 @@ import { CampusComponent } from '../usercampus/campus.component';
 import { BookingsComponent } from '../bookings/bookings.component';
 import { Router } from '@angular/router';
 import { InfouserComponent } from '../infouser/infouser.component';
+import { RoutesListService } from '../routes-list.service';
 
 @Component({
   selector: 'app-home',
@@ -17,12 +18,12 @@ export class HomeComponent {
   public number: number | undefined;
   public rol: string | unknown;
 
-  constructor(private http: HttpClient, private router: Router){
+  constructor(private http: HttpClient, private router: Router, private routesList: RoutesListService){
     const decode_token: object = jwt_decode(JSON.stringify(localStorage.getItem('token')));
     if('infoUser' in decode_token){
       const infoUser =  decode_token.infoUser as Array<object>;
       if('email' in infoUser[0]){
-        const url = 'http://localhost:3005/api/user/search';
+        const url = routesList.getSearchUser();
         const token_email = infoUser[0].email;
         const data = {
           email: token_email as string,

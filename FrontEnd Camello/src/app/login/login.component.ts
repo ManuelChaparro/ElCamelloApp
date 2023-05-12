@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import jwt_decode from 'jwt-decode';
+import { RoutesListService } from '../routes-list.service';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +14,7 @@ export class LoginComponent {
   user: string = "";
   password: string = "";
 
-  constructor(private router: Router, private http: HttpClient){}
+  constructor(private router: Router, private http: HttpClient, private routesList: RoutesListService){}
 
   goToCreateUser(){
     this.router.navigate(['/createUser']);
@@ -28,7 +29,7 @@ export class LoginComponent {
   }
 
   public registerUser() {
-    const url = 'http://localhost:3005/api/user/login';
+    const url = this.routesList.getLogin();
     const data = {
       email: this.user,
       password: this.password

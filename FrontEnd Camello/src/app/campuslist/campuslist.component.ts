@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { HttpClient, HttpHeaders} from '@angular/common/http';
 import jwt_decode from 'jwt-decode';
 import * as bootstrap from 'bootstrap';
+import { RoutesListService } from '../routes-list.service';
 
 interface Campus{
   name: string;
@@ -39,7 +40,7 @@ export class CampuslistComponent {
     this.initComponents();
   }
 
-  constructor(private http: HttpClient){
+  constructor(private http: HttpClient, private routesList: RoutesListService){
     this.campus_list = [];
     this.campus_id_list = [];
     this.idCampusToDelete = undefined;
@@ -64,7 +65,7 @@ export class CampuslistComponent {
   }
 
   public saveModifyCampus(): void{
-    const url = 'http://localhost:3005/api/headquarters/modify';
+    const url = this.routesList.getModifyCampus();
     const headers = new HttpHeaders({
       Authorization: 'Bearer ' + localStorage.getItem('token'),
     });
@@ -83,10 +84,7 @@ export class CampuslistComponent {
           id_user: infoUser[0].id_usuario
         };
 
-        this.http.put(url, data, {headers}).subscribe(response => {
-          console.log(response);
-
-        });
+        this.http.put(url, data, {headers}).subscribe(response => {});
       }
     }
   }
@@ -100,7 +98,7 @@ export class CampuslistComponent {
   }
 
   loadCampusOnDatabase(){
-    const url = 'http://localhost:3005/api/headquarters/list';
+    const url = this.routesList.getCampusList();
     const headers = new HttpHeaders({
       Authorization: 'Bearer ' + localStorage.getItem('token'),
     });
@@ -116,7 +114,7 @@ export class CampuslistComponent {
               const info_campus = n as Object;
               if('nombre_sede' in info_campus && 'descripcion' in info_campus && 'direccion' in info_campus
               && 'id_sede' in info_campus){
-                const url = 'http://localhost:3005/api/headquarters/spaces/quantity';
+                const url = this.routesList.getQuantitySpacesPerCampus();
                 const data = {
                   headquarter_id: info_campus.id_sede,
                   rol: rol
@@ -146,7 +144,7 @@ export class CampuslistComponent {
   }
 
   loadIdCampus(newCampus: Campus){
-    const url = 'http://localhost:3005/api/headquarters/searchSchedules';
+    const url = this.routesList.getScheduleCampus();
     const headers = new HttpHeaders({
       Authorization: 'Bearer ' + localStorage.getItem('token'),
     });
@@ -192,7 +190,7 @@ export class CampuslistComponent {
     if('infoUser' in decode_token){
       const infoUser =  decode_token.infoUser as Array<object>;
       if('id_usuario' in infoUser[0] && 'rol' in infoUser[0]){
-        const url = 'http://localhost:3005/api/headquarters/delete';
+        const url = this.routesList.getDeleteCampus();
         const headers = new HttpHeaders({
           Authorization: 'Bearer ' + localStorage.getItem('token'),
         });

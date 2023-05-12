@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import * as bootstrap from 'bootstrap';
 import { HttpClient, HttpHeaders} from '@angular/common/http';
 import jwt_decode from 'jwt-decode';
+import { RoutesListService } from '../routes-list.service';
 
 interface stockObject{
   id: number,
@@ -30,7 +31,7 @@ export class NewstockComponent {
   public campus_selected: string | null | undefined;
   public campus_selected_id: number | null | undefined;
 
-  constructor(private http: HttpClient){
+  constructor(private http: HttpClient, private routesList: RoutesListService){
     this.countObjs = 1;
     this.stockName = '';
     this.stockType = 'Mueble';
@@ -78,7 +79,7 @@ export class NewstockComponent {
       if('rol' in infoUser[0] && 'id_usuario' in infoUser[0]){
         const rol = infoUser[0].rol;
         const id_usuario = infoUser[0].id_usuario;
-        const url = 'http://localhost:3005/api/inventary/product/add';
+        const url = this.routesList.getCreateProduct();
         const data = {
           product_name: this.stockName,
           product_type: this.stockType,
@@ -99,7 +100,7 @@ export class NewstockComponent {
   }
 
   private getInventoryId(){
-    const url = 'http://localhost:3005/api/inventary/search';
+    const url = this.routesList.getSearchInventory();
     const data = {
       headquarter_id: this.campus_selected
     }
@@ -125,7 +126,7 @@ export class NewstockComponent {
   }
 
   initCampusList(){
-    const url = 'http://localhost:3005/api/headquarters/list';
+    const url = this.routesList.getCampusList();
     const headers = new HttpHeaders({
       Authorization: 'Bearer ' + localStorage.getItem('token'),
     });
@@ -167,14 +168,12 @@ export class NewstockComponent {
   }
 
   deleteObjList(id: string){
-    console.log(id);
-
     const newId = parseInt(id);
     const decode_token: object = jwt_decode(JSON.stringify(localStorage.getItem('token')));
     if('infoUser' in decode_token){
       const infoUser =  decode_token.infoUser as Array<object>;
       if('rol' in infoUser[0] && 'id_usuario' in infoUser[0]){
-        const url = 'http://localhost:3005/api/inventary/product/delete';
+        const url = this.routesList.getDeleteProduct();
         const data = {
           id_user: infoUser[0].id_usuario,
           id_product: newId,

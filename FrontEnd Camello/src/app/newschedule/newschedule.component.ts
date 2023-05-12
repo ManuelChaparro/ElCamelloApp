@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { HttpClient, HttpHeaders} from '@angular/common/http';
 import jwt_decode from 'jwt-decode';
 import * as bootstrap from 'bootstrap';
+import { RoutesListService } from '../routes-list.service';
 
 @Component({
   selector: 'app-newschedule',
@@ -15,7 +16,7 @@ export class NewscheduleComponent {
   public campus_selected: string | null | undefined;
   public id_schedule_delete: number | undefined;
 
-  constructor(private http: HttpClient){
+  constructor(private http: HttpClient, private routesList: RoutesListService){
     this.campus_list = undefined;
     this.campus_selected = undefined;
     this.campus_schedule = undefined;
@@ -27,7 +28,7 @@ export class NewscheduleComponent {
   }
 
   initCampusList(){
-    const url = 'http://localhost:3005/api/headquarters/list';
+    const url = this.routesList.getCampusList();
     const headers = new HttpHeaders({
       Authorization: 'Bearer ' + localStorage.getItem('token'),
     });
@@ -56,7 +57,7 @@ export class NewscheduleComponent {
         id_headquarter: id_campus
       };
     }
-    const url = 'http://localhost:3005/api/headquarters/searchSchedules';
+    const url = this.routesList.getScheduleCampus();
     const headers = new HttpHeaders({
       Authorization: 'Bearer ' + localStorage.getItem('token'),
     });
@@ -76,7 +77,7 @@ export class NewscheduleComponent {
   }
 
   deleteSchedule(){
-    const url = 'http://localhost:3005/api/schedules/deleteSchedule';
+    const url = this.routesList.getDeleteSchedule();
     const headers = new HttpHeaders({
       Authorization: 'Bearer ' + localStorage.getItem('token'),
     });
@@ -108,7 +109,7 @@ export class NewscheduleComponent {
   }
 
   saveSchedule(day: string, firstOpen: string, firstClose:string, secondOpen:string, secondClose:string){
-    const url = 'http://localhost:3005/api/schedules/createSchedule';
+    const url = this.routesList.getCreateSchedule();
     const headers = new HttpHeaders({
       Authorization: 'Bearer ' + localStorage.getItem('token'),
     });

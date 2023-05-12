@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import * as bootstrap from 'bootstrap';
 import jwt_decode from 'jwt-decode';
 import { HttpClient, HttpHeaders} from '@angular/common/http';
+import { RoutesListService } from '../routes-list.service';
 
 interface campus{
   name: string,
@@ -49,7 +50,7 @@ export class NewcampusComponent {
 
   public stock: Array<stockObject>;
 
-  constructor(private http: HttpClient){
+  constructor(private http: HttpClient, private routesList: RoutesListService){
     this.campusName = '';
     this.direction = '';
     this.cities = [];
@@ -86,7 +87,7 @@ export class NewcampusComponent {
   ngOnInit() {
     const space = document.querySelector('#space') as HTMLElement;
     space.style.display = 'none';
-    const url = 'http://localhost:3005/api/headquarters/departments/list';
+    const url = this.routesList.getDepartments();
     const headers = new HttpHeaders({
       Authorization: 'Bearer ' + localStorage.getItem('token'),
     });
@@ -104,7 +105,7 @@ export class NewcampusComponent {
   }
 
   private loadInventary(): void{
-    const url = 'http://localhost:3005/api/inventary/product/list';
+    const url = this.routesList.getProductList();
     const headers = new HttpHeaders({
       Authorization: 'Bearer ' + localStorage.getItem('token'),
     });
@@ -114,7 +115,7 @@ export class NewcampusComponent {
   }
 
   setDefaultCity(){
-    const url = 'http://localhost:3005/api/headquearters/cities/search';
+    const url = this.routesList.getCities();
     const data = {
       department_name: 'ANTIOQUIA'
     };
@@ -139,7 +140,7 @@ export class NewcampusComponent {
 
   setCity(){
     const department = document.querySelector('#selectDepartment') as HTMLSelectElement;
-    const url = 'http://localhost:3005/api/headquearters/cities/search';
+    const url = this.routesList.getCities();
     const data = {
       department_name: department.value
     };
@@ -204,7 +205,7 @@ export class NewcampusComponent {
           rol: infoUser[0].rol,
           id_user: infoUser[0].id_usuario
         };
-        const url = 'http://localhost:3005/api/headquearters/create';
+        const url = this.routesList.getCreateCampus();
         const headers = new HttpHeaders({
           Authorization: 'Bearer ' + localStorage.getItem('token'),
         });
@@ -234,7 +235,7 @@ export class NewcampusComponent {
             rol: rol,
             id_user: id_usuario
           };
-          const url = 'http://localhost:3005/api/spaces/add';
+          const url = this.routesList.getCreateSpace();
           const headers = new HttpHeaders({
             Authorization: 'Bearer ' + localStorage.getItem('token'),
           });
@@ -255,7 +256,7 @@ export class NewcampusComponent {
       id_user: id_user,
       rol: rol
     };
-    const url = 'http://localhost:3005/api/inventary/create';
+    const url = this.routesList.getCreateInventory();
     const headers = new HttpHeaders({
       Authorization: 'Bearer ' + localStorage.getItem('token'),
     });
