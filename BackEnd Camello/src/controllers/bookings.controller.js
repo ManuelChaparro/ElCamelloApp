@@ -37,7 +37,7 @@ const deleteBooking = async(req, res) =>{
             await connection.query(`select id_reserva from reservas where id_reserva = ${connection.escape(booking_id)}`, async(error, result, fields) =>{
                 if(!error){
                     await connection.query(`Delete from reservas where id_reserva = ${connection.escape(booking_id)}`,async(error, result, fields) =>{
-                        if(!error){
+                        if(!error && result.affectedRows > 0){
                             res.json({message: "0"})
                         }else{
                             res.json({message: "2"})
@@ -54,13 +54,30 @@ const deleteBooking = async(req, res) =>{
 }
 
 const getBookingList = async(req, res) =>{
-    jwt.verify(req.token, 'rsecretkey', async(error) =>{
+    jwt.verify(req.token, 'secretkey', async(error) =>{
         if(!error){
             await connection.query(`Select * from reservas`, async(error, result, fields) =>{
                 if(!error){
                     res.json(result)
                 }else{
-                    res.json({message:"1"})
+                    res.json({message: error})
+                }
+            })
+        }else{
+            res.json({message:error})
+        }
+    })
+}
+
+const searchBooking = async(req, res) =>{
+    jwt.verify(req.token, 'secretkey', async(error)=>{
+        if(!error){
+            const {booking_id} = req.body
+            await connection.query(`Select * from reservas where id_reserva = ${connection.escape(booking_id)}`, async(error, result, fields) =>{
+                if(!error){
+                    res.json(result)
+                }else{
+                    res.json({message:"2"})
                 }
             })
         }else{
@@ -76,14 +93,14 @@ const modifyBooking = async(req, res) =>{
             await connection.query(`select id_reserva from reservas where id_reserva = ${connection.escape(booking_id)} `, async(error, result, fields) =>{
                 if(!error){
                     if(result.length === 1){
-                        await connection.query(`Select * from reservas where id_espacio = ${connection.escape(space_id)} and fecha = ${connection.escape(date_booking)} and hora_entrada between ${connection.escape(hour_start)} and ${connection.escape(hour_end)} and hora_salida between ${connection.escape(hour_start)} and ${connection.escape(hour_end)}`, async(error, result, fields) =>{
+                        await connection.query(`Select * from reservas where id_espacio = ${connection.escape(space_id)} and fecha = ${connection.escape(date_booking)} and hora_entrada <= ${connection.escape(hour_start)} and hora_salida >= ${connection.escape(hour_start)} or hora_entrada <= ${connection.escape(hour_end)} and  or hora_salida >= ${connection.escape(hour_end)}`, async(error, result, fields) =>{
                             if(!error){
                                 if(result.length === 0){
-                                    await connection.query(`Update reservas set id_espacio = ${connection.escape(space_id)}, fecha = ${connection.escape(date_booking)}, hora_entrada = ${connection.escape(hour_start)}, hora_salida = ${connection.escape(hour_end)}, nota = ${connection.escape(note)}`, async(error, result, fields) =>{
+                                    await connection.query(`Update reservas set id_espacio = ${connection.escape(space_id)}, fecha = ${connection.escape(date_booking)}, hora_entrada = ${connection.escape(hour_start)}, hora_salida = ${connection.escape(hour_end)}, notas = ${connection.escape(note)} where id_reserva = ${connection.escape(booking_id)}`, async(error, result, fields) =>{
                                         if(!error){
                                             res.json({message: "0"})
                                         }else{
-                                            res.json({message: "6"})
+                                            res.json({message: error})
                                         }
                                     })
                                 }else{
@@ -101,9 +118,9 @@ const modifyBooking = async(req, res) =>{
                 }
             })
         }else{
-            res.json({message: "1"})
+            res.json({message: error})
         }
     })
 }
 
-module.exports = {makeBooking, deleteBooking, getBookingList}
+module.exports = {makeBooking, deleteBooking, getBookingList, modifyBooking, searchBooking}

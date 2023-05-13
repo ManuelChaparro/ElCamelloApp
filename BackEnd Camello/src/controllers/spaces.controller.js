@@ -9,17 +9,27 @@ const createSpace = async(req, res) =>{
     jwt.verify(req.token, 'secretkey', async(error) =>{
         if(!error){
             if(rol === "A" || rol === "a"){
-                await connection.query(`Insert into espacios (id_sede, nombre, tarifa, descripcion) values (${connection.escape(headquarter_id)}, ${connection.escape(space_name)}, ${connection.escape(space_fee)}, ${connection.escape(space_description)})`, async(error, result, fields) =>{
+                await connection.query(`Select * from espacios where nombre = ${connection.escape(space_name)}`, async(error, result, fields)=>{
                     if(!error){
-                        await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripcion) values (${id_user}, NOW(), "Agregacion", "Se agrego el espacio ${connection.escape(space_name)} a la tabla de espacios")`, async(error, info, fields) =>{
-                            if(!error){
-                                res.json({message: "Se ha ingresado correctamente el nuevo espacio"})
-                            }else{
-                                res.json({message: "Error log"})
-                            }
-                        })
+                        if(result.length === 0){
+                            await connection.query(`Insert into espacios (id_sede, nombre, tarifa, descripcion) values (${connection.escape(headquarter_id)}, ${connection.escape(space_name)}, ${connection.escape(space_fee)}, ${connection.escape(space_description)})`, async(error, result, fields) =>{
+                                if(!error){
+                                    await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripcion) values (${id_user}, NOW(), "Agregacion", "Se agrego el espacio ${connection.escape(space_name)} a la tabla de espacios")`, async(error, info, fields) =>{
+                                        if(!error){
+                                            res.json({message: "Se ha ingresado correctamente el nuevo espacio"})
+                                        }else{
+                                            res.json({message: "Error log"})
+                                        }
+                                    })
+                                }else{
+                                    res.json({message: error})
+                                }
+                            })
+                        }else{
+                            res.json({message: "1"})
+                        }
                     }else{
-                        res.json({message: "Ha ocurrido un error en la insercion del nuevo espacio"})
+                        res.json({message: "1"})
                     }
                 })
             }else{
