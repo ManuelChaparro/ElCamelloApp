@@ -93,14 +93,16 @@ const modifyBooking = async(req, res) =>{
             await connection.query(`select id_reserva from reservas where id_reserva = ${connection.escape(booking_id)} `, async(error, result, fields) =>{
                 if(!error){
                     if(result.length === 1){
-                        await connection.query(`Select * from reservas where id_espacio = ${connection.escape(space_id)} and fecha = ${connection.escape(date_booking)} and hora_entrada <= ${connection.escape(hour_start)} and hora_salida >= ${connection.escape(hour_start)} or hora_entrada <= ${connection.escape(hour_end)} and  or hora_salida >= ${connection.escape(hour_end)}`, async(error, result, fields) =>{
+                        await connection.query(`Select * from reservas where id_espacio = ${connection.escape(space_id)} and fecha = ${connection.escape(date_booking)} and (hora_entrada >= ${connection.escape(hour_start)} AND hora_entrada < ${connection.escape(hour_end)}) OR
+                        (hora_salida > ${connection.escape(hour_start)} AND hora_salida <= ${connection.escape(hour_end)}) OR
+                        (hora_entrada < ${connection.escape(hour_start)} AND hora_salida > ${connection.escape(hour_end)})`, async(error, result, fields) =>{
                             if(!error){
                                 if(result.length === 0){
                                     await connection.query(`Update reservas set id_espacio = ${connection.escape(space_id)}, fecha = ${connection.escape(date_booking)}, hora_entrada = ${connection.escape(hour_start)}, hora_salida = ${connection.escape(hour_end)}, notas = ${connection.escape(note)} where id_reserva = ${connection.escape(booking_id)}`, async(error, result, fields) =>{
                                         if(!error){
                                             res.json({message: "0"})
                                         }else{
-                                            res.json({message: error})
+                                            res.json({message: "3"})
                                         }
                                     })
                                 }else{
