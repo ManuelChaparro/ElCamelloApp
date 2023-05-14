@@ -5,7 +5,7 @@ const {makeBooking, deleteBooking, getBookingList, modifyBooking, searchBooking}
 const {verifyToken} = require('../controllers/users.controller')
 
 router.post('/booking/make', verifyToken, makeBooking)
-router.delete('/booking/delete', verifyToken, deleteBooking)
+router.post('/booking/delete', verifyToken, deleteBooking)
 router.get('/booking/list', verifyToken, getBookingList)
 router.put('/booking/modify', verifyToken, modifyBooking)
 router.post('/booking/search', verifyToken, searchBooking)

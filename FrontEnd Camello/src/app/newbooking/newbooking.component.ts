@@ -84,6 +84,8 @@ export class NewbookingComponent {
           hour_end: this.bookingData.hour_end,
           note: this.bookingData.note
         }
+        console.log(data);
+
         this.http.post(url, data, { headers }).subscribe((data) => {
           if("message" in data){
             if(data.message === "3"){

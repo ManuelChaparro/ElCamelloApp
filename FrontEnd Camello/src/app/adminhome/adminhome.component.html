@@ -5,13 +5,13 @@
     <div class="col w-50">
 
       <button type="button" class="btn btn-outline-light" placement="bottom" [ngbPopover]="popoverContent">
-        {{name}} {{surname}}
+        <i class="fas fa-user"></i> {{name}} {{surname}}
       </button>
 
       <ng-template #popoverContent>
         <div class="d-flex flex-column gap-2">
-          <button (click)="cambiarComponente(5)" type="button" class="btn btn-outline-primary mr-2">Ver Perfil</button>
-          <button (click)="logout()" type="button" class="btn btn-outline-danger">Cerrar Sesión</button>
+          <button (click)="cambiarComponente(5)" type="button" class="btn btn-outline-primary mr-2"><i class="fas fa-user"></i> Ver Perfil</button>
+          <button (click)="logout()" type="button" class="btn btn-outline-danger"><i class="fas fa-right-from-bracket"></i> Cerrar Sesión</button>
         </div>
       </ng-template>
 
