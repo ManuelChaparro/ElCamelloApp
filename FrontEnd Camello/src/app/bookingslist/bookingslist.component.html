@@ -25,7 +25,7 @@
     </div>
     <div class="card-footer d-flex gap-2">
       <button class="btn btn-outline-primary">Modificar</button>
-      <button (click)="deleteBooking(booking.booking_id)" class="btn btn-outline-danger">Eliminar</button>
+      <button (click)="modalDelete(booking.booking_id)" class="btn btn-outline-danger">Eliminar</button>
     </div>
   </div>
 </div>
@@ -45,4 +45,25 @@
     </div>
   </div>
 </div>
+
+<div class="container mt-3">
+  <div class="modal fade" id=modalDelete>
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Eliminar Reserva</h5>
+          <button class="btn btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body" id="modal-body">
+          ¿Está Seguro que Desea Eliminar la <strong>Reserva #<span id="modalDeleteValue"></span></strong> ?
+        </div>
+        <div class="modal-footer">
+          <button data-bs-dismiss="modal" class="btn btn-primary">Cancelar</button>
+          <button (click)="deleteBooking()" data-bs-dismiss="modal" class="btn btn-danger">Eliminar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 

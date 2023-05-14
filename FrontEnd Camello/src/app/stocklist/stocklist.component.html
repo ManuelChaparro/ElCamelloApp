@@ -1,5 +1,5 @@
 <div class="container" style="margin-top: 1rem;">
-  <div class="d-flex flex-column gap-3">
+  <div class="d-flex flex-column gap-3" style="max-height: 500px; overflow: auto;">
     <div *ngFor="let stock of stockList" class="card" style="flex-basis: 100%;">
       <div class="card-header">
         <h5>Inventario de la sede: {{stock.name}}</h5>

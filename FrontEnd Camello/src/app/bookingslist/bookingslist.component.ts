@@ -23,17 +23,23 @@ export class BookingslistComponent {
   public booking_list: Array<Booking>;
   public bookingsPerCampus: Array<Booking>;
   public view: number;
+  private bookingIdToDelete: number;
+  private campusIdSelected: number;
 
   constructor(private http: HttpClient, private routesList: RoutesListService){
     this.booking_list = [];
     this.campus_list = [];
     this.bookingsPerCampus = [];
     this.view = 0;
+    this.bookingIdToDelete = -1;
+    this.campusIdSelected = -1;
     this.getCampusList();
     this.getBookingList();
   }
 
   public loadBookings(campusId: number): void{
+    this.bookingsPerCampus = [];
+    this.campusIdSelected = campusId;
     const url = this.routesList.getSpacesPerCampusList();
     const headers = new HttpHeaders({
       Authorization: 'Bearer ' + localStorage.getItem('token'),
@@ -58,18 +64,33 @@ export class BookingslistComponent {
     });
   }
 
-  public deleteBooking(bookingId: number): void{
+  public deleteBooking(): void{
     const url = this.routesList.getDeleteBooking();
     const headers = new HttpHeaders({
       Authorization: 'Bearer ' + localStorage.getItem('token'),
     });
     const data = {
-      booking_id: bookingId
+      booking_id: this.bookingIdToDelete
     }
     this.http.post(url, data, { headers }).subscribe((response) => {
-      console.log(response);
+      if('message' in response){
+        if(response.message === '0'){
+          this.bookingsPerCampus = this.bookingsPerCampus.filter((booking) => booking.booking_id != this.bookingIdToDelete);
+          this.booking_list = this.booking_list.filter((booking) => booking.booking_id != this.bookingIdToDelete);
+          this.bookingIdToDelete = -1;
+        }
+      }
 
     });
+  }
+
+  public modalDelete(bookingId: number): void{
+    const modal = document.querySelector('#modalDelete') as HTMLElement;
+    const spanDelete = document.querySelector('#modalDeleteValue') as HTMLElement;
+    spanDelete.innerHTML = bookingId.toString();
+    this.bookingIdToDelete = bookingId;
+    const bootstrapModal = new bootstrap.Modal(modal);
+    bootstrapModal.show();
   }
 
   public changeView(view: number): void{

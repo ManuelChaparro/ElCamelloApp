@@ -145,6 +145,7 @@ export class NewbookingComponent {
     const selectedOption = document.querySelector(`[value="${selectedOptionId}"]`);
     if (selectedOption) {
       const optionId = selectedOption.getAttribute('id') as string;
+
       this.initSpaceList(optionId);
     }
   }
@@ -160,6 +161,7 @@ export class NewbookingComponent {
       }
       this.http.post(url, data, { headers }).subscribe((data) => {
         this.spacesList = data as Array<any>;
+        this.bookingData.space_id = this.spacesList[0].id_espacio;
         req(true);
       });
     });
