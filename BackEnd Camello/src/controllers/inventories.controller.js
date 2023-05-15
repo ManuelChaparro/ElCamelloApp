@@ -122,30 +122,32 @@ const createInventary = async(req, res) =>{
     jwt.verify(req.token, 'secretkey', async(error)=>{
         const {headquarter_id, description_inventary, id_user, rol} = req.body
         if(!error){
-            await connection.query(`Select * from inventarios where id_sede = ${connection.escape(headquarter_id)}`, async(error, result, fields) =>{
-                if(!error){
-                    if(result.length === 0){
-                        await connection.query(`Insert into inventarios (id_sede, descripcion) values (${connection.escape(headquarter_id)}, ${connection.escape(description_inventary)})`, async(error, result, fields) =>{
-                            if(!error){
-                                let idInventary = result.insertId
-                                await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripcion) values (${id_user}, NOW(), "Agregacion", "Se agrego el inventario numero ${connection.escape(idInventary)} a la sede ${connection.escape(headquarter_id)}")`, async(error, info, fields) =>{
-                                    if(!error){
-                                        res.json({message: "0"})
-                                    }else{
-                                        res.json({message: error})
-                                    }
-                                })
-                            }else{
-                                res.json({message: error})
-                            }
-                        })
+            if(rol === "A" || rol === "a"){
+                await connection.query(`Select * from inventarios where id_sede = ${connection.escape(headquarter_id)}`, async(error, result, fields) =>{
+                    if(!error){
+                        if(result.length === 0){
+                            await connection.query(`Insert into inventarios (id_sede, descripcion) values (${connection.escape(headquarter_id)}, ${connection.escape(description_inventary)})`, async(error, result, fields) =>{
+                                if(!error){
+                                    let idInventary = result.insertId
+                                    await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripcion) values (${connection.escape(id_user)}, NOW(), "Agregacion", "Se agrego el inventario numero ${connection.escape(idInventary)} a la sede ${connection.escape(headquarter_id)}")`, async(error, info, fields) =>{
+                                        if(!error){
+                                            res.json({message: "0"})
+                                        }else{
+                                            res.json({message: error})
+                                        }
+                                    })
+                                }else{
+                                    res.json({message: error})
+                                }
+                            })
+                        }else{
+                            res.json({message: error})
+                        }
                     }else{
                         res.json({message: error})
                     }
-                }else{
-                    res.json({message: error})
-                }
-            })
+                })
+            }
         }else{
             res.json({message: error})
         }

@@ -2,6 +2,7 @@
 
 const jwt = require('jsonwebtoken');
 const connection = require('../../config/connections.js');
+const moment = require('moment')
 
 const makeBooking = async(req, res) =>{
     jwt.verify(req.token, 'secretkey', async(error)=>{
@@ -11,10 +12,43 @@ const makeBooking = async(req, res) =>{
                 if(!error){
                     if(result.length === 0){
                         await connection.query(`Insert into reservas (id_espacio, id_usuario, fecha, hora_entrada, hora_salida, notas) values (${connection.escape(space_id)}, ${connection.escape(client_id)}, ${connection.escape(date_booking)}, ${connection.escape(hour_start)}, ${connection.escape(hour_end)}, ${connection.escape(note)})`,async(error, result, fields) =>{
-                            if(!error){
-                                res.json({message: "0"})
+                            if(!error && result.affectedRows > 0){
+                                let bookingId = result.insertId
+                                await connection.query(`SELECT tarifa FROM espacios WHERE id_espacio = ${connection.escape(space_id)}`, async(error, result, fields) =>{
+                                    if(!error && result.length === 1){
+                                        let fee = result[0].tarifa
+                                        await connection.query(`INSERT INTO facturas (id_reserva, valor_pago, fecha_creacion, estado) VALUES (${connection.escape(bookingId)}, ${connection.escape(calculateTotalFee(fee, hour_start, hour_end))}, NOW(), "PENDIENTE")`, async(error, result, fields) => {
+                                            if(!error && result.affectedRows > 0){
+                                                await connection.query(`SELECT id_sede FROM espacios WHERE id_espacio = ${connection.escape(space_id)}`, async(error, result, fields) =>{
+                                                    let headquarterId = result[0].id_sede
+                                                    if(!error){
+                                                        await connection.query(`SELECT * FROM sedes_usuarios WHERE id_usuario = ${connection.escape(client_id)} and id_sede = ${connection.escape(headquarterId)}`, async(error, result, fields) =>{
+                                                            if(!error && result.length === 0){
+                                                                await connection.query(`INSERT INTO sedes_usuarios (id_sede, id_usuario) VALUES (${connection.escape(headquarterId)}, ${connection.escape(client_id)})`, async(error, result, fields) =>{
+                                                                    if(!error && result.affectedRows > 0){
+                                                                        res.json({message: "0"})
+                                                                    }else{
+                                                                        res.json({message: error})
+                                                                    }
+                                                                })
+                                                            }else{
+                                                                res.json({message: "7"})
+                                                            }
+                                                        })
+                                                    }else{
+                                                        res.json({message: "4"})
+                                                    }
+                                                })
+                                            }else{
+                                                res.json({message: error})
+                                            }
+                                        })
+                                    }else{
+                                        res.json({message: error})
+                                    }
+                                })
                             }else{
-                                res.json({message: "4"})
+                                res.json({message: error})
                             }
                         })
                     }else{
@@ -25,9 +59,19 @@ const makeBooking = async(req, res) =>{
                 }
             })
         }else{
-            res.json({message: "1"})
+            res.json({message: error})
         }
     })
+}
+
+const calculateTotalFee = (fee, hour_start, hour_end) =>{
+    const hourStartFormat = moment(hour_start, 'HH:mm');
+    const hourEndFormat = moment(hour_end, 'HH:mm');
+
+    const rentalDuration = moment.duration(hourEndFormat.diff(hourStartFormat));
+    const hours = rentalDuration.asHours();
+
+    return fee * hours;
 }
 
 const deleteBooking = async(req, res) =>{

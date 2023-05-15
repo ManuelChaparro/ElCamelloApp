@@ -203,14 +203,14 @@ const createHeadquarter = async(req, res) =>{
                                                     if(!error){
                                                         res.json({message: idHeadquearter})
                                                     }else{
-                                                        res.json({message: error})
+                                                        res.json({message: "1"})
                                                     }
                                                 })
                                             }else{
                                                 res.json({message: "2"})
                                             }
                                         }else{
-                                            res.json({message: error})
+                                            res.json({message: "3"})
                                         }
                                     })
                                 }else{
