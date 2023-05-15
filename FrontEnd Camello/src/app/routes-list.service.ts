@@ -47,9 +47,14 @@ export class RoutesListService {
   private scheduleCampus = 'http://localhost:3005/api/headquarters/searchSchedules';
 
   //Reservas
+  private modifyBooking = 'http://localhost:3005/api/booking/modify';
   private deleteBooking = 'http://localhost:3005/api/booking/delete';
   private createBooking = 'http://localhost:3005/api/booking/make';
   private bookingList = 'http://localhost:3005/api/booking/list';
+
+  getModifyBooking(): string{
+    return this.modifyBooking;
+  }
 
   getDeleteBooking(): string{
     return this.deleteBooking;

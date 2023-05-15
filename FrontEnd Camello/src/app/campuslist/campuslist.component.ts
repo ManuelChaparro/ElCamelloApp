@@ -84,7 +84,11 @@ export class CampuslistComponent {
           id_user: infoUser[0].id_usuario
         };
 
-        this.http.put(url, data, {headers}).subscribe(response => {});
+        this.http.put(url, data, {headers}).subscribe(response => {
+          if('message' in response && response.message === "0"){
+            
+          }
+        });
       }
     }
   }

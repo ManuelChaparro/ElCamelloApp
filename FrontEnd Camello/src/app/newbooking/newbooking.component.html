@@ -33,11 +33,11 @@
           <div class="d-flex gap-2 w-100 justify-content-between">
             <div style="flex-basis: 45%;" class="d-flex flex-column">
               <label class="h6" for="open">Entrada</label>
-              <input [(ngModel)]="bookingData.hour_start" [min]="actualHour" class="form-control" #secondOpen type="time" id="open" name="secondOpen" required>
+              <input [(ngModel)]="bookingData.hour_start" [min]="actualHour" class="form-control" #secondOpen type="time" id="open" name="secondOpen" (change)="validateTime($event)" required>
             </div>
             <div style="flex-basis: 45%;" class="d-flex flex-column">
               <label class="h6" for="close">Salida</label>
-              <input [(ngModel)]="bookingData.hour_end" [min]="actualHour" class="form-control" #secondClose type="time" id="close" name="secondClose" required>
+              <input [(ngModel)]="bookingData.hour_end" [min]="actualHour" class="form-control" #secondClose type="time" id="close" name="secondClose" (change)="validateTime($event)" required>
             </div>
           </div>
         </div>

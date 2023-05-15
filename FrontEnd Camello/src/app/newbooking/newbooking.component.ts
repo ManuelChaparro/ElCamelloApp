@@ -46,6 +46,17 @@ export class NewbookingComponent {
     this.initCampusList().then(res => this.initSpaceList(res).then(res => this.setSpaceAndUserOnInit(res)));
   }
 
+  validateTime(event: Event) {
+    const timeInput = event.target as HTMLInputElement;
+    const selectedTime = timeInput.value.split(':');
+    const minutes = parseInt(selectedTime[1]);
+    if (minutes % 15 !== 0) {
+      const validMinutes = Math.round(minutes / 15) * 15;
+      selectedTime[1] = validMinutes.toString().padStart(2, '0');
+      timeInput.value = selectedTime.join(':');
+    }
+  }
+
   private showNotification(): void{
     const notification = document.querySelector('#notification') as HTMLElement;
     notification.classList.add('show');

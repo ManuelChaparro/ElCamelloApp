@@ -7,25 +7,64 @@
   </button>
 </div>
 
-<div *ngIf="view === 1" class="container-fluid d-flex flex-column flex-wrap gap-2 my-2 justify-content-center">
-  <div>
-    <button (click)="changeView(0)" class="btn btn-dark d-flex gap-2 justify-content-center align-items-center">
-      <i class="fas fa-arrow-left"></i><h6 style="margin: 0;">Volver a Seleccionar Sede</h6>
-    </button>
-
+<div *ngIf="view === 1" class="d-flex flex-column px-2 position-absolute" style="width: 80%; height: 80%; overflow-y: auto;">
+  <button (click)="changeView(0)" class="btn btn-dark d-flex gap-2 justify-content-center align-items-center w-25" style="flex-basis: 10%;">
+    <i class="fas fa-arrow-left"></i><h6 style="margin: 0;">Volver a Seleccionar Sede</h6>
+  </button>
+  <div class="d-flex flex-wrap justify-content-between gap-2 py-2"le="flex-basis: 90%; overflow-y: auto;">
+    <div *ngFor="let booking of bookingsPerCampus" class="card" style="flex-basis: 49%;">
+      <div class="card-header d-flex align-items-center gap-2">
+        <h5>#<strong>{{booking.booking_id}}</strong></h5>
+        <h6>{{booking.date_booking}}</h6>
+      </div>
+      <div class="card-body">
+        Cliente: {{booking.client_id}}
+        Espacio: {{booking.space_id}}
+      </div>
+      <div class="card-footer d-flex gap-2">
+        <button (click)="btnBkngModify(booking)" class="btn btn-outline-primary">Modificar Reserva</button>
+        <button (click)="modalDelete(booking.booking_id)" class="btn btn-outline-danger">Eliminar</button>
+      </div>
+    </div>
   </div>
-  <div *ngFor="let booking of bookingsPerCampus" class="card" style="flex-basis: 45%;">
-    <div class="card-header d-flex align-items-center gap-2">
-      <h5>#<strong>{{booking.booking_id}}</strong></h5>
-      <h6>{{booking.date_booking}}</h6>
+</div>
+
+<div *ngIf="view === 2" class="container-fluid d-flex flex-column flex-wrap gap-2 my-2 justify-content-center w-100 h-100">
+  <div class="card">
+    <div class="card-header">
+      <h4>Modificar Reserva <strong>#{{bookingToModify.booking_id}}</strong></h4>
     </div>
-    <div class="card-body">
-      Cliente: {{booking.client_id}}
-      Espacio: {{booking.space_id}}
+    <div class="card-body w-100 d-flex flex-column gap-3">
+      <div class="d-flex gap-2 w-100 justify-content-between">
+        <div style="flex-basis: 45%;" class="d-flex flex-column">
+          <label class="h6" for="space">Espacio</label>
+          <select (change)="setSpace($event)" class="form-control" name="" id="selectSpace">
+            <option [id]="space.id_espacio" [value]="space.nombre" *ngFor="let space of spacesList">{{space.nombre}}</option>
+          </select>
+        </div>
+        <div style="flex-basis: 45%;" class="d-flex flex-column">
+          <label class="h6" for="open">Entrada</label>
+          <input [(ngModel)]="bookingToModify.hour_start" [min]="actualHour" class="form-control" #secondOpen type="time" id="open" name="secondOpen" (change)="validateTime($event)" required>
+        </div>
+      </div>
+      <div class="d-flex gap-2 w-100 justify-content-between">
+        <div style="flex-basis: 45%;" class="d-flex flex-column">
+          <label class="h6" for="day">Día</label>
+          <input [(ngModel)]="bookingToModify.date_booking" [min]="actualDate" class="form-control" id="day" type="date">
+        </div>
+        <div style="flex-basis: 45%;" class="d-flex flex-column">
+          <label class="h6" for="close">Salida</label>
+          <input [(ngModel)]="bookingToModify.hour_end" [min]="actualHour" class="form-control" #secondClose type="time" id="close" name="secondClose" (change)="validateTime($event)" required>
+        </div>
+      </div>
+      <div class="d-flex flex-column">
+        <label for="" class="h6">Nota</label>
+        <textarea [(ngModel)]="bookingToModify.note" placeholder="(Opcional) Escriba una nota que desea dejar para la reserva" class="form-control" style="resize: none;" name="" id="" cols="30" rows="3"></textarea>
+      </div>
     </div>
-    <div class="card-footer d-flex gap-2">
-      <button class="btn btn-outline-primary">Modificar</button>
-      <button (click)="modalDelete(booking.booking_id)" class="btn btn-outline-danger">Eliminar</button>
+    <div class="card-footer d-flex gap-2 justify-content-end">
+      <button (click)="changeView(1)" style="flex-basis: 20%;" class="btn btn-danger">Cancelar</button>
+      <button (click)="saveBookingChanges()" style="flex-basis: 20%;" class="btn btn-success">Guardar Cambios</button>
     </div>
   </div>
 </div>

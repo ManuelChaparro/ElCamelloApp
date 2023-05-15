@@ -6,7 +6,7 @@
       <button class="btn btn-dark col d-flex gap-2 justify-content-center align-items-center" (click)="cambiarComponente(0)"><i class="fas fa-eye"></i>Ver Sedes</button>
     </div>
   </div>
-  <div id="data">
+  <div class="d-flex">
     <ng-container *ngComponentOutlet="componentes[indiceComponenteActual].componente"></ng-container>
   </div>
 </div>

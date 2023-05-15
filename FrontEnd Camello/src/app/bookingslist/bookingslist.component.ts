@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { RoutesListService } from '../routes-list.service';
 import * as bootstrap from 'bootstrap';
+import { formatDate } from '@angular/common';
 
 interface Booking{
   booking_id: number,
@@ -25,16 +26,155 @@ export class BookingslistComponent {
   public view: number;
   private bookingIdToDelete: number;
   private campusIdSelected: number;
+  public bookingToModify: Booking;
+  public usersList: Array<any> | undefined;
+  public campusList: Array<any> | undefined;
+  public spacesList: Array<any> | undefined;
+  public actualDate: string;
+  public actualHour: string;
 
   constructor(private http: HttpClient, private routesList: RoutesListService){
+    this.actualDate = this.getMinDate();
+    this.actualHour = this.getMinHour();
     this.booking_list = [];
     this.campus_list = [];
     this.bookingsPerCampus = [];
     this.view = 0;
     this.bookingIdToDelete = -1;
     this.campusIdSelected = -1;
+    this.bookingToModify = {
+      booking_id: -1,
+      space_id: -1,
+      client_id: -1,
+      date_booking: "",
+      hour_start: "",
+      hour_end: "",
+      note: ""
+    };
     this.getCampusList();
     this.getBookingList();
+    this.initUsersList();
+    this.initCampusList().then(res => this.initSpaceList(res).then(res => this.setSpaceAndUserOnInit(res)));
+  }
+
+  public saveBookingChanges(): void{
+    const url = this.routesList.getModifyBooking();
+    const headers = new HttpHeaders({
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+    });
+    const data = {
+      booking_id: this.bookingToModify.booking_id,
+      space_id: this.bookingToModify.space_id,
+      date_booking: this.bookingToModify.date_booking,
+      hour_start: this.bookingToModify.hour_start,
+      hour_end: this.bookingToModify.hour_end,
+      note: this.bookingToModify.note
+    }
+    this.http.put(url, data, { headers }).subscribe((data) => {
+      console.log(data);
+    });
+  }
+
+  private setSpaceAndUserOnInit(res: any): void{
+    if(this.spacesList){
+      this.bookingToModify.space_id = this.spacesList[0].id_espacio;
+    }
+    if(this.usersList){
+      this.bookingToModify.client_id = this.usersList[0].id_usuario;
+    }
+  }
+
+  private async initUsersList(): Promise<any>{
+    const url = this.routesList.getUserList();
+    const headers = new HttpHeaders({
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+    });
+    await this.http.get(url, { headers }).subscribe((data) => {
+      const userResponse = data as Array<any>;
+      this.usersList = userResponse.filter((user) => user.rol != "A");
+    });
+  }
+
+  private initCampusList(): Promise<any>{
+    return new Promise<any>((res, rej) => {
+      const url = this.routesList.getCampusList();
+      const headers = new HttpHeaders({
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
+      });
+      this.http.get(url, { headers }).subscribe((data) => {
+        this.campusList = data as Array<any>;
+        res(this.campusList[0].id_sede);
+      });
+    });
+
+  }
+
+  validateTime(event: Event) {
+    const timeInput = event.target as HTMLInputElement;
+    const selectedTime = timeInput.value.split(':');
+    const minutes = parseInt(selectedTime[1]);
+    if (minutes % 15 !== 0) {
+      const validMinutes = Math.round(minutes / 15) * 15;
+      selectedTime[1] = validMinutes.toString().padStart(2, '0');
+      timeInput.value = selectedTime.join(':');
+    }
+  }
+
+  private getMinDate(): string {
+    const actualDate = new Date();
+    return formatDate(actualDate, 'yyyy-MM-dd', 'en-US');
+  }
+
+  private getMinHour(): string {
+    const actualDate = new Date();
+    return actualDate.toISOString().substring(11, 16);
+  }
+
+  public loadSpaces(event: any): void{
+    const selectedOptionId = event.target.value;
+    const selectedOption = document.querySelector(`[value="${selectedOptionId}"]`);
+    if (selectedOption) {
+      const optionId = selectedOption.getAttribute('id') as string;
+      this.initSpaceList(optionId);
+    }
+  }
+
+  public setSpace(event: any): void{
+    const selectedOptionId = event.target.value;
+    const selectedOption = document.querySelector(`[value="${selectedOptionId}"]`);
+    if (selectedOption) {
+      const optionId = selectedOption.getAttribute('id') as any;
+      this.bookingToModify.space_id = optionId as number;
+    }
+  }
+
+  private async initSpaceList(id_campus: string): Promise<any>{
+    return new Promise<any>((req, res) => {
+      const url = this.routesList.getSpacesPerCampusList();
+      const headers = new HttpHeaders({
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
+      });
+      let data = {
+        headquarter_id: id_campus
+      }
+      this.http.post(url, data, { headers }).subscribe((data) => {
+        this.spacesList = data as Array<any>;
+        this.bookingToModify.space_id = this.spacesList[0].id_espacio;
+        req(true);
+      });
+    });
+  }
+
+  public loadUser(event: any): void{
+    const selectedOptionId = event.target.value as string;
+    this.bookingToModify.client_id = parseInt(selectedOptionId.split(" |")[0]);
+  }
+
+  public btnBkngModify(bookingToModify: Booking): void{
+    this.bookingToModify = bookingToModify;
+    this.view = 2;
+    console.log(this.bookingToModify);
+
   }
 
   public loadBookings(campusId: number): void{
