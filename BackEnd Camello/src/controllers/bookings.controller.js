@@ -28,38 +28,38 @@ const makeBooking = async(req, res) =>{
                                                                     if(!error && result.affectedRows > 0){
                                                                         res.json({message: "0"})
                                                                     }else{
-                                                                        res.json({message: error})
+                                                                        res.json({message: "1"})
                                                                     }
                                                                 })
                                                             }else{
-                                                                res.json({message: "7"})
+                                                                res.json({message: "1"})
                                                             }
                                                         })
                                                     }else{
-                                                        res.json({message: "4"})
+                                                        res.json({message: "1"})
                                                     }
                                                 })
                                             }else{
-                                                res.json({message: error})
+                                                res.json({message: "1"})
                                             }
                                         })
                                     }else{
-                                        res.json({message: error})
+                                        res.json({message: "1"})
                                     }
                                 })
                             }else{
-                                res.json({message: error})
+                                res.json({message: "1"})
                             }
                         })
                     }else{
-                        res.json({message: "3"})
+                        res.json({message: "1"})
                     }
                 }else{
-                    res.json({message: "2"})
+                    res.json({message: "1"})
                 }
             })
         }else{
-            res.json({message: error})
+            res.json({message: "1"})
         }
     })
 }
@@ -84,11 +84,11 @@ const deleteBooking = async(req, res) =>{
                         if(!error && result.affectedRows > 0){
                             res.json({message: "0"})
                         }else{
-                            res.json({message: "2"})
+                            res.json({message: "1"})
                         }
                     })
                 }else{
-                    res.json({message: "2"})
+                    res.json({message: "1"})
                 }
             })
         }else{
@@ -104,11 +104,11 @@ const getBookingList = async(req, res) =>{
                 if(!error){
                     res.json(result)
                 }else{
-                    res.json({message: error})
+                    res.json({message: "1"})
                 }
             })
         }else{
-            res.json({message:error})
+            res.json({message: "1"})
         }
     })
 }
@@ -181,9 +181,42 @@ const modifyBooking = async(req, res) =>{
                 }
             })
         }else{
+            res.json({message: "1"})
+        }
+    })
+}
+
+const getBill = async(req, res) => {
+    jwt.verify(req.token, 'secretkey', async(error) =>{
+        const {booking_id} = req.body
+        if(!error){
+            await connection.query(`SELECT * FROM facturas WHERE id_reserva = ${connection.escape(booking_id)}`, async(error, result, fields) =>{
+                if(!error && result.length === 1){
+                    res.json(result)
+                }else{
+                    res.json({message: error})
+                }
+            })
+        }else{
             res.json({message: error})
         }
     })
 }
 
-module.exports = {makeBooking, deleteBooking, getBookingList, modifyBooking, searchBooking}
+const getBillList = async(req, res) => {
+    jwt.verify(req.token, 'secretkey', async(error) =>{
+        if(!error){
+            await connection.query(`SELECT * FROM facturas`, async(error, result, fields) =>{
+                if(!error){
+                    res.json(result)
+                }else{
+                    res.json({message: error})
+                }
+            })
+        }else{
+            res.json({message: error})
+        }
+    })
+}
+
+module.exports = {makeBooking, deleteBooking, getBookingList, modifyBooking, searchBooking, getBill, getBillList}
