@@ -1,0 +1,12 @@
+:root{
+  --colorPrimary: #DB5B2C;
+}
+
+html, body{
+  font-family: 'Nunito Sans', sans-serif;
+  overflow: hidden;
+}
+
+h1{
+  color: var(--colorPrimary);
+}

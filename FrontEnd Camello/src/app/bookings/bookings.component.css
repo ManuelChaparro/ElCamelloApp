@@ -1,0 +1,28 @@
+#home{
+  margin-bottom: 1rem;
+}
+
+#img-home{
+  background-image: url('../../assets/img-stock/LoginHomeLow.webp');
+  background-repeat: no-repeat;
+  background-size: auto 100%;
+  animation: movimiento 50s infinite;
+}
+
+#img-home img{
+  filter: brightness(100) contrast(100) saturate(100);
+  position: fixed;
+  top: 50%;
+}
+
+@keyframes movimiento{
+  0%{
+    background-position: left;
+  }
+  50%{
+    background-position: right;
+  }
+  100%{
+    background-position: left;
+  }
+}

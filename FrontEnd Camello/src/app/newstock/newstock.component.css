@@ -1,0 +1,30 @@
+.warn{
+  display: none;
+  color: red;
+}
+
+.btn-height{
+  height: max-content;
+}
+
+.btn-table-img{
+  height: 25px;
+}
+
+.btn-table{
+  border: none;
+  background-color: transparent;
+}
+
+#notification{
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+#notification.show {
+  opacity: 1;
+}
