@@ -20,7 +20,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Change to Node.js project directory
-      run: cd "/home/runner/work/ElCamelloApp-Repo/ElCamelloApp-Repo/BackEnd\ Camello"   # Reemplaza "carpeta-del-proyecto-node" con la ruta correcta a tu proyecto de Node.js
+      run: cd '/home/runner/work/ElCamelloApp-Repo/ElCamelloApp-Repo/BackEnd Camello'   # Reemplaza "carpeta-del-proyecto-node" con la ruta correcta a tu proyecto de Node.js
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
