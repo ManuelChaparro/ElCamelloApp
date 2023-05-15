@@ -19,7 +19,7 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - run: cd /home/runner/work/ElCamelloApp-Repo/ElCamelloApp-Repo
+    - run: cd /home/runner/work/ElCamelloApp-Repo
     - run: pwd
     - run: ls
     - uses: actions/checkout@v3
