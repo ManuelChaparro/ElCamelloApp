@@ -241,9 +241,9 @@ const modifyHeadquarter = async(req, res) =>{
                 await connection.query(`Select * from sedes where id_sede = ${connection.escape(headquarter_id)}`, async(err, result, fields) =>{
                     if(!err){
                         if(result.length === 1){
-                            await connection.query(`Update sedes set nombre = ${connection.escape(headquater_new_name)}, descripcion = ${connection.escape(new_description)}`, async(err, results, fields) =>{
+                            await connection.query(`Update sedes set nombre = ${connection.escape(headquater_new_name)}, descripcion = ${connection.escape(new_description)} where id_sede = ${connection.escape(headquarter_id)}`, async(err, results, fields) =>{
                                 if(!err){
-                                    await connection.query(`update ciudades_sedes set direccion = ${connection.escape(new_adress)}`, async(err, results, field) =>{
+                                    await connection.query(`update ciudades_sedes set direccion = ${connection.escape(new_adress)} where id_sede = ${connection.escape(headquarter_id)}`, async(err, results, field) =>{
                                         if(!err){
                                             await connection.query(`Insert into user_logs (id_usuario, fecha, estado, descripcion) values (${id_user}, NOW(), "Modificacion", "Se modifico la sede ${connection.escape(headquater_new_name)} de la tabla de sedes")`, async(error, info, fields) =>{
                                                 if(!error){

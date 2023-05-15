@@ -107,7 +107,23 @@ const modifyBooking = async(req, res) =>{
                                         }
                                     })
                                 }else{
-                                    res.json({message: error})
+                                    await connection.query(`Select * from reservas where id_reserva = ${connection.escape(booking_id)}`, async(error, result, fields) =>{
+                                        if(!error){
+                                            if(result.length === 1){
+                                                await connection.query(`Update reservas set id_espacio = ${connection.escape(space_id)}, fecha = ${connection.escape(date_booking)}, hora_entrada = ${connection.escape(hour_start)}, hora_salida = ${connection.escape(hour_end)}, notas = ${connection.escape(note)} where id_reserva = ${connection.escape(booking_id)}`, async(error, result, fields) =>{
+                                                    if(!error){
+                                                        res.json({message: "0"})
+                                                    }else{
+                                                        res.json({message: "3"})
+                                                    }
+                                                })
+                                            }else{
+                                                res.json({message: "1"})
+                                            }
+                                        }else{
+                                            res.json({message: "2"})
+                                        }
+                                    })
                                 }
                             }else{
                                 res.json({message: "4"})
