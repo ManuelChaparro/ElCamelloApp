@@ -22,7 +22,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let usuario of usuarios">
+        <tr *ngFor="let usuario of usuarios" class="align-items-center">
           <td>{{ usuario.id_usuario }}</td>
           <td>{{ usuario.rol }}</td>
           <td>{{ usuario.nombres }}</td>
@@ -30,8 +30,8 @@
           <td>{{ usuario.email }}</td>
           <td>{{ usuario.tipo_documento }}</td>
           <td>{{ usuario.identificacion }}</td>
-          <td class="td-img"><button (click)="modifyUser(usuario.email)" class="btn-table"><img class="btn-table-img" src="../../assets/img-stock/modifyIcon.svg" alt=""></button></td>
-          <td class="td-img"><button (click)="confirmDelete(usuario.email)" class="btn-table btn-close"></button></td>
+          <td><button (click)="modifyUser(usuario.email)" class="btn"><i class="fas fa-pen"></i></button></td>
+          <td><button (click)="confirmDelete(usuario.email)" class="btn"><i class="fas fa-trash"></i></button></td>
         </tr>
       </tbody>
     </table>

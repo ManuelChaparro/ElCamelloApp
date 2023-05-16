@@ -28,6 +28,7 @@ import { NewscheduleComponent } from './newschedule/newschedule.component';
 import { SchedulelistComponent } from './schedulelist/schedulelist.component';
 import { BookingslistComponent } from './bookingslist/bookingslist.component';
 import { NewbookingComponent } from './newbooking/newbooking.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 const appRoutes:Routes=[
   {path:'login', component:LoginComponent},
@@ -70,7 +71,8 @@ const appRoutes:Routes=[
     AppRoutingModule,
     RouterModule.forRoot(appRoutes),
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    NgxChartsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

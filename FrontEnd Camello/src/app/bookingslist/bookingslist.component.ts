@@ -71,7 +71,16 @@ export class BookingslistComponent {
       note: this.bookingToModify.note
     }
     this.http.put(url, data, { headers }).subscribe((data) => {
-      console.log(data);
+      if('message' in data && data.message === "0"){
+        const modal = document.querySelector('#modifyModal') as HTMLElement;
+        const spanModal = document.querySelector('#modifySuccessModal') as HTMLSpanElement;
+        spanModal.innerHTML = this.bookingToModify.booking_id.toString();
+        const bootstrapModal = new bootstrap.Modal(modal);
+        bootstrapModal.show();
+        this.view = 1;
+      }else{
+        alert("Error al modificar reserva");
+      }
     });
   }
 
@@ -135,7 +144,7 @@ export class BookingslistComponent {
     const selectedOption = document.querySelector(`[value="${selectedOptionId}"]`);
     if (selectedOption) {
       const optionId = selectedOption.getAttribute('id') as string;
-      this.initSpaceList(optionId);
+      this.initSpaceList(parseInt(optionId));
     }
   }
 
@@ -148,7 +157,7 @@ export class BookingslistComponent {
     }
   }
 
-  private async initSpaceList(id_campus: string): Promise<any>{
+  private async initSpaceList(id_campus: number): Promise<any>{
     return new Promise<any>((req, res) => {
       const url = this.routesList.getSpacesPerCampusList();
       const headers = new HttpHeaders({
@@ -195,6 +204,7 @@ export class BookingslistComponent {
       });
       this.bookingsPerCampus = this.booking_list.filter((booking) => spacesId.includes(booking.space_id));
       if(this.bookingsPerCampus.length != 0){
+        this.initSpaceList(campusId);
         this.view = 1;
       }else{
         const modal = document.querySelector('#infoModal') as HTMLElement;
@@ -217,6 +227,13 @@ export class BookingslistComponent {
         if(response.message === '0'){
           this.bookingsPerCampus = this.bookingsPerCampus.filter((booking) => booking.booking_id != this.bookingIdToDelete);
           this.booking_list = this.booking_list.filter((booking) => booking.booking_id != this.bookingIdToDelete);
+          const notification = document.querySelector('#deleteBkngNtf') as HTMLElement;
+          const notification_name = document.querySelector('#deleteBookingSpan') as HTMLSpanElement;
+          notification_name.innerText = this.bookingIdToDelete.toString();
+          notification.classList.add('show');
+          setTimeout(() => {
+            notification.classList.remove('show');
+          }, 5000);
           this.bookingIdToDelete = -1;
         }
       }

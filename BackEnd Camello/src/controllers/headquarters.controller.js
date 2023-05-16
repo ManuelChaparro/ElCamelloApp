@@ -372,7 +372,6 @@ const getQuantitySpaces = async(req, res) =>{
 }
 
 const getDepartments = async(req, res) =>{
-    console.log(1);
     jwt.verify(req.token, 'secretkey', async(error) =>{
         if(!error){
             await connection.query(`Select * from departamentos`, async(error, result, fields) =>{

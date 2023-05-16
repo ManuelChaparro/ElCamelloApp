@@ -200,7 +200,6 @@ const getInventaryList = async(req, res) =>{
             if(!error){
                 await connection.query(`Select i.id_inventario, s.nombre as nombre_sede, i.descripcion from inventarios i, sedes s where s.id_sede = i.id_sede`, async(error, result, fields) =>{
                     if(!error){
-                        console.log(result);
                         res.json(result)
                     }else{
                         res.json({message: "1"})

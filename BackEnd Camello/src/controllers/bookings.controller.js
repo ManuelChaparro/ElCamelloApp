@@ -133,7 +133,6 @@ const searchBooking = async(req, res) =>{
 const modifyBooking = async(req, res) =>{
     jwt.verify(req.token, 'secretkey', async(error) =>{
         const {booking_id, space_id, date_booking, hour_start, hour_end, note} = req.body
-        console.log(req.body);
         if(!error){
             await connection.query(`select id_reserva from reservas where id_reserva = ${connection.escape(booking_id)} `, async(error, result, fields) =>{
                 if(!error){
