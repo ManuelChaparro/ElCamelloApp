@@ -53,7 +53,22 @@ export class RoutesListService {
   private bookingList = 'http://localhost:3005/api/booking/list';
 
   //Reportes
+  private clientQuantityPerHeadquarter = 'http://localhost:3005/api/reports/1';
   private moneyPerHeadquarter = 'http://localhost:3005/api/reports/2';
+  private bookingPerMonth = 'http://localhost:3005/api/reports/3';
+  private spacesPerHeadquarter = 'http://localhost:3005/api/reports/4';
+
+  getBookingPerMonth(): string{
+    return this.bookingPerMonth;
+  }
+
+  getClientQuantityPerHeadquarter(): string{
+    return this.clientQuantityPerHeadquarter;
+  }
+
+  getSpacesPerHeadquarter(): string{
+    return this.spacesPerHeadquarter;
+  }
 
   getMoneyPerHeadquarter(): string{
     return this.moneyPerHeadquarter;

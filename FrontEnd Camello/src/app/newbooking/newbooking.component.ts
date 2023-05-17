@@ -105,6 +105,7 @@ export class NewbookingComponent {
               alert("Error al crear la reserva")
             }else if(data.message === "0"){
               this.showNotification();
+              this.clearInputs();
             }
           }
         });
@@ -114,6 +115,13 @@ export class NewbookingComponent {
     }else{
       alert("Faltan datos")
     }
+  }
+
+  private clearInputs(): void{
+    this.bookingData.date_booking = "";
+    this.bookingData.hour_start = "";
+    this.bookingData.hour_end = "";
+    this.bookingData.note = "";
   }
 
   private validateMinTime(): boolean{

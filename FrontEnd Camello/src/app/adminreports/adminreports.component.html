@@ -15,12 +15,12 @@
       <div class="d-flex flex-column">
         <h4>Sedes</h4>
         <div class="d-flex flex-wrap gap-2">
-          <button class="card btn btn-outline-dark">
+          <button (click)="spacesPerCampus()" class="card btn btn-outline-dark">
             <div class="card-body">
               <h4 class="m-0"><i class="fas fa-person-shelter"></i> Espacios por Sede</h4>
             </div>
           </button>
-          <button class="card btn btn-outline-dark">
+          <button (click)="getClientQuantityPerHeadquarter()" class="card btn btn-outline-dark">
             <div class="card-body">
               <h4 class="m-0"><i class="fas fa-users"></i> Clientes por Sede</h4>
             </div>
@@ -30,7 +30,7 @@
       <div class="d-flex flex-column">
         <h4>Reservas</h4>
         <div class="d-flex flex-wrap gap-2">
-          <button class="card btn btn-outline-dark">
+          <button (click)="getBookingPerMonth()"  class="card btn btn-outline-dark">
             <div class="card-body">
               <h4 class="m-0"><i class="fas fa-bookmark"></i> Reservas por Mes</h4>
             </div>
@@ -45,7 +45,7 @@
   <button (click)="setFrame(0)" class="btn btn-dark"><i class="fas fa-arrow-left"></i> Volver a Reportes</button>
   <h1>{{titleGraphic}}</h1>
   <div class="card d-flex justify-content-center align-items-center border rounded w-100" style="height: 60vh;">
-    <ngx-charts-advanced-pie-chart class="card-body h-50 m-0 p-0"
+    <ngx-charts-advanced-pie-chart class="card-body m-0 p-0"
     [view]="view"
     scheme="fire"
     [results]="data"
@@ -55,6 +55,27 @@
     (deactivate)="onDeactivate($event)"
     >
     </ngx-charts-advanced-pie-chart>
+  </div>
+</div>
+
+<div *ngIf="frame === 2" class="gap-3 p-2 d-flex flex-column justify-content-center align-items-start h-100 w-100" >
+  <button (click)="setFrame(0)" class="btn btn-dark"><i class="fas fa-arrow-left"></i> Volver a Reportes</button>
+  <h1>{{titleGraphic}}</h1>
+  <div class="card d-flex justify-content-center align-items-center border rounded w-100" style="height: 60vh;">
+    <ngx-charts-bar-vertical
+    [view]="view"
+    scheme="cool"
+    [results]="data"
+    [gradient]="gradient"
+    [xAxis]="showXAxis"
+    [yAxis]="showYAxis"
+    [legend]="showLegend"
+    [showXAxisLabel]="showXAxisLabel"
+    [showYAxisLabel]="showYAxisLabel"
+    [xAxisLabel]="xAxisLabel"
+    [yAxisLabel]="yAxisLabel"
+    (select)="onSelect($event)">
+  </ngx-charts-bar-vertical>
   </div>
 </div>
 

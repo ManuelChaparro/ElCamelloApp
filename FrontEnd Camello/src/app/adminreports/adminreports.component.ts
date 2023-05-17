@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
-import { GraphicsDataServiceService } from '../graphics-data-service.service';
 import { RoutesListService } from '../routes-list.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
@@ -11,51 +10,76 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
   templateUrl: './adminreports.component.html',
   styleUrls: ['./adminreports.component.css']
 })
-export class AdminreportsComponent {
+export class AdminreportsComponent{
 
   frame: number;
   data: any[];
-  view: [number, number] = [700, 400];
-  gradient: boolean = true;
-  showLegend: boolean = true;
+
+  //Grafico de Pastel
+  view: [number, number] = [1000, 300];
   showLabels: boolean = true;
   isDoughnut: boolean = false;
   titleGraphic: string;
+
+  //Grafico de barras
+  showXAxis = true;
+  showYAxis = true;
+  showXAxisLabel = true;
+  xAxisLabel = '';
+  showYAxisLabel = true;
+  yAxisLabel = '';
+
+  //Compartidas
+  gradient = false;
+  showLegend = true;
+
 
   constructor(private routesList: RoutesListService,
     private http: HttpClient) {
     this.titleGraphic = "";
     this.frame = 0;
-    this.data = [
-      {
-        "name": "Germany",
-        "value": 8940000
-      },
-      {
-        "name": "USA",
-        "value": 5000000
-      }
-    ];
-    console.log(this.data);
-
+    this.data = [];
     Object.assign(this.data);
   }
 
-  onSelect(data: any): void {
-    console.log('Item clicked', JSON.parse(JSON.stringify(data)));
-  }
+  onSelect(data: any): void {}
 
-  onActivate(data: any): void {
-    console.log('Activate', JSON.parse(JSON.stringify(data)));
-  }
+  onActivate(data: any): void {}
 
-  onDeactivate(data: any): void {
-    console.log('Deactivate', JSON.parse(JSON.stringify(data)));
+  onDeactivate(data: any): void {}
+
+  public getBookingPerMonth(): void{
+    this.getFetch(this.routesList.getBookingPerMonth())
+    .then(res => this.data = res)
+    .catch(rej => console.log(rej)
+    );
+    this.titleGraphic = "Ganancias por Sede";
+    this.xAxisLabel = "Meses"
+    this.yAxisLabel = "Reservas"
+    this.frame = 2;
   }
 
   public moneyPerCampus(): void{
     this.getFetch(this.routesList.getMoneyPerHeadquarter())
-    .then()
+    .then(res => this.data = res)
+    .catch(rej => console.log(rej)
+    );
+    this.titleGraphic = "Ganancias por Sede";
+    this.frame = 1;
+  }
+
+  public spacesPerCampus(): void{
+    this.getFetch(this.routesList.getSpacesPerHeadquarter())
+    .then(res => this.data = res)
+    .catch(rej => console.log(rej)
+    );
+    this.titleGraphic = "Ganancias por Sede";
+    this.frame = 1;
+  }
+
+  public getClientQuantityPerHeadquarter(): void{
+    this.getFetch(this.routesList.getClientQuantityPerHeadquarter())
+    .then(res => this.data = res)
     .catch(rej => console.log(rej)
     );
     this.titleGraphic = "Ganancias por Sede";
@@ -71,8 +95,6 @@ export class AdminreportsComponent {
         if('message' in response){
           rej("Ocurrio un error al cargar los datos...");
         }else{
-          console.log(response as Array<any>);
-
           res(response as Array<any>);
         }
       });
