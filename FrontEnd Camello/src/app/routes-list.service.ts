@@ -52,6 +52,13 @@ export class RoutesListService {
   private createBooking = 'http://localhost:3005/api/booking/make';
   private bookingList = 'http://localhost:3005/api/booking/list';
 
+  //Reportes
+  private moneyPerHeadquarter = 'http://localhost:3005/api/reports/2';
+
+  getMoneyPerHeadquarter(): string{
+    return this.moneyPerHeadquarter;
+  }
+
   getModifyBooking(): string{
     return this.modifyBooking;
   }
