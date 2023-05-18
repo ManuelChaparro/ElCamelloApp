@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { formatDate } from '@angular/common';
 import { HttpClient, HttpHeaders} from '@angular/common/http';
 import jwt_decode from 'jwt-decode';
-import * as bootstrap from 'bootstrap';
 import { RoutesListService } from '../routes-list.service';
 
 interface Booking{
