@@ -106,7 +106,7 @@ export class CreateUserComponent {
       apellidos: this.surname,
       fecha_nacimiento: this.birthdate,
       email: this.email,
-      genero: this.gender,
+      genero: this.gender.charAt(0),
       tipo_documento: this.document_type,
       identificacion: this.document,
       telefono: this.number,
@@ -135,7 +135,8 @@ export class CreateUserComponent {
         }else if(response.message == '1'){
           alert("El email ya se encuentra registrado");
         }else{
-          alert("Error");
+          console.log(response);
+
         }
       }
     });

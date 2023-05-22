@@ -19,4 +19,12 @@ dbconector.connect((err) =>{
     console.log('Se ha conectado exitosamente la base de datos con el servidor, id:' + dbconector.threadId);
 });
 
+dbconector.query('SELECT * FROM espacios', (err, results) => {
+    if (err) {
+      console.error('Error al realizar la consulta: ' + err.stack);
+      return;
+    }
+    console.log('Resultados de la consulta:', results);
+  });
+
 module.exports = dbconector;

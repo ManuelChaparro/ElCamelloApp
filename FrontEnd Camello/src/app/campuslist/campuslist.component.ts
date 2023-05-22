@@ -85,8 +85,12 @@ export class CampuslistComponent {
         };
 
         this.http.put(url, data, {headers}).subscribe(response => {
+          console.log(response);
           if('message' in response && response.message === "0"){
-            
+            const modal = document.querySelector('#modifyCampus') as HTMLElement;
+            const bootstrapModal = new bootstrap.Modal(modal);
+            bootstrapModal.show();
+            this.listCampusPanel = true;
           }
         });
       }

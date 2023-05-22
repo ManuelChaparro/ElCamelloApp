@@ -32,7 +32,7 @@
         <div class="input-containers d-flex flex-column gap-2" style="flex-basis: 50%;">
           <div class="flex-grow-1 d-flex flex-column">
             <label for="">Descripción <span style="display: none; color: red;" id="warn-description">*</span></label>
-            <textarea id="campusDescription" class="form-control flex-grow-1" style="resize: none" [(ngModel)]="description" type="text" name="name" placeholder="Ingrese la Descripción del campus" name="" id="" cols="30" rows="3"></textarea>
+            <textarea maxlength="250" id="campusDescription" class="form-control flex-grow-1" style="resize: none" [(ngModel)]="description" type="text" name="name" placeholder="Ingrese la Descripción del campus" name="" id="" cols="30" rows="3"></textarea>
           </div>
         </div>
 
@@ -51,7 +51,7 @@
           </div>
           <div>
             <label for="">Descripción <span style="display: none; color: red;" id="warn-space-desc">*</span></label>
-            <textarea class="form-control" id="description-space" style="resize: none" [(ngModel)]="spaceDescription" type="text" name="name" placeholder="Ingrese la Descripción del Espacio" name="" cols="30" rows="4"></textarea>
+            <textarea maxlength="250" class="form-control" id="description-space" style="resize: none" [(ngModel)]="spaceDescription" type="text" name="name" placeholder="Ingrese la Descripción del Espacio" name="" cols="30" rows="4"></textarea>
           </div>
         </div>
         <div style="flex-basis: 10%;" class="d-flex w-100">

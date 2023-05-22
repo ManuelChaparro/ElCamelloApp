@@ -71,7 +71,6 @@ const modifyUser = async(req, res) =>{
 const loginUser = async (req, res) => {
     const {email, password} = req.body;
     let email_binary = crypto.createHash('sha256').update(email).digest('hex')
-    console.log(email_binary)
     await connection.query(`Select password from passwords where indicador = ${connection.escape(email_binary)}`, async (error, result, fields) =>{
         if(result.length === 1){
             if(result[0].password === crypto.createHash('sha256').update(password).digest('hex')){
@@ -197,9 +196,9 @@ const changePassword = async(req, res) =>{
                                 if(validation.length === 1){
                                     await connection.query(`update passwords set password = ${connection.escape(newPassword)} where indicador = ${connection.escape(email_binary)}`, async (error, result, fields) =>{
                                         if(!error){
-                                            res.json({message: "1"})
-                                        }else{
                                             res.json({message: "0"})
+                                        }else{
+                                            res.json({message: "1"})
                                         }
                                     })
                                 }else{

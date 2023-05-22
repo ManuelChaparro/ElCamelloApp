@@ -54,7 +54,7 @@ export class AdminusersComponent {
       email: this.email,
       nombres: this.name,
       apellidos: this.surname,
-      genero: this.gender,
+      genero: this.gender.charAt(0),
       telefono: this.number
     };
     this.http.put(url, data, { headers }).subscribe((data) => {
@@ -155,11 +155,11 @@ export class AdminusersComponent {
       apellidos: this.surname,
       fecha_nacimiento: this.birthdate,
       email: this.email,
-      genero: this.gender,
+      genero: this.gender.charAt(0),
       tipo_documento: this.document_type,
       identificacion: this.document,
       telefono: this.number,
-      rol: this.rol,
+      rol: this.rol.charAt(0),
       password: this.password
     };
 
@@ -179,7 +179,7 @@ export class AdminusersComponent {
         }else if(response.message == '1'){
           alert("El email ya se encuentra registrado");
         }else{
-          alert("Error");
+          console.log(response);
         }
       }
     });

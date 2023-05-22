@@ -129,7 +129,9 @@ export class InfouserComponent {
             const modalTwo = document.querySelector('#infoModal') as HTMLElement;
             const bootstrapModalInfo = new bootstrap.Modal(modalTwo);
             bootstrapModalInfo.show();
-          }else if(response.message === '1'){}
+          }else if(response.message === '1'){
+            alert("Error")
+          }
           else{
             alert("No tiene permisos")
           }

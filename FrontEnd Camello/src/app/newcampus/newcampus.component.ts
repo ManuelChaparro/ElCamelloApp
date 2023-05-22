@@ -210,6 +210,8 @@ export class NewcampusComponent {
           Authorization: 'Bearer ' + localStorage.getItem('token'),
         });
         this.http.post(url, data, {headers}).subscribe(response => {
+          console.log(response);
+
           if('message' in response){
             this.createSpaces(response.message as number);
           }

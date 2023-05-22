@@ -160,7 +160,7 @@ const listSpacesPerHeadquarter = async(req, res) =>{
     jwt.verify(req.token, 'secretkey', async(error) => {
         const {headquarter_id} = req.body
         if(!error){
-            await connection.query(`select id_espacio, nombre from espacios where id_sede = ${connection.escape(headquarter_id)}`, async(error, result, fields) =>{
+            await connection.query(`select id_espacio, nombre, tarifa, descripcion from espacios where id_sede = ${connection.escape(headquarter_id)}`, async(error, result, fields) =>{
                 if(!error){
                     res.json(result)
                 }else{

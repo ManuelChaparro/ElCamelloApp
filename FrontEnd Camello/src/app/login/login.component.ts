@@ -35,6 +35,8 @@ export class LoginComponent {
       password: this.password
     };
     this.http.post(url, data).subscribe(response => {
+      console.log("-->" + response);
+
       if('message' in response){
         const div_email = document.querySelector('#warn_email') as HTMLElement;
         const div_pass = document.querySelector('#warn_pass') as HTMLElement;
@@ -54,6 +56,8 @@ export class LoginComponent {
         if('infoUser' in decode_token){
           const data = decode_token.infoUser as Array<object>;
           if('rol' in data[0]){
+            console.log(data[0].rol);
+
             if(data[0].rol == 'A'){
               this.router.navigate(['/adminHome']);
             }else{

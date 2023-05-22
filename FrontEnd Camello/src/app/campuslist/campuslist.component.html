@@ -58,7 +58,7 @@
         </div>
         <div class="d-flex flex-column w-100">
           <label for="descriptionCampusModify">Descripción</label>
-          <textarea class="form-control" id="descriptionCampusModify" style="resize: none; height: 200px;" [(ngModel)]="campusToModify.description" name="" id="" cols="30" rows="4"></textarea>
+          <textarea maxlength="250" class="form-control" id="descriptionCampusModify" style="resize: none; height: 200px;" [(ngModel)]="campusToModify.description" name="" id="" cols="30" rows="4"></textarea>
         </div>
       </div>
       <div class="card-footer d-flex justify-content-end gap-2">
@@ -67,4 +67,20 @@
       </div>
     </div>
   </ng-template>
+</div>
+
+<div class="container mt-3">
+  <div class="modal fade" id=modifyCampus>
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Modificación de Sede Exitosa</h5>
+          <button class="btn btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body" id="modal-body">
+          La Sede fue modificada exitosamente!
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
