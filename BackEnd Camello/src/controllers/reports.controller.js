@@ -22,7 +22,7 @@ const clientQuantityPerHeadquarter = async(req, res) =>{
 const moneyPerHeadquarter = async(req, res) =>{
     jwt.verify(req.token, 'secretkey', async(error) =>{
         if(!error){
-            await connection.query(`SELECT s.nombre AS name, SUM(f.valor_pago) AS value FROM sedes s, facturas f, reservas r, espacios e WHERE r.id_reserva = f.id_reserva AND r.id_espacio = e.id_espacio AND e.id_sede = s.id_sede GROUP BY s.nombre`, async(error, result, fields) =>{
+            await connection.query(`SELECT s.nombre AS name, SUM(f.valor_pago) AS value FROM sedes s, facturas f, reservas r, espacios e WHERE r.id_reserva = f.id_reserva AND r.id_espacio = e.id_espacio AND e.id_sede = s.id_sede AND f.estado = "PAGO" GROUP BY s.nombre`, async(error, result, fields) =>{
                 if(!error){
                     res.json(result)
                 }else{
@@ -55,7 +55,7 @@ const spacesPerHeadquarter = async(req, res) =>{
     jwt.verify(req.token, 'secretkey', async(error) =>{
         if(!error){
             const {headquarter_id} = req.body
-            await connection.query(`SELECT e.nombre AS name, COUNT(r.id_espacio) AS value FROM espacios e, reservas r, sedes s WHERE s.id_sede = e.id_sede AND e.id_espacio = r.id_espacio AND s.id_sede =${connection.escape(headquarter_id)}`, async(error, result, fields) =>{
+            await connection.query(`SELECT e.nombre AS name, (SELECT COUNT(*) FROM reservas r WHERE r.id_espacio = e.id_espacio) AS value FROM espacios e WHERE e.id_sede = ${connection.escape(headquarter_id)}`, async(error, result, fields) =>{
                 if(!error){
                     res.json(result)
                 }else{
@@ -68,4 +68,52 @@ const spacesPerHeadquarter = async(req, res) =>{
     })
 }
 
-module.exports = {clientQuantityPerHeadquarter, moneyPerHeadquarter, bookingPerMonth, spacesPerHeadquarter}
+const avgPerUsersAge = async(req, res) =>{
+    jwt.verify(req.token, 'secretkey', async(error) =>{
+        if(!error){
+            await connection.query(`SELECT TIMESTAMPDIFF(YEAR, fecha_nacimiento, CURDATE()) AS name, COUNT(id_usuario) AS value FROM usuarios GROUP BY name`, async(error, result, fields) =>{
+                if(!error){
+                    res.json(result)
+                }else{
+                    res.json({message: "1"}) 
+                }
+            })
+        }else{
+            res.json({message: "1"})
+        }
+    })
+}
+
+const quantityBillState = async(req, res) =>{
+    jwt.verify(req.token, 'secretkey', async(error)=>{
+        if(!error){
+            await connection.query(`SELECT f.estado, COUNT(f.id_factura) FROM facturas f GROUP BY f.estado`, async(error, result, fields) =>{
+                if(!error){
+                    res.json(result)
+                }else{
+                    res.json({message: "1"})
+                }
+            })
+        }else{
+            res.json({message: "1"})
+        }
+    })
+}
+
+const inventaryValuePerHeadquarter = async(req, res) =>{
+    jwt.verify(req.token, 'secretkey', async(error) =>{
+        if(!error){
+            await connection.query(`SELECT s.nombre AS name, SUM(p.valor_producto) AS value FROM inventarios i, productos p, sedes s WHERE i.id_sede = s.id_sede AND i.id_inventario = p.id_inventario group by i.id_inventario`, async(error, result, fields) =>{
+                if(!error){
+                    res.json(result)
+                }else{
+                    res.json({message: "1"})
+                }
+            })
+        }else{
+            res.json({message: "1"})
+        }
+    })
+}
+
+module.exports = {clientQuantityPerHeadquarter, moneyPerHeadquarter, bookingPerMonth, spacesPerHeadquarter, avgPerUsersAge, quantityBillState, inventaryValuePerHeadquarter}

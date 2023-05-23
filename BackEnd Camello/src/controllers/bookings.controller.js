@@ -209,13 +209,30 @@ const getBillList = async(req, res) => {
                 if(!error){
                     res.json(result)
                 }else{
-                    res.json({message: error})
+                    res.json({message: "0"})
                 }
             })
         }else{
-            res.json({message: error})
+            res.json({message: "0"})
         }
     })
 }
 
-module.exports = {makeBooking, deleteBooking, getBookingList, modifyBooking, searchBooking, getBill, getBillList}
+const getBookingListWithIdClient = async(req, res) =>{
+    jwt.verify(req.token, 'secretkey', async(error) =>{
+        if(!error){
+            const {client_id} = req.body
+            await connection.query(`SELECT * FROM reservas WHERE id_usuario = ${connection.escape(client_id)}`, async(error, result, fields) =>{
+                if(!error){
+                    res.json(result)
+                }else{
+                    res.json({message: "0"})
+                }
+            })
+        }else{
+            res.json({message: "0"})
+        }
+    })
+}
+
+module.exports = {makeBooking, deleteBooking, getBookingList, modifyBooking, searchBooking, getBill, getBillList, getBookingListWithIdClient}

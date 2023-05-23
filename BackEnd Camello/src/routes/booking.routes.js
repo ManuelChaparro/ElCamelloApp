@@ -1,7 +1,7 @@
 'use strict'
 
 const router = require('express').Router()
-const {makeBooking, deleteBooking, getBookingList, modifyBooking, searchBooking, getBill, getBillList} = require('../controllers/bookings.controller')
+const {makeBooking, deleteBooking, getBookingList, modifyBooking, searchBooking, getBill, getBillList, getBookingListWithIdClient} = require('../controllers/bookings.controller')
 const {verifyToken} = require('../controllers/users.controller')
 
 router.post('/booking/make', verifyToken, makeBooking)
@@ -11,5 +11,6 @@ router.put('/booking/modify', verifyToken, modifyBooking)
 router.post('/booking/search', verifyToken, searchBooking)
 router.post('/booking/bill/search', verifyToken, getBill)
 router.get('/booking/bill/list', verifyToken, getBillList)
+router.post('/booking/list/me', verifyToken, getBookingListWithIdClient)
 
 module.exports = router
