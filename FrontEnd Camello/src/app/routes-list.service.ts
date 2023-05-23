@@ -56,6 +56,9 @@ export class RoutesListService {
   private bookingList = this.route+'/api/booking/list';
   private bookingListWithIdClient = this.route+'/api/booking/list/me';
 
+  //Facturas
+  private searchBill = this.route+'/api/booking/bill/search';
+
   //Reportes
   private clientQuantityPerHeadquarter = this.route+'/api/reports/1';
   private moneyPerHeadquarter = this.route+'/api/reports/2';
@@ -64,6 +67,10 @@ export class RoutesListService {
   private avgPerUsersAge = this.route+'/api/reports/5';
   private quantityBillState = this.route+'/api/reports/6';
   private inventaryValuePerHeadquarter = this.route+'/api/reports/7';
+
+  getSearchBill(): string{
+    return this.searchBill;
+  }
 
   getBookingListWithIdClient(): string{
     return this.bookingListWithIdClient;

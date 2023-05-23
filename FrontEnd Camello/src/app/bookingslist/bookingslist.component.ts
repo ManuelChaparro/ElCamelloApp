@@ -182,8 +182,6 @@ export class BookingslistComponent {
   public btnBkngModify(bookingToModify: Booking): void{
     this.bookingToModify = bookingToModify;
     this.view = 2;
-    console.log(this.bookingToModify);
-
   }
 
   public loadBookings(campusId: number): void{
