@@ -193,11 +193,28 @@ const getBill = async(req, res) => {
                 if(!error && result.length === 1){
                     res.json(result)
                 }else{
-                    res.json({message: error})
+                    res.json({message: "1"})
                 }
             })
         }else{
-            res.json({message: error})
+            res.json({message: "1"})
+        }
+    })
+}
+
+const changeBillState = async(req, res) =>{
+    jwt.verify(req.token, 'secretkey', async(error) =>{
+        if(!error){
+            const {bill_id} = req.body
+            await connection.query(`UPDATE facturas SET estado = "PAGO" WHERE id_factura = ${connection.escape(bill_id)}`, async(error, result, fields) =>{
+                if(!error && result.affectedRows > 0){
+                    res.json({message: "0"})
+                }else{
+                    res.json({message: "1"})
+                }
+            })
+        }else{
+            res.json({message: "1"})
         }
     })
 }
@@ -209,11 +226,11 @@ const getBillList = async(req, res) => {
                 if(!error){
                     res.json(result)
                 }else{
-                    res.json({message: "0"})
+                    res.json({message: "1"})
                 }
             })
         }else{
-            res.json({message: "0"})
+            res.json({message: "1"})
         }
     })
 }
@@ -226,13 +243,13 @@ const getBookingListWithIdClient = async(req, res) =>{
                 if(!error){
                     res.json(result)
                 }else{
-                    res.json({message: "0"})
+                    res.json({message: "1"})
                 }
             })
         }else{
-            res.json({message: "0"})
+            res.json({message: "1"})
         }
     })
 }
 
-module.exports = {makeBooking, deleteBooking, getBookingList, modifyBooking, searchBooking, getBill, getBillList, getBookingListWithIdClient}
+module.exports = {makeBooking, deleteBooking, getBookingList, modifyBooking, searchBooking, changeBillState, getBill, getBillList, getBookingListWithIdClient}
