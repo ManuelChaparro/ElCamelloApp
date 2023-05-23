@@ -87,7 +87,7 @@ const avgPerUsersAge = async(req, res) =>{
 const quantityBillState = async(req, res) =>{
     jwt.verify(req.token, 'secretkey', async(error)=>{
         if(!error){
-            await connection.query(`SELECT f.estado, COUNT(f.id_factura) FROM facturas f GROUP BY f.estado`, async(error, result, fields) =>{
+            await connection.query(`SELECT f.estado AS name, COUNT(f.id_factura) AS value FROM facturas f GROUP BY f.estado`, async(error, result, fields) =>{
                 if(!error){
                     res.json(result)
                 }else{
