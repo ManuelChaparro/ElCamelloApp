@@ -51,6 +51,27 @@ export class AdminreportsComponent{
 
   onDeactivate(data: any): void {}
 
+  public inventaryValuePerHeadquarter():void{
+    this.frame = 1;
+    this.getFetch(this.routesList.getInventaryValuePerHeadquarter())
+    .then(res => this.data = res)
+    .catch(rej => console.log(rej)
+    );
+    this.titleGraphic = "Valor de Inventarios";
+    this.getSizeGraphic(1);
+  }
+
+  public quantityBillState():void{
+    this.frame = 1;
+    this.getFetch(this.routesList.getQuantityBillState())
+    .then(res => {this.data = res; console.log(this.data);
+    })
+    .catch(rej => console.log(rej)
+    );
+    this.titleGraphic = "Ganancias por Sede";
+    this.getSizeGraphic(0);
+  }
+
   public getBookingPerMonth(): void{
     this.frame = 1;
     this.getFetch(this.routesList.getBookingPerMonth())
@@ -61,6 +82,18 @@ export class AdminreportsComponent{
     this.titleGraphic = "Reservas por Mes";
     this.xAxisLabel = "Meses"
     this.yAxisLabel = "Reservas"
+  }
+
+  public avgPerUsersAge():void{
+    this.frame = 1;
+    this.getFetch(this.routesList.getAvgPerUsersAge())
+    .then(res => this.data = res)
+    .catch(rej => console.log(rej)
+    );
+    this.titleGraphic = "Promedio de Edades";
+    this.xAxisLabel = 'Edades';
+    this.yAxisLabel = 'Personas';
+    this.getSizeGraphic(1);
   }
 
   public moneyPerCampus(): void{
@@ -104,6 +137,26 @@ export class AdminreportsComponent{
     this.getSizeGraphic(0);
   }
 
+  private getSizeGraphic(option: number): void{
+    setTimeout(() => {
+      const container = document.querySelector('#container') as HTMLElement;
+      if(container){
+        this.view = [container.offsetWidth-20, container.offsetHeight-20]
+        const loading = document.querySelector('#loading') as HTMLElement;
+        loading.style.display = 'none';
+        const graphicPie = document.querySelector('#graphic-pie') as HTMLElement;
+        const graphicBar = document.querySelector('#graphic-bar') as HTMLElement;
+        if(option === 0){
+          graphicPie.style.display = 'block';
+          graphicBar.style.display = 'none';
+        }else{
+          graphicPie.style.display = 'none';
+          graphicBar.style.display = 'block';
+        }
+      }else{}
+    }, 2000);
+  }
+
   async getFetch(url: string): Promise<Array<any>>{
     return new Promise<Array<any>>((res, rej) => {
       const headers = new HttpHeaders({
@@ -132,26 +185,6 @@ export class AdminreportsComponent{
         }
       });
     });
-  }
-
-  private getSizeGraphic(option: number): void{
-    setTimeout(() => {
-      const container = document.querySelector('#container') as HTMLElement;
-      if(container){
-        this.view = [container.offsetWidth-20, container.offsetHeight-20]
-        const loading = document.querySelector('#loading') as HTMLElement;
-        loading.style.display = 'none';
-        const graphicPie = document.querySelector('#graphic-pie') as HTMLElement;
-        const graphicBar = document.querySelector('#graphic-bar') as HTMLElement;
-        if(option === 0){
-          graphicPie.style.display = 'block';
-          graphicBar.style.display = 'none';
-        }else{
-          graphicPie.style.display = 'none';
-          graphicBar.style.display = 'block';
-        }
-      }else{}
-    }, 500);
   }
 
   private initCampusList(): void{

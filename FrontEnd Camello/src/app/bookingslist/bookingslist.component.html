@@ -22,6 +22,7 @@
         Espacio: {{booking.space_id}}
       </div>
       <div class="card-footer d-flex gap-2">
+        <button (click)="modalDelete(booking.booking_id)" class="btn btn-outline-dark">Estado</button>
         <button (click)="btnBkngModify(booking)" class="btn btn-outline-primary">Modificar Reserva</button>
         <button (click)="modalDelete(booking.booking_id)" class="btn btn-outline-danger">Eliminar</button>
       </div>

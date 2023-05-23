@@ -1,13 +1,6 @@
 require('dotenv').config();
-const mysql = require('mysql');
-
-const config = {
-    host: process.env.HOST_DB,
-    user: process.env.USER_DB,
-    password: process.env.PASSWORD_DB,
-    database: process.env.DATABASE
-}
-const dbconector = mysql.createConnection(config);
+const mysql = require('mysql')
+const dbconector = mysql.createConnection(process.env.DATABASE_URL);
 
 dbconector.escape = mysql.escape;
 
@@ -18,13 +11,5 @@ dbconector.connect((err) =>{
     }
     console.log('Se ha conectado exitosamente la base de datos con el servidor, id:' + dbconector.threadId);
 });
-
-dbconector.query('SELECT * FROM espacios', (err, results) => {
-    if (err) {
-      console.error('Error al realizar la consulta: ' + err.stack);
-      return;
-    }
-    console.log('Resultados de la consulta:', results);
-  });
 
 module.exports = dbconector;

@@ -7,21 +7,48 @@
       <h1 class="display-4">Mis Reservas</h1>
       <p class="h6">En este espacio puedes encontrar la lista de reservas que realizaste a lo largo del tiempo...</p>
     </div>
-    <div class="container border rounded p-3 d-flex flex-wrap justify-content-center gap-3 w-100 overflow">
-      <div class="card" style="height: 250px; width: 30%;">
+    <div class="container border rounded p-3 d-flex flex-wrap justify-content-center gap-3 w-100 overflow" style="overflow-y: auto;">
+      <div *ngIf="bookingList == []" class="d-flex justify-content-center align-items-center h-100 w-100">
+        <h1>No tiene reservas realizadas en este momento</h1>
+      </div>
+      <div *ngFor="let booking of bookingList" class="card" style="width: 30%;">
         <div class="card-header">
-
+          <h4 class="m-0"><strong>#{{booking.booking_id}}) </strong> {{booking.date_booking}}</h4>
         </div>
-        <div class="card-body">
-
+        <div class="card-body d-flex flex-column gap-1">
+          <h6>Hora de Entrada: <strong>{{booking.hour_start}}</strong></h6>
+          <h6>Hora de Salida: <strong>{{booking.hour_end}}</strong></h6>
+          <p *ngIf="booking.note == ''">No dejaste ninguna nota para esta reserva...</p>
+          <p>{{booking.note}}</p>
         </div>
-        <div class="card-footer">
-
+        <div class="card-footer d-flex gap-2 justify-content-end">
+          <button class="btn btn-dark">Estado</button>
+          <button (click)="modalDelete(booking.booking_id)" class="btn btn-outline-danger">Eliminar</button>
         </div>
       </div>
 
 
 
+    </div>
+  </div>
+</div>
+
+<div class="container mt-3">
+  <div class="modal fade" id=modalDelete>
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Eliminar Reserva</h5>
+          <button class="btn btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body" id="modal-body">
+          ¿Está Seguro que Desea Eliminar la <strong>Reserva #<span id="modalDeleteValue"></span></strong> ?
+        </div>
+        <div class="modal-footer">
+          <button data-bs-dismiss="modal" class="btn btn-primary">Cancelar</button>
+          <button (click)="deleteBooking()" data-bs-dismiss="modal" class="btn btn-danger">Eliminar</button>
+        </div>
+      </div>
     </div>
   </div>
 </div>

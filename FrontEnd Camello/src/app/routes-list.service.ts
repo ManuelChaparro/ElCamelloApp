@@ -5,58 +5,81 @@ import { Injectable } from '@angular/core';
 })
 export class RoutesListService {
 
+  //Ruta principal
+  private route = 'http://localhost:3005';
+
   //Cuenta
-  private login = 'http://localhost:3005/api/user/login';
-  private changePass = 'http://localhost:3005/api/user/changepass';
-  private recoverPass = 'http://localhost:3005/api/user/recovery';
+  private login = this.route+'/api/user/login';
+  private changePass = this.route+'/api/user/changepass';
+  private recoverPass = this.route+'/api/user/recovery';
 
   //Usuarios
-  private createUser = 'http://localhost:3005/api/user/register';
-  private deleteUser = 'http://localhost:3005/api/user/delete';
-  private deleteUserAdmin = 'http://localhost:3005/api/user/ad/delete';
-  private modifyUser = 'http://localhost:3005/api/user/modify';
-  private validUser = 'http://localhost:3005/api/user/validUser';
-  private searchUser = 'http://localhost:3005/api/user/search';
-  private userList = 'http://localhost:3005/api/user/list';
+  private createUser = this.route+'/api/user/register';
+  private deleteUser = this.route+'/api/user/delete';
+  private deleteUserAdmin = this.route+'/api/user/ad/delete';
+  private modifyUser = this.route+'/api/user/modify';
+  private validUser = this.route+'/api/user/validUser';
+  private searchUser = this.route+'/api/user/search';
+  private userList = this.route+'/api/user/list';
 
   //Sedes
-  private createCampus = 'http://localhost:3005/api/headquearters/create';
-  private deleteCampus = 'http://localhost:3005/api/headquarters/delete';
-  private campusList = 'http://localhost:3005/api/headquarters/list';
-  private modifyCampus = 'http://localhost:3005/api/headquarters/modify';
-  private departments = 'http://localhost:3005/api/headquarters/departments/list';
-  private cities = 'http://localhost:3005/api/headquearters/cities/search';
+  private createCampus = this.route+'/api/headquearters/create';
+  private deleteCampus = this.route+'/api/headquarters/delete';
+  private campusList = this.route+'/api/headquarters/list';
+  private modifyCampus = this.route+'/api/headquarters/modify';
+  private departments = this.route+'/api/headquarters/departments/list';
+  private cities = this.route+'/api/headquearters/cities/search';
 
   //Inventario
-  private inventaryList = 'http://localhost:3005/api/inventary/list';
-  private createInventory = 'http://localhost:3005/api/inventary/create';
-  private searchInventory = 'http://localhost:3005/api/inventary/search';
-  private createProduct = 'http://localhost:3005/api/inventary/product/add';
-  private productList = 'http://localhost:3005/api/inventary/product/list';
-  private deleteProduct = 'http://localhost:3005/api/inventary/product/delete';
-  private filterProductByInventory = 'http://localhost:3005/api/inventary/product/filter';
+  private inventaryList = this.route+'/api/inventary/list';
+  private createInventory = this.route+'/api/inventary/create';
+  private searchInventory = this.route+'/api/inventary/search';
+  private createProduct = this.route+'/api/inventary/product/add';
+  private productList = this.route+'/api/inventary/product/list';
+  private deleteProduct = this.route+'/api/inventary/product/delete';
+  private filterProductByInventory = this.route+'/api/inventary/product/filter';
 
   //Espacios
-  private createSpace = 'http://localhost:3005/api/spaces/add';
-  private quantitySpacesPerCampus = 'http://localhost:3005/api/headquarters/spaces/quantity';
-  private spacesPerCampusList = 'http://localhost:3005/api/spaces/list/headquarter';
+  private createSpace = this.route+'/api/spaces/add';
+  private quantitySpacesPerCampus = this.route+'/api/headquarters/spaces/quantity';
+  private spacesPerCampusList = this.route+'/api/spaces/list/headquarter';
 
   //Horarios
-  private createSchedule = 'http://localhost:3005/api/schedules/createSchedule';
-  private deleteSchedule = 'http://localhost:3005/api/schedules/deleteSchedule';
-  private scheduleCampus = 'http://localhost:3005/api/headquarters/searchSchedules';
+  private createSchedule = this.route+'/api/schedules/createSchedule';
+  private deleteSchedule = this.route+'/api/schedules/deleteSchedule';
+  private scheduleCampus = this.route+'/api/headquarters/searchSchedules';
 
   //Reservas
-  private modifyBooking = 'http://localhost:3005/api/booking/modify';
-  private deleteBooking = 'http://localhost:3005/api/booking/delete';
-  private createBooking = 'http://localhost:3005/api/booking/make';
-  private bookingList = 'http://localhost:3005/api/booking/list';
+  private modifyBooking = this.route+'/api/booking/modify';
+  private deleteBooking = this.route+'/api/booking/delete';
+  private createBooking = this.route+'/api/booking/make';
+  private bookingList = this.route+'/api/booking/list';
+  private bookingListWithIdClient = this.route+'/api/booking/list/me';
 
   //Reportes
-  private clientQuantityPerHeadquarter = 'http://localhost:3005/api/reports/1';
-  private moneyPerHeadquarter = 'http://localhost:3005/api/reports/2';
-  private bookingPerMonth = 'http://localhost:3005/api/reports/3';
-  private spacesPerHeadquarter = 'http://localhost:3005/api/reports/4';
+  private clientQuantityPerHeadquarter = this.route+'/api/reports/1';
+  private moneyPerHeadquarter = this.route+'/api/reports/2';
+  private bookingPerMonth = this.route+'/api/reports/3';
+  private spacesPerHeadquarter = this.route+'/api/reports/4';
+  private avgPerUsersAge = this.route+'/api/reports/5';
+  private quantityBillState = this.route+'/api/reports/6';
+  private inventaryValuePerHeadquarter = this.route+'/api/reports/7';
+
+  getBookingListWithIdClient(): string{
+    return this.bookingListWithIdClient;
+  }
+
+  getInventaryValuePerHeadquarter(): string{
+    return this.inventaryValuePerHeadquarter;
+  }
+
+  getQuantityBillState(): string{
+    return this.quantityBillState;
+  }
+
+  getAvgPerUsersAge(): string{
+    return this.avgPerUsersAge;
+  }
 
   getBookingPerMonth(): string{
     return this.bookingPerMonth;
