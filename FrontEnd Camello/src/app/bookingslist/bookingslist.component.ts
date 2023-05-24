@@ -11,7 +11,10 @@ interface Booking{
   date_booking: string,
   hour_start: string,
   hour_end: string,
-  note: string
+  note: string,
+  value: number,
+  state: string,
+  bill_id: number
 }
 
 @Component({
@@ -49,7 +52,10 @@ export class BookingslistComponent {
       date_booking: "",
       hour_start: "",
       hour_end: "",
-      note: ""
+      note: "",
+      value: -1,
+      state: "",
+      bill_id: -1
     };
     this.getCampusList();
     this.getBookingList();
@@ -184,6 +190,35 @@ export class BookingslistComponent {
     this.view = 2;
   }
 
+  public modalState(bill_id: number): void{
+    this.bookingToModify.bill_id = bill_id;
+    const modal = document.querySelector('#stateModal') as HTMLElement;
+    const bootstrapModal = new bootstrap.Modal(modal);
+    bootstrapModal.show();
+  }
+
+  public setNewState(): void{
+    const data = {
+      bill_id: this.bookingToModify.bill_id
+    };
+    this.post(this.routesList.getChangeBillState(), data).then(res => {
+      if('message' in res){
+        if(res.message == '0'){
+          let booking = this.booking_list.find(booking => booking.bill_id == this.bookingToModify.bill_id);
+          if(booking){
+            booking.state = 'PAGO';
+          }
+        }else{
+          alert("Ocurrio un error al cambiar el estado de la reserva");
+        }
+      }else{
+        alert("Error en la petición");
+      }
+
+    });
+
+  }
+
   public loadBookings(campusId: number): void{
     this.bookingsPerCampus = [];
     this.campusIdSelected = campusId;
@@ -264,6 +299,21 @@ export class BookingslistComponent {
     });
   };
 
+  private post(url: string, data: Object):Promise<any>{
+    return new Promise<any>((res, rej) => {
+      const headers = new HttpHeaders({
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
+      });
+      this.http.post(url, data, {headers}).subscribe(response => {
+        if(response){
+          res(response);
+        }else{
+          rej("Error al realizar la consulta");
+        }
+      });
+    });
+  }
+
   private async getBookingList(): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
       const url = this.routesList.getBookingList();
@@ -273,17 +323,25 @@ export class BookingslistComponent {
       this.http.get(url, { headers }).subscribe((response) => {
           const data = response as Array<any>;
           data.forEach((booking) => {
-            const date = booking.fecha as string;
-            let bookingToAdd: Booking = {
-              booking_id: booking.id_reserva,
-              space_id: booking.id_espacio,
-              client_id: booking.id_usuario,
-              date_booking: date.slice(0,10),
-              hour_start: booking.hora_entrada,
-              hour_end: booking.hora_salida,
-              note: booking.notas,
-            };
-            this.booking_list?.push(bookingToAdd);
+            const toSend = {
+              booking_id: booking.id_reserva
+            }
+            this.post(this.routesList.getSearchBill(), toSend).then(res => {
+              const date = booking.fecha as string;
+              let bookingToAdd: Booking = {
+                booking_id: booking.id_reserva,
+                space_id: booking.id_espacio,
+                client_id: booking.id_usuario,
+                date_booking: date.slice(0,10),
+                hour_start: booking.hora_entrada,
+                hour_end: booking.hora_salida,
+                note: booking.notas,
+                value: res[0].valor_pago,
+                state: res[0].estado,
+                bill_id: res[0].id_factura
+              };
+              this.booking_list?.push(bookingToAdd);
+            });
           });
           resolve(true);
         },
