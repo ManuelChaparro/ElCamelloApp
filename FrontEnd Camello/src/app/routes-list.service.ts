@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 export class RoutesListService {
 
   //Ruta principal
-  private route = 'http://localhost:3005';
+  private route = 'https://elcamellobackend-production.up.railway.app';
 
   //Cuenta
   private login = this.route+'/api/user/login';
@@ -55,6 +55,7 @@ export class RoutesListService {
   private createBooking = this.route+'/api/booking/make';
   private bookingList = this.route+'/api/booking/list';
   private bookingListWithIdClient = this.route+'/api/booking/list/me';
+  private changeBillState = this.route+'/api/booking/bill/pay';
 
   //Facturas
   private searchBill = this.route+'/api/booking/bill/search';
@@ -67,6 +68,10 @@ export class RoutesListService {
   private avgPerUsersAge = this.route+'/api/reports/5';
   private quantityBillState = this.route+'/api/reports/6';
   private inventaryValuePerHeadquarter = this.route+'/api/reports/7';
+
+  getChangeBillState(): string{
+    return this.changeBillState;
+  }
 
   getSearchBill(): string{
     return this.searchBill;

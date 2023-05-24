@@ -11,20 +11,22 @@
   <button (click)="changeView(0)" class="btn btn-dark d-flex gap-2 justify-content-center align-items-center w-25" style="flex-basis: 10%;">
     <i class="fas fa-arrow-left"></i><h6 style="margin: 0;">Volver a Seleccionar Sede</h6>
   </button>
-  <div class="d-flex flex-wrap justify-content-between gap-2 py-2"le="flex-basis: 90%; overflow-y: auto;">
-    <div *ngFor="let booking of bookingsPerCampus" class="card" style="flex-basis: 49%;">
+  <div class="d-flex flex-wrap justify-content-evenly gap-2 py-2"le="flex-basis: 90%; overflow-y: auto;">
+    <div *ngFor="let booking of bookingsPerCampus" class="card" style="flex-basis: 40%;">
       <div class="card-header d-flex align-items-center gap-2">
         <h5>#<strong>{{booking.booking_id}}</strong></h5>
         <h6>{{booking.date_booking}}</h6>
       </div>
-      <div class="card-body">
-        Cliente: {{booking.client_id}}
-        Espacio: {{booking.space_id}}
+      <div class="card-body d-flex flex-column">
+        <h6>Cliente: {{booking.client_id}}</h6>
+        <h6>Espacio: {{booking.space_id}}</h6>
+        <h6>Valor: <strong>${{booking.value}}</strong></h6>
+        <h6>Estado: <strong style="color: green;" *ngIf="booking.state == 'PAGO'">{{booking.state}}</strong> <strong style="color: red;" *ngIf="booking.state == 'PENDIENTE'">{{booking.state}}</strong></h6>
       </div>
-      <div class="card-footer d-flex gap-2">
-        <button (click)="modalDelete(booking.booking_id)" class="btn btn-outline-dark">Estado</button>
-        <button (click)="btnBkngModify(booking)" class="btn btn-outline-primary">Modificar Reserva</button>
-        <button (click)="modalDelete(booking.booking_id)" class="btn btn-outline-danger">Eliminar</button>
+      <div class="card-footer d-flex gap-2 justify-content-end">
+        <button *ngIf="booking.state == 'PENDIENTE'" (click)="modalState(booking.bill_id)" class="btn btn-dark">Estado</button>
+        <button *ngIf="booking.state == 'PENDIENTE'" (click)="btnBkngModify(booking)" class="btn btn-primary">Modificar Reserva</button>
+        <button *ngIf="booking.state == 'PENDIENTE'" (click)="modalDelete(booking.booking_id)" class="btn btn-outline-danger">Eliminar</button>
       </div>
     </div>
   </div>
@@ -66,6 +68,26 @@
     <div class="card-footer d-flex gap-2 justify-content-end">
       <button (click)="changeView(1)" style="flex-basis: 20%;" class="btn btn-danger">Cancelar</button>
       <button (click)="saveBookingChanges()" style="flex-basis: 20%;" class="btn btn-success">Guardar Cambios</button>
+    </div>
+  </div>
+</div>
+
+<div class="container mt-3">
+  <div class="modal fade" id=stateModal>
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Cambio de Estado</h5>
+          <button class="btn btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body" id="modal-body">
+          ¿Desea actualizar el estado de la reserva a <strong style="color: green;">PAGO</strong>?
+        </div>
+        <div class="modal-footer">
+          <button data-bs-dismiss="modal" class="btn btn-danger">Cancelar</button>
+          <button (click)="setNewState()" data-bs-dismiss="modal" class="btn btn-success">Aprobar</button>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -125,5 +147,3 @@
 <div id="deleteBkngNtf" class="alert alert-danger" role="alert">
   La reserva <strong>#<span id="deleteBookingSpan"></span></strong> ha sido eliminada
 </div>
-
-
